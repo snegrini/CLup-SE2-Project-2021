@@ -3,13 +3,19 @@
 \usepackage{preamble}
 
 \begin{document}
+	\pagenumbering{Roman}
+	
+	\include{structure/revision_history}
+	
 	\tableofcontents
-
+	
+	\clearpage
+	\pagenumbering{arabic}
+	
 	\include{chapters/1_introduction}
 	\include{chapters/2_overall_description}
 	\include{chapters/3_specific_requirements}
 	\include{chapters/4_alloy}
 	\include{chapters/5_effort}
-	\include{chapters/6_references}
-	\include{chapters/7_appendices}
+	\include{chapters/6_appendices}
 \end{document}
