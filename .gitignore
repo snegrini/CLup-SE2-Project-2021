@@ -1,6 +1,11 @@
+# Locally-built files
 RASD.pdf
 DD.pdf
 
+# MacOS files
+*.DS_Store
+
+# LaTeX files
 *.aux
 *.lof
 *.log
