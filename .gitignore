@@ -18,6 +18,17 @@ DD.pdf
 *.cb
 *.cb2
 
+# Bibliography auxiliary files (bibtex/biblatex/biber):
+*.bbl
+*.bcf
+*.blg
+*-blx.aux
+*-blx.bib
+*.run.xml
+
+# Todo list files:
+*.tdo
+
 *.fdb_latexmk
 *.synctex
 *.synctex(busy)
