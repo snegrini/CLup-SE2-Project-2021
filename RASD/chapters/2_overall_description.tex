@@ -36,9 +36,8 @@ In addition, for long-term customers, it also suggests a time inferred by the sy
 Customers are also allowed to delete their booking at any time by going to the right section in the Mobile App or by clicking the link sent via email after the reservation. 
 
 \subsection{Validation function}
-The system provides an API interface that can be queried to allow the validation of QR codes. The process of scanning the QR is to be handled by an external service.
-% Add what we need QR for and why we validate them. (Fake tickets)
-\todo{Check comments}
+The system provides an API interface that can be queried to allow the validation of QR codes. The process of scanning the QR is to be handled by an external service.\newline
+Ticket validation through QR is necessary to speed up the check-in process. At the same time it helps staff to detect the authenticity of tickets brought to them.
 
 \subsection{Dashboard function}
 \textit{Customers Line-up} web platform grants supermarkets a way to manage queues and customers inside their stores. In particular, it offers two level of access: \textit{manager-level} and \textit{staff-level}.
@@ -56,6 +55,32 @@ The system provides an API interface that can be queried to allow the validation
 \section{User characteristics}
 
 \section{Constraints}
+In this topic it is put on paper a general description about considerations, boundaries and items that will limit the system's options.
+
+\subsection{Regulatory policies}
+The mobile application requests the user's permission in order to retrieve and use their position at runtime. The email addresses provided when booking through CLup will not be used for commercial purposes or given to third parties.
+
+\subsection{Hardware limitations}
+ Here is listed where CLup is available depending on your device. Please note that not all devices are supported.
+\begin{itemize}
+	\item Mobile App
+		\begin{itemize}
+			\item iPhones with iOS version 13.5 or above, phones running Android 6 (Marshmallow) or above;
+			\item 2G/3G/4G connection or Wi-Fi available;
+			\item GPS service.
+		\end{itemize}
+	\item Web App
+		\begin{itemize}
+			\item modern web browser like Firefox, Chrome or Safari;
+			\item internet connection available.
+		\end{itemize}
+\end{itemize}
+
+\subsection{Interfaces to other applications}
+The proper functioning of the app is strictly subordinated to an external map service which will be accessed via API. This is required to compute travel distance and time for a matrix of origins and destinations (i.e. customer and store position).\newline
+In addition, CLup provides an API to be used by an external solution that take charge of the scanning of QR.
+
+A failure in any of the above described services will translate into the inability to use CLup.
 
 \section{Assumptions and Dependencies}
 
