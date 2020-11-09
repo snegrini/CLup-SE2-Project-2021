@@ -6,7 +6,8 @@ The system will be developed from scratch and it will completely replace the leg
 It is composed by a client part and a server part.
 The latter is composed by an application server (CLup Server) where all the logic is located. It also comprehends the web server, the database server and the mail server,
 which all communicate with the CLup Server.
-It also has an interface, the API Manager, which exposes the public CLup API, for the QR validation.\todo{External Map API}\newline
+It has an interface, the API Manager, which exposes the public CLup API, for the QR validation. It also makes use of an External Map API for querying data about the 
+distance of the user from the store. This information will be used to inform the user of when leave the current place.\newline
 The solution for the client part includes two interfaces based on the user type: the mobile app for the customers and the browser for supermarkets' employee and managers.
 \begin{figure}[H]
 	\centering
