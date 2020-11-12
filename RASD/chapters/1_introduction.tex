@@ -12,14 +12,19 @@ Below are presented the goals of CLup. Further description will be discussed in 
 \todo{Insert right section}
 
 \begin{enumerate}[label=\textbf{G.\arabic*}]
-	\item Avoid the creation of physical queues outside stores.
+	\item \itemtext{req:goalQueue}{Avoid the creation of physical queues outside stores.}
 	\begin{enumerate}[label*=\textbf{.\arabic*}, leftmargin=+.5in]
-		\item Allow customers and supermarkets to avoid the creation of hazardous situations.
-		\item Shorten the amount of time a customer is in queue.
-		\item Allow customers to arrive at stores right on time.
+		\item \itemtext{req:goalCustHazard}{Allow customers to avoid the creation of hazardous situations.}
+        \item \itemtext{req:goalStoreHazard}{Allow supermarkets to avoid the creation of hazardous situations.}
+		\item \itemtext{req:goalShortenTime}{Shorten the amount of time a customer is in queue.}
+		\item \itemtext{req:goalOnTime}{Allow customers to arrive at stores right on time.}
 	\end{enumerate}
 
 	\item Allow customers to perform other tasks while they are queued up.
+
+    \item Grant customers an overall experience as easy as possible.
+
+    \item Allow the application to target most of available devices.
 
 	\item Allow customers, even the ones who don't have access to technology, to enjoy the service.
 
@@ -108,6 +113,7 @@ This application works as a digital counterpart to the common situation where pe
 		G & Goal\\
 		WP & World Phenomena\\
 		SP & Shared Phenomena\\
+        RE & Requirement\\
 		\bottomrule
 	\end{tabular}
 \end{center}

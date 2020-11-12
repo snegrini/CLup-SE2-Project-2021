@@ -103,18 +103,23 @@ A failure in any of the above described services will translate into the inabili
 The properties that hold in the analysed world will be listed below.
 \subsection{Domain assumptions}
 \begin{enumerate}[label=\textbf{D.\arabic*}]
-	\item The majority of the customers has a smartphone.
-	\item Customers attains to the declared categories of items.
-	\item Stores have an internet contract.
-	\item GPS modules of smartphones are working properly.
-	\item The precision of the GPS  modules of smartphones is greater than twenty meters.
-	\item Customers bring with themselves the smartphone that they used to retrieve a ticket or reserve a time slot.
-	\item Stores are easily searchable and have unique names.
-	\item Each store has an employee at the entrance which check-in people.
-	\item External service to scan QRs is reliable and fast.
-	\item External service to scan QRs communicates effectively with CLup APIs.
-	\item Store managers have registered their stores in CLup.
-	\item Customers comply with the arrival time assigned by the mobile app.
-	\item Store managers define the cap of customers both in stores and queues.
+	\item \itemtext{dom:smartphone}{The majority of the customers has a smartphone.}
+	\item \itemtext{dom:categories}{Customers attains to the declared categories of items.}
+	\item \itemtext{dom:internetStores}{Stores have an internet contract.}
+	\item \itemtext{dom:workingGps}{GPS modules of smartphones are working properly.}
+	\item \itemtext{dom:gpsPrecision}{The precision of the GPS modules of smartphones is greater than twenty meters.}
+	\item \itemtext{dom:bringSmartphone}{Customers bring with themselves the smartphone that they used to retrieve a ticket or reserve a time slot.}
+    \item \itemtext{dom:oneToOneQr}{A ticket or a booked visit is associated with exactly one person.}
+	\item \itemtext{dom:uniqueName}{Stores are easily searchable and have unique names.}
+	\item \itemtext{dom:employeeEntrance}{Each store has an employee at the entrance which check-in people.}
+	\item \itemtext{dom:qrServiceReliable}{External service to scan QRs is reliable and fast.}
+	\item \itemtext{dom:qrServiceApi}{External service to scan QRs communicates effectively with CLup APIs.}
+	\item \itemtext{dom:storeRegistered}{Store managers have registered their stores in CLup.}
+	\item \itemtext{dom:timeArrival}{Customers comply with the arrival time assigned by the mobile app.}
+
+    % TODO compare with FUN.REQ.
+	\item \itemtext{dom:capStores}{Store managers define the cap of customers both in stores and queues.}
+
+   	\item \itemtext{dom:storeKiosk}{Each store has a Self Service Ticketing Kiosk accessible.}
 \end{enumerate}
 \todo{Dependencies}

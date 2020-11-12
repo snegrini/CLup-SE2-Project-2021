@@ -6,27 +6,167 @@
 In this section, it is given a complete description of the functional requirements of the system.
 
     \subsection{Requirements}
-    \subsubsection{Customers}
-        \begin{enumerate}[label=\textbf{R.\arabic*}]
-            \item
+    \subsubsection{Customer}
+        \begin{enumerate}[series=requirements, label=\textbf{R.\arabic*}, leftmargin=+.3in]
+            \item \itemtext{req:custQueue}{The system shall allow customers to line-up remotely in a store queue.}
+            \item \itemtext{req:custTicket}{The system shall generate a new ticket when a customer enters a queue.}
+            \item \itemtext{req:custTicketKiosk}{The system shall allow customers which do not have a smartphone to get a ticket in place.}
+            \item \itemtext{req:custNum}{The system shall allow customers to view the number of people lined up in a queue.}
+            \item \itemtext{req:custTime}{The system shall give customers an estimated waiting time.}
+            \item \itemtext{req:custGps}{The system shall retrieve the GPS position while the user is subscribed to a queue.}
+            \item \itemtext{req:custLeave}{The system shall allow customers to leave a queue.}
+            \item \itemtext{req:custFilter}{The system shall allow customers to filter stores by name.}
+            \item \itemtext{req:custTtl}{The system shall notify customers when it's time to leave for the store.}
+            \item \itemtext{req:custBook}{The system shall allow customers to book-a-visit to the store and send them the receipt via email.}
+            \item \itemtext{req:custItems}{The system shall allow book-a-visit customers to specify the main categories of item they intend to buy.}
+            \item \itemtext{req:custDelete}{The system shall allow customers to delete a booked visit.}
+            \item \itemtext{req:custNotifyDelete}{The system shall notify customers when a ticket or booked visit is deleted.}
         \end{enumerate}
 
-    \subsubsection{Store managers}
-    \begin{enumerate}[label=\textbf{R.\arabic*}]
-        \item
+    \subsubsection{Store manager}
+    \begin{enumerate}[resume*=requirements]
+        \item \itemtext{req:mngLogin}{A registered store manager must be able to login to the system by using his/her credentials.}
+        \item \itemtext{req:mngViewStore}{The system shall allow store managers to view the current status of people inside the store.}
+        \item \itemtext{req:mngViewQueue}{The system shall allow store managers to view the current status of people in the queue.}
+         \item \itemtext{req:mngViewBook}{The system shall allow store managers to view the booked visits to the store.}
+        \item \itemtext{req:mngSaveStatsPeople}{The system shall save statistics about the number of people in the store at a given date and time.}
+        \item \itemtext{req:mngSaveStatsBook}{The system shall save statistics about the main categories of items from the booked visits.}
+        \item \itemtext{req:mngViewStatsStore}{The system shall allow store managers to browse statistics about the number of people inside the store at a given date and time.}
+        \item \itemtext{req:mngViewStatsBook}{The system shall allow store managers to browse statistics about booked visits.}
+        \item \itemtext{req:mngCapStore}{The system shall allow store managers to insert a maximum cap of people inside the store.}
+        \item \itemtext{req:mngCapQueue}{The system shall allow store managers to insert a maximum cap of people in the queue.}
+        \item \itemtext{req:mngDeleteTickets}{The system shall allow store managers to delete tickets and booked visits.}
+        \item \itemtext{req:mngChangeSchedule}{The system shall allow store managers to change the week schedule of the store.}
     \end{enumerate}
 
     \subsubsection{Store staff}
-    \begin{enumerate}[label=\textbf{R.\arabic*}]
-        \item
+    \begin{enumerate}[resume*=requirements]
+        \item \itemtext{req:stfLogin}{A registered store staff must be able to login to the system by using his/her credentials.}
+        \item \itemtext{req:stfViewStore}{The system shall allow store staff to view the current status of people inside the store.}
+        \item \itemtext{req:stfViewQueue}{The system shall allow store staff to view the current status of people in the queue.}
     \end{enumerate}
 
     \subsubsection{CLup admin}
-    \begin{enumerate}[label=\textbf{R.\arabic*}]
-        \item
+    \begin{enumerate}[resume*=requirements]
+        \item \itemtext{req:admRegister}{The system shall allow CLup admins to register new supermarkets.}
+        \item \itemtext{req:admCredentials}{The system shall generate new manager and staff credential for each supermarket registered.}
+        \item \itemtext{req:admDelete}{The system shall allow CLup admins to delete supermarkets.}
     \end{enumerate}
 
     \subsection{Goal mapping on requirements}
+
+    \begin{enumerate}[label=\textbf{G.\arabic*}]
+        \item Avoid the creation of physical queues outside stores.
+
+        \begin{enumerate}[label*=\textbf{.\arabic*}, leftmargin=+.5in]
+            \item Allow customers to avoid the creation of hazardous situations.
+
+            \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
+            \ref{req:custNum} \useitemtext{req:custNum} ~\\
+            \ref{req:custTime} \useitemtext{req:custTime} ~\\
+            \ref{req:custTtl} \useitemtext{req:custTtl} ~\\
+            \ref{req:custBook} \useitemtext{req:custBook} ~\\
+            \ref{req:custItems} \useitemtext{req:custItems} ~\\
+
+            \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+            \ref{dom:timeArrival} \useitemtext{dom:timeArrival} ~\\
+
+
+            \item Allow supermarkets to avoid the creation of hazardous situations.
+
+            \ref{req:mngViewStore} \useitemtext{req:mngViewStore} ~\\
+            \ref{req:mngViewQueue} \useitemtext{req:mngViewQueue} ~\\
+            \ref{req:mngViewBook} \useitemtext{req:mngViewBook} ~\\
+            \ref{req:mngViewStatsStore} \useitemtext{req:mngViewStatsStore} ~\\
+            \ref{req:mngCapStore} \useitemtext{req:mngCapStore} ~\\
+            \ref{req:mngCapQueue} \useitemtext{req:mngCapQueue} ~\\
+            \ref{req:mngDeleteTickets} \useitemtext{req:mngDeleteTickets} ~\\
+            \ref{req:stfViewStore} \useitemtext{req:stfViewStore} ~\\
+            \ref{req:stfViewQueue} \useitemtext{req:stfViewQueue} ~\\
+
+
+            \item Shorten the amount of time a customer is in queue.
+
+            \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
+            \ref{req:custNum} \useitemtext{req:custNum} ~\\
+            \ref{req:custTime} \useitemtext{req:custTime} ~\\
+            \ref{req:custTtl} \useitemtext{req:custTtl} ~\\
+            \ref{req:custBook} \useitemtext{req:custBook} ~\\
+
+            \ref{dom:bringSmartphone} \useitemtext{dom:bringSmartphone} ~\\
+            \ref{dom:timeArrival} \useitemtext{dom:timeArrival} ~\\
+            \ref{dom:qrServiceReliable} \useitemtext{dom:qrServiceReliable} ~\\
+
+
+            \item Allow customers to arrive at stores right on time. ~\\
+            \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
+            \ref{req:custNum} \useitemtext{req:custNum} ~\\
+            \ref{req:custTime} \useitemtext{req:custTime} ~\\
+            \ref{req:custGps} \useitemtext{req:custGps} ~\\
+            \ref{req:custTtl} \useitemtext{req:custTtl} ~\\
+            \ref{req:custBook} \useitemtext{req:custBook} ~\\
+
+        \end{enumerate}
+
+        \item Allow customers to perform other tasks while they are queued up.
+
+        \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
+        \ref{req:custTicket} \useitemtext{req:custTicket} ~\\
+        \ref{req:custTime} \useitemtext{req:custTime} ~\\
+        \ref{req:custTtl} \useitemtext{req:custTtl} ~\\
+
+        \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+        \ref{dom:workingGps} \useitemtext{dom:workingGps} ~\\
+        \ref{dom:gpsPrecision} \useitemtext{dom:gpsPrecision} ~\\
+
+
+        \item Grant customers an overall experience as easy as possible.
+
+        %\ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+
+
+        \item Allow the application to target most of available devices.
+
+        %\ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+
+        \item Allow customers, even the ones who don't have access to technology, to enjoy the service.
+
+        \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
+        \ref{req:custTicket} \useitemtext{req:custTicket} ~\\
+        \ref{req:custTicketKiosk} \useitemtext{req:custTicketKiosk} ~\\
+
+        \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+        \ref{dom:storeKiosk} \useitemtext{dom:storeKiosk} ~\\
+
+
+
+        \item Allow supermarkets to manage and to monitor access to stores in a better way.
+
+        \ref{req:mngLogin} \useitemtext{req:mngLogin} ~\\
+        \ref{req:mngViewStore} \useitemtext{req:mngViewStore} ~\\
+        \ref{req:mngViewQueue} \useitemtext{req:mngViewQueue} ~\\
+
+        \ref{dom:storeRegistered} \useitemtext{dom:storeRegistered} ~\\
+        \ref{dom:employeeEntrance} \useitemtext{dom:employeeEntrance} ~\\
+
+        \begin{enumerate}[label*=\textbf{.\arabic*}]
+            \item Allow supermarkets to know in advance how many people are coming to stores.
+
+            \ref{req:mngViewBook} \useitemtext{req:mngViewBook} ~\\
+
+            \ref{dom:categories} \useitemtext{dom:categories} ~\\
+
+
+            \item Allow supermarkets to limit the number of access to stores.
+
+            % TODO \ref{req:mngInsertCap} \useitemtext{req:mngInsertCap} ~\\
+
+
+            \ref{dom:qrServiceReliable} \useitemtext{dom:qrServiceReliable} ~\\
+            \ref{dom:qrServiceApi} \useitemtext{dom:qrServiceApi} ~\\
+            % TODO \ref{dom:capStores} \useitemtext{dom:capStores} ~\\
+        \end{enumerate}
+    \end{enumerate}
 
     \subsection{Traceability matrix}
 
