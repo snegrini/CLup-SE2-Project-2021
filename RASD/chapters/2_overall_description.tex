@@ -6,15 +6,15 @@ The system will be developed from scratch and it will completely replace the leg
 It is composed by a client part and a server part.
 The latter is composed by an application server (CLup Server) where all the logic is located. It also comprehends the web server, the database server and the mail server,
 which all communicate with the CLup Server.
-It has an interface, the API Manager, which exposes the public CLup API, for the QR validation. It also makes use of an External Map API for querying data about the 
+It has an interface, the API Manager, which exposes the public CLup API, for the QR validation. It also makes use of an External Map API for querying data about the
 distance of the user from the store. This information will be used to inform the user of when leave the current place.\newline
 The solution for the client part includes two interfaces based on the user type: the mobile app for the customers and the browser for supermarkets' employee and managers.
 There is also the ticketing kiosk which is a tablet with installed a modified version of the mobile app able to print the ticket on place.
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.45]{ProdPerspective_Diagram}
-	\caption{CLup system diagram}	
-\end{figure} 
+	\caption{CLup system diagram.}
+\end{figure}
 
 \section{Product functions}
 This section provides a summary of the major functions that the software will perform w.r.t. the goals already described in section <<SECTION>> \todo{Add right section}.
@@ -35,14 +35,14 @@ This advanced function allows customers to "book a visit" to the store. Customer
 Every field of the form is mandatory, this means that the user must complete all of them in order to submit the reservation. %The more specific is the user the more effective is \textit{CLup}.
 
 In addition, for long-term customers, it also suggests a time inferred by the system based on an analysis of the previous visits.
-Customers are also allowed to delete their booking at any time by going to the right section in the Mobile App or by clicking the link sent via email after the reservation. 
+Customers are also allowed to delete their booking at any time by going to the right section in the Mobile App or by clicking the link sent via email after the reservation.
 
 \subsection{Validation function}
 The system provides an API interface that can be queried to allow the validation of QR codes. The process of scanning the QR is to be handled by an external service.\newline
 Ticket validation through QR is necessary to speed up the check-in process. At the same time it helps staff to detect the authenticity of tickets brought to them.
 
 \subsection{Dashboard function}
-\textit{Customers Line-up} web platform grants supermarkets a way to manage queues and customers inside their stores. In particular, it offers two level of access: \textit{manager-level} and \textit{staff-level}.
+\textit{Customers Line-up} web platform grants supermarkets a way to manage queues and customers inside their stores. In particular, \textbf{upon authentication}, it offers three level of access: \textit{manager-level} and \textit{staff-level} for supermarkets and \textit{admin-level} for CLup administrators.
 
 \begin{itemize}
 	\item \textbf{Manager-level}\newline
@@ -52,20 +52,24 @@ Ticket validation through QR is necessary to speed up the check-in process. At t
 
 	\item \textbf{Staff-level}\newline
 	A store employee is able to view data about the number of people in the queue and inside the building. This is needed during the validation of tickets when the check-in staff scans QR and allows customers inside the store.
+
+    \item \textbf{Admin-level}\newline
+    An administrator of CLup is able to register new supermarkets and generate the respective credentials to access \textit{manager-level} and \textit{staff-level}.
 \end{itemize}
 
 \section{User characteristics}
 CLup has three different groups of users:
 \begin{itemize}
-	\item \textbf{Customers}: They are customers of the supermarket. They can be of all ages and don't necessarily have experience with technology. They can also be elderly 
+	\item \textbf{Customers}: They are customers of the supermarket. They can be of all ages and don't necessarily have experience with technology. They can also be elderly
 	people who don't have a smartphone at all. For this reason the system should be as easy to use as possible and should provide an alternative way to retrieve a ticket in
-	addition to the mobile app.  
+	addition to the mobile app.
 	\item \textbf{Store managers}: They are the managers of the store. They manage the number of people who can access the store and can monitor the ones that
 	are in the supermarket. It is reasonable to assume that they have at least a minimum experience with technology and the use of computer. For this reason the dashboard
 	with all the statistics will be accessible from a web browser.
 	\item \textbf{Store employee}: They are the employee of the store. They validate the tickets at the entrance of the store. They could not have experience
 	with technology. For this reason the interaction that they should have with the dashboard is reduced to the bare minimum.
-\end{itemize} 
+    \item \textbf{CLup admin}: an employee of CLup able to register supermarkets and generate their credentials. It can also maintain and update the system. Registration for this kind of users is forbidden and it has to be added directly during the system's installation process.
+\end{itemize}
 
 \section{Constraints}
 In this topic it is put on paper a general description about considerations, boundaries and items that will limit the system's options.
@@ -96,7 +100,7 @@ In addition, CLup provides an API to be used by an external solution that take c
 A failure in any of the above described services will translate into the inability to use CLup.
 
 \section{Assumptions and Dependencies}
-The properties that hold in the analyzed world will be listed below.
+The properties that hold in the analysed world will be listed below.
 \subsection{Domain assumptions}
 \begin{enumerate}[label=\textbf{D.\arabic*}]
 	\item The majority of the customers has a smartphone.
