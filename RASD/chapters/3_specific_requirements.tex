@@ -3,7 +3,7 @@ This section is devoted to a specific description of every kind of requirement t
 system has to deal with in order to achieve all the functionalities described.
 \section{External interface Requirements}
 \subsection{User Interfaces}
-The mobile app is the interface which permit customers to enjoy CLup services. Whether installed on a smartphone or on a ticketing kiosk, it is the only way 
+The mobile app is the interface which permit customers to enjoy CLup services. Whether installed on a smartphone or on a ticketing kiosk, it is the only way
 for a customer to use CLup.
 User interface mockups of most important pages of the app are shown below.
 
@@ -18,7 +18,7 @@ User interface mockups of most important pages of the app are shown below.
 	\centering
 	\includegraphics{my_tickets}
 	\captionsetup{type=figure}
-	\caption{Tickets list.}	
+	\caption{Tickets list.}
 \end{minipage}
 
 \clearpage
@@ -33,7 +33,7 @@ User interface mockups of most important pages of the app are shown below.
 	\centering
 	\includegraphics{ticket}
 	\captionsetup{type=figure}
-	\caption{Ticket Retrieved.}	
+	\caption{Ticket Retrieved.}
 \end{minipage}
 
 \vspace{2em}
@@ -48,7 +48,7 @@ User interface mockups of most important pages of the app are shown below.
 	\centering
 	\includegraphics{book2}
 	\captionsetup{type=figure}
-	\caption{Book a visit (2/2).}	
+	\caption{Book a visit (2/2).}
 \end{minipage}
 
 \clearpage
@@ -56,48 +56,48 @@ User interface mockups of most important pages of the app are shown below.
 \begin{figure}[H]
 	\centering
 	\includegraphics{book3}
-	\caption{Visit booked.}	
-\end{figure} 
+	\caption{Visit booked.}
+\end{figure}
 
-Store managers and store employee use a web based interface for enjoying CLup features. The CLup admins can login at the same interface as well.
+Store managers and store employees use a web based interface for enjoying CLup features. The CLup admins can login at the same interface as well.
 User interface mockups of most important pages of the web dashboard are shown below.
 \vspace{2em}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.77\linewidth]{login}
-	\caption{Dashboard login.}	
-\end{figure} 
+	\caption{Dashboard login.}
+\end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.77\linewidth]{employee}
-	\caption{Employee homepage.}	
-\end{figure} 
+	\caption{Employee homepage.}
+\end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.77\linewidth]{dashboard1}
-	\caption{Manager homepage.}	
-\end{figure} 
+	\caption{Manager homepage.}
+\end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.77\linewidth]{dashboard2}
-	\caption{Item categories page.}	
-\end{figure} 
+	\caption{Item categories page.}
+\end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.77\linewidth]{dashboard3}
-	\caption{Bookings list page.}	
-\end{figure} 
+	\caption{Bookings list page.}
+\end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.77\linewidth]{dashboard4}
-	\caption{Statistics page.}	
-\end{figure} 
+	\caption{Statistics page.}
+\end{figure}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.77\linewidth]{new_store}
-	\caption{Admin new supermarket page.}	
-\end{figure} 
+	\caption{Admin new supermarket page.}
+\end{figure}
 \clearpage
 
 \subsection{Hardware Interfaces}
@@ -161,11 +161,11 @@ In this section, it is given a complete description of the functional requiremen
 
     \subsection{Goal mapping on requirements}
 
-    \begin{enumerate}[label=\textbf{G.\arabic*}]
-        \item Avoid the creation of physical queues outside stores.
+    \begin{description}
+        \item[\ref{goal:avoidQueue}] \useitemtext{goal:avoidQueue} ~\\
 
-        \begin{enumerate}[label*=\textbf{.\arabic*}, leftmargin=+.5in]
-            \item Allow customers to avoid the creation of hazardous situations.
+        \begin{description}
+            \item[\ref{goal:custHazardSit}] \useitemtext{goal:custHazardSit} ~\\
 
             \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
             \ref{req:custNum} \useitemtext{req:custNum} ~\\
@@ -178,7 +178,7 @@ In this section, it is given a complete description of the functional requiremen
             \ref{dom:timeArrival} \useitemtext{dom:timeArrival} ~\\
 
 
-            \item Allow supermarkets to avoid the creation of hazardous situations.
+            \item[\ref{goal:storeHazardSit}] \useitemtext{goal:storeHazardSit} ~\\
 
             \ref{req:mngViewStore} \useitemtext{req:mngViewStore} ~\\
             \ref{req:mngViewQueue} \useitemtext{req:mngViewQueue} ~\\
@@ -191,7 +191,7 @@ In this section, it is given a complete description of the functional requiremen
             \ref{req:stfViewQueue} \useitemtext{req:stfViewQueue} ~\\
 
 
-            \item Shorten the amount of time a customer is in queue.
+            \item[\ref{goal:shortenTime}] \useitemtext{goal:shortenTime} ~\\
 
             \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
             \ref{req:custNum} \useitemtext{req:custNum} ~\\
@@ -204,17 +204,18 @@ In this section, it is given a complete description of the functional requiremen
             \ref{dom:qrServiceReliable} \useitemtext{dom:qrServiceReliable} ~\\
 
 
-            \item Allow customers to arrive at stores right on time. ~\\
+            \item[\ref{goal:arriveOnTime}] \useitemtext{goal:arriveOnTime} ~\\
+
             \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
             \ref{req:custNum} \useitemtext{req:custNum} ~\\
             \ref{req:custTime} \useitemtext{req:custTime} ~\\
             \ref{req:custGps} \useitemtext{req:custGps} ~\\
             \ref{req:custTtl} \useitemtext{req:custTtl} ~\\
             \ref{req:custBook} \useitemtext{req:custBook} ~\\
+        \end{description}
 
-        \end{enumerate}
 
-        \item Allow customers to perform other tasks while they are queued up.
+        \item[\ref{goal:otherTasks}] \useitemtext{goal:otherTasks} ~\\
 
         \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
         \ref{req:custTicket} \useitemtext{req:custTicket} ~\\
@@ -226,16 +227,17 @@ In this section, it is given a complete description of the functional requiremen
         \ref{dom:gpsPrecision} \useitemtext{dom:gpsPrecision} ~\\
 
 
-        \item Grant customers an overall experience as easy as possible.
+        \item[\ref{goal:easyExp}] \useitemtext{goal:easyExp} ~\\
 
         %\ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
 
 
-        \item Allow the application to target most of available devices.
+        \item[\ref{goal:targetDevices}] \useitemtext{goal:targetDevices} ~\\
 
         %\ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
 
-        \item Allow customers, even the ones who don't have access to technology, to enjoy the service.
+
+        \item[\ref{goal:enjoyService}] \useitemtext{goal:enjoyService} ~\\
 
         \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
         \ref{req:custTicket} \useitemtext{req:custTicket} ~\\
@@ -245,8 +247,7 @@ In this section, it is given a complete description of the functional requiremen
         \ref{dom:storeKiosk} \useitemtext{dom:storeKiosk} ~\\
 
 
-
-        \item Allow supermarkets to manage and to monitor access to stores in a better way.
+        \item[\ref{goal:monitorAccess}] \useitemtext{goal:monitorAccess} ~\\
 
         \ref{req:mngLogin} \useitemtext{req:mngLogin} ~\\
         \ref{req:mngViewStore} \useitemtext{req:mngViewStore} ~\\
@@ -255,31 +256,42 @@ In this section, it is given a complete description of the functional requiremen
         \ref{dom:storeRegistered} \useitemtext{dom:storeRegistered} ~\\
         \ref{dom:employeeEntrance} \useitemtext{dom:employeeEntrance} ~\\
 
-        \begin{enumerate}[label*=\textbf{.\arabic*}]
-            \item Allow supermarkets to know in advance how many people are coming to stores.
-
-            \ref{req:mngViewBook} \useitemtext{req:mngViewBook} ~\\
+        \begin{description}
+            \item[\ref{goal:knowInAdvance}] \useitemtext{goal:knowInAdvance} ~\\
 
             \ref{dom:categories} \useitemtext{dom:categories} ~\\
 
 
-            \item Allow supermarkets to limit the number of access to stores.
+            \item[\ref{goal:limitNumber}] \useitemtext{goal:limitNumber} ~\\
 
             % TODO \ref{req:mngInsertCap} \useitemtext{req:mngInsertCap} ~\\
-
 
             \ref{dom:qrServiceReliable} \useitemtext{dom:qrServiceReliable} ~\\
             \ref{dom:qrServiceApi} \useitemtext{dom:qrServiceApi} ~\\
             % TODO \ref{dom:capStores} \useitemtext{dom:capStores} ~\\
-        \end{enumerate}
-    \end{enumerate}
-
-    \subsection{Traceability matrix}
+        \end{description}
+    \end{description}
 
     \subsection{Scenarios}
 
     \subsection{Use cases description}
     % Use cases capture functional requirements of a system from the users' perspective.
+
+
+    \subsection{Traceability matrix}
+    \begin{center}
+        \begin{tabular}{@{}p{0.25\linewidth}cccc@{}}
+            \toprule
+            \textbf{Item} & \textbf{\ref{req:custQueue}} & \textbf{\ref{req:custTicket}}
+            & \textbf{\ref{req:custTime}} & \textbf{\ref{req:custNum}}\\
+            \midrule
+            Lorem Ipsum & \cmark \\
+            Dolor Sit & & & \cmark \\
+
+            \bottomrule
+        \end{tabular}
+    \end{center}
+
 
 \section{Performance Requirements}
 
