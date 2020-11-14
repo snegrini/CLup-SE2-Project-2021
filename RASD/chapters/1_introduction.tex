@@ -6,10 +6,9 @@ It provides functional and non-functional requirements for the development of th
 
 This document is addressed to the developers who have to implement the requirements and could be used as an agreement between the customer and the contractors.
 
-\subsection{Goals}
+\subsection{Goals}\label{intro:goals}
 The ambition is that the adoption of these requirements will avoid having crowds inside facilities such as supermarkets and relieve the consequent long lines forming outside. This matter is particularly relevant during a pandemic emergency, like the one that is going on in the present day.\newline
-Below are presented the goals of CLup. Further description will be discussed in section <<SECTION>>.
-\todo{Insert right section}
+Below are presented the goals of CLup. Further description will be discussed in section \textbf{\ref{desc:prodFunc}}.
 
 \begin{enumerate}[label=\textbf{G.\arabic*}]
 	\item \itemtext{goal:avoidQueue}{Avoid the creation of physical queues outside stores.}
@@ -24,15 +23,13 @@ Below are presented the goals of CLup. Further description will be discussed in 
 
     \item \itemtext{goal:easyExp}{Grant customers an overall experience as easy as possible.}
 
-    \item \itemtext{goal:targetDevices}{Allow the application to target most of available devices.}
-
 	\item \itemtext{goal:enjoyService}{Allow customers, even the ones who don't have access to technology, to enjoy the service.}
 
-	\item \itemtext{goal:monitorAccess}{Allow supermarkets to manage and to monitor access to stores in a better way.}
-	\begin{enumerate}[label*=\textbf{.\arabic*}, leftmargin=+.5in]
-		\item \itemtext{goal:knowInAdvance}{Allow supermarkets to know in advance how many people are coming to stores.}
-		\item \itemtext{goal:limitNumber}{Allow supermarkets to limit the number of access to stores.}
-	\end{enumerate}
+	\item \itemtext{goal:monitorAccess}{Allow supermarkets to monitor access to stores in a better way.}
+
+	\item \itemtext{goal:knowInAdvance}{Allow supermarkets to know in advance how many people are coming to stores.}
+
+    \item \itemtext{goal:limitNumber}{Allow supermarkets to limit the number of access to stores.}
 \end{enumerate}
 
 \section{Scope}
@@ -62,7 +59,6 @@ This application works as a digital counterpart to the common situation where pe
 	\item Customers choose which store to go to.
 	\item Ticket is retrieved from the customer remotely.
 	\item Ticket is retrieved from the customer at the local kiosk.
-	\item Supermarkets can consult customers' statistics.
 	\item Customers can book a time-slot at the store.
 	\item Customers check the queue status of the store.
 \end{enumerate}
