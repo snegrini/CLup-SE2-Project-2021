@@ -1,7 +1,12 @@
 \ProvidesPackage{preamble}
 
+\RequirePackage{geometry}
+
+\newgeometry{left=3cm,right=3cm,bottom=3.5cm,top=3.5cm}
+
 \RequirePackage[scaled]{helvet}
-\renewcommand*\familydefault{\sfdefault} %% Only if the base font of the document is to be sans serif
+\renewcommand*\familydefault{\sfdefault}
+
 \RequirePackage[T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
 
@@ -18,8 +23,6 @@
 
 \RequirePackage{todonotes}
 
-%\RequirePackage{biblatex}
-
 \RequirePackage[hidelinks]{hyperref}
 
 \RequirePackage{graphicx}
@@ -29,6 +32,8 @@
 
 \RequirePackage{pifont}
 
+\chapterstyle{bianchi}
+\setlength{\beforechapskip}{0pt}
 
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{2}

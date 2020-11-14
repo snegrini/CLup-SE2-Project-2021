@@ -10,6 +10,7 @@ It has an interface, the API Manager, which exposes the public CLup API, for the
 distance of the user from the store. This information will be used to inform the user of when leave the current place.\newline
 The solution for the client part includes two interfaces based on the user type: the mobile app for the customers and the browser for supermarkets' employee and managers.
 There is also the ticketing kiosk which is a tablet with installed a modified version of the mobile app able to print the ticket on place.
+\vspace{1em}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.45]{ProdPerspective_Diagram}
@@ -100,6 +101,8 @@ In addition, CLup provides an API to be used by an external solution that take c
 
 A failure in any of the above described services will translate into the inability to use CLup.
 
+\clearpage
+
 \section{Assumptions and Dependencies}
 The properties that hold in the analysed world will be listed below.
 \subsection{Domain assumptions}
@@ -121,4 +124,4 @@ The properties that hold in the analysed world will be listed below.
 	\item \itemtext{dom:capStores}{Store managers know the maximum capacity of customers in the building.}
    	\item \itemtext{dom:storeKiosk}{Each store has a Self Service Ticketing Kiosk accessible.}
 \end{enumerate}
-\todo{Dependencies}
+
