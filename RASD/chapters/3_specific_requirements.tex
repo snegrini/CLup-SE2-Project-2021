@@ -135,14 +135,9 @@ In this section, it is given a complete description of the functional requiremen
         \item \itemtext{req:mngViewStore}{The system shall allow store managers to view the current status of people inside the store.}
         \item \itemtext{req:mngViewQueue}{The system shall allow store managers to view the current status of people in the queue.}
          \item \itemtext{req:mngViewBook}{The system shall allow store managers to view the booked visits to the store.}
-        \item \itemtext{req:mngSaveStatsPeople}{The system shall save statistics about the number of people in the store at a given date and time.}
-        \item \itemtext{req:mngSaveStatsBook}{The system shall save statistics about the main categories of items from the booked visits.}
-        \item \itemtext{req:mngViewStatsStore}{The system shall allow store managers to browse statistics about the number of people inside the store at a given date and time.}
-        \item \itemtext{req:mngViewStatsBook}{The system shall allow store managers to browse statistics about booked visits.}
-        \item \itemtext{req:mngCapStore}{The system shall allow store managers to insert a maximum cap of people inside the store.}
-        \item \itemtext{req:mngCapQueue}{The system shall allow store managers to insert a maximum cap of people in the queue.}
+        \item \itemtext{req:mngCapStore}{The system shall allow store managers to set a maximum cap of people inside the store.}
+        \item \itemtext{req:mngCapQueue}{The system shall allow store managers to set a maximum cap of people in the queue.}
         \item \itemtext{req:mngDeleteTickets}{The system shall allow store managers to delete tickets and booked visits.}
-        \item \itemtext{req:mngChangeSchedule}{The system shall allow store managers to change the week schedule of the store.}
     \end{enumerate}
 
     \subsubsection{Store staff}
@@ -156,7 +151,6 @@ In this section, it is given a complete description of the functional requiremen
     \begin{enumerate}[resume*=requirements]
         \item \itemtext{req:admRegister}{The system shall allow CLup admins to register new supermarkets.}
         \item \itemtext{req:admCredentials}{The system shall generate new manager and staff credential for each supermarket registered.}
-        \item \itemtext{req:admDelete}{The system shall allow CLup admins to delete supermarkets.}
     \end{enumerate}
 
     \subsection{Goal mapping on requirements}
@@ -175,6 +169,9 @@ In this section, it is given a complete description of the functional requiremen
             \ref{req:custItems} \useitemtext{req:custItems} ~\\
 
             \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+            \ref{dom:categories} \useitemtext{dom:categories} ~\\
+            \ref{dom:custEmail} \useitemtext{dom:custEmail} ~\\
+            \ref{dom:oneToOneQr} \useitemtext{dom:oneToOneQr} ~\\
             \ref{dom:timeArrival} \useitemtext{dom:timeArrival} ~\\
 
 
@@ -183,12 +180,18 @@ In this section, it is given a complete description of the functional requiremen
             \ref{req:mngViewStore} \useitemtext{req:mngViewStore} ~\\
             \ref{req:mngViewQueue} \useitemtext{req:mngViewQueue} ~\\
             \ref{req:mngViewBook} \useitemtext{req:mngViewBook} ~\\
-            \ref{req:mngViewStatsStore} \useitemtext{req:mngViewStatsStore} ~\\
             \ref{req:mngCapStore} \useitemtext{req:mngCapStore} ~\\
             \ref{req:mngCapQueue} \useitemtext{req:mngCapQueue} ~\\
             \ref{req:mngDeleteTickets} \useitemtext{req:mngDeleteTickets} ~\\
             \ref{req:stfViewStore} \useitemtext{req:stfViewStore} ~\\
             \ref{req:stfViewQueue} \useitemtext{req:stfViewQueue} ~\\
+
+            \ref{dom:categories} \useitemtext{dom:categories} ~\\
+            \ref{dom:oneToOneQr} \useitemtext{dom:oneToOneQr} ~\\
+            \ref{dom:internetStores} \useitemtext{dom:internetStores} ~\\
+            \ref{dom:employeeEntrance} \useitemtext{dom:employeeEntrance} ~\\
+            \ref{dom:timeArrival} \useitemtext{dom:timeArrival} ~\\
+            \ref{dom:capStores} \useitemtext{dom:capStores} ~\\
 
 
             \item[\ref{goal:shortenTime}] \useitemtext{goal:shortenTime} ~\\
@@ -199,9 +202,15 @@ In this section, it is given a complete description of the functional requiremen
             \ref{req:custTtl} \useitemtext{req:custTtl} ~\\
             \ref{req:custBook} \useitemtext{req:custBook} ~\\
 
+            \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+            \ref{dom:workingGps} \useitemtext{dom:workingGps} ~\\
+            \ref{dom:gpsPrecision} \useitemtext{dom:gpsPrecision} ~\\
             \ref{dom:bringSmartphone} \useitemtext{dom:bringSmartphone} ~\\
-            \ref{dom:timeArrival} \useitemtext{dom:timeArrival} ~\\
+            \ref{dom:employeeEntrance} \useitemtext{dom:employeeEntrance} ~\\
             \ref{dom:qrServiceReliable} \useitemtext{dom:qrServiceReliable} ~\\
+            \ref{dom:qrServiceApi} \useitemtext{dom:qrServiceApi} ~\\
+            \ref{dom:timeArrival} \useitemtext{dom:timeArrival} ~\\
+
 
 
             \item[\ref{goal:arriveOnTime}] \useitemtext{goal:arriveOnTime} ~\\
@@ -212,38 +221,58 @@ In this section, it is given a complete description of the functional requiremen
             \ref{req:custGps} \useitemtext{req:custGps} ~\\
             \ref{req:custTtl} \useitemtext{req:custTtl} ~\\
             \ref{req:custBook} \useitemtext{req:custBook} ~\\
+
+            \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+            \ref{dom:workingGps} \useitemtext{dom:workingGps} ~\\
+            \ref{dom:gpsPrecision} \useitemtext{dom:gpsPrecision} ~\\
+            \ref{dom:bringSmartphone} \useitemtext{dom:bringSmartphone} ~\\
+            \ref{dom:timeArrival} \useitemtext{dom:timeArrival} ~\\
         \end{description}
 
 
         \item[\ref{goal:otherTasks}] \useitemtext{goal:otherTasks} ~\\
 
         \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
-        \ref{req:custTicket} \useitemtext{req:custTicket} ~\\
+        \ref{req:custNum}  \useitemtext{req:custNum} ~\\
         \ref{req:custTime} \useitemtext{req:custTime} ~\\
         \ref{req:custTtl} \useitemtext{req:custTtl} ~\\
+        \ref{req:custBook} \useitemtext{req:custBook} ~\\
 
         \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
         \ref{dom:workingGps} \useitemtext{dom:workingGps} ~\\
         \ref{dom:gpsPrecision} \useitemtext{dom:gpsPrecision} ~\\
+        \ref{dom:custEmail} \useitemtext{dom:custEmail} ~\\
+        \ref{dom:bringSmartphone} \useitemtext{dom:bringSmartphone} ~\\
+        \ref{dom:timeArrival} \useitemtext{dom:timeArrival} ~\\
 
 
         \item[\ref{goal:easyExp}] \useitemtext{goal:easyExp} ~\\
+        \ref{req:custTicket} \useitemtext{req:custTicket} ~\\
+        \ref{req:custNum} \useitemtext{req:custNum} ~\\
+        \ref{req:custTime} \useitemtext{req:custTime} ~\\
+        \ref{req:custLeave} \useitemtext{req:custLeave} ~\\
+        \ref{req:custFilter} \useitemtext{req:custFilter} ~\\
+        \ref{req:custBook} \useitemtext{req:custBook} ~\\
+        \ref{req:custDelete} \useitemtext{req:custDelete} ~\\
+        \ref{req:custNotifyDelete} \useitemtext{req:custNotifyDelete} ~\\
 
-        %\ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
-
-
-        \item[\ref{goal:targetDevices}] \useitemtext{goal:targetDevices} ~\\
-
-        %\ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+        \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+        \ref{dom:workingGps} \useitemtext{dom:workingGps} ~\\
+        \ref{dom:uniqueName} \useitemtext{dom:uniqueName} ~\\
+        \ref{dom:qrServiceReliable} \useitemtext{dom:qrServiceReliable} ~\\
+        \ref{dom:storeRegistered} \useitemtext{dom:storeRegistered} ~\\
+        \ref{dom:storeKiosk} \useitemtext{dom:storeKiosk} ~\\
 
 
         \item[\ref{goal:enjoyService}] \useitemtext{goal:enjoyService} ~\\
 
         \ref{req:custQueue} \useitemtext{req:custQueue} ~\\
-        \ref{req:custTicket} \useitemtext{req:custTicket} ~\\
         \ref{req:custTicketKiosk} \useitemtext{req:custTicketKiosk} ~\\
+        \ref{req:custBook} \useitemtext{req:custBook} ~\\
 
         \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+        \ref{dom:internetStores} \useitemtext{dom:internetStores} ~\\
+        \ref{dom:storeRegistered} \useitemtext{dom:storeRegistered} ~\\
         \ref{dom:storeKiosk} \useitemtext{dom:storeKiosk} ~\\
 
 
@@ -252,24 +281,44 @@ In this section, it is given a complete description of the functional requiremen
         \ref{req:mngLogin} \useitemtext{req:mngLogin} ~\\
         \ref{req:mngViewStore} \useitemtext{req:mngViewStore} ~\\
         \ref{req:mngViewQueue} \useitemtext{req:mngViewQueue} ~\\
+        \ref{req:mngViewBook} \useitemtext{req:mngViewBook} ~\\
+        \ref{req:stfLogin} \useitemtext{req:stfLogin} ~\\
+        \ref{req:stfViewStore} \useitemtext{req:stfViewStore} ~\\
+        \ref{req:stfViewQueue} \useitemtext{req:stfViewQueue} ~\\
+        \ref{req:admRegister} \useitemtext{req:admRegister} ~\\
+        \ref{req:admCredentials} \useitemtext{req:admCredentials} ~\\
 
-        \ref{dom:storeRegistered} \useitemtext{dom:storeRegistered} ~\\
+        \ref{dom:internetStores} \useitemtext{dom:internetStores} ~\\
         \ref{dom:employeeEntrance} \useitemtext{dom:employeeEntrance} ~\\
-
-        \begin{description}
-            \item[\ref{goal:knowInAdvance}] \useitemtext{goal:knowInAdvance} ~\\
-
-            \ref{dom:categories} \useitemtext{dom:categories} ~\\
+        \ref{dom:storeRegistered} \useitemtext{dom:storeRegistered} ~\\
+        \ref{dom:capStores} \useitemtext{dom:capStores} ~\\
 
 
-            \item[\ref{goal:limitNumber}] \useitemtext{goal:limitNumber} ~\\
+        \item[\ref{goal:knowInAdvance}] \useitemtext{goal:knowInAdvance} ~\\
+        \ref{req:mngViewStore} \useitemtext{req:mngViewStore} ~\\
+        \ref{req:mngViewQueue} \useitemtext{req:mngViewQueue} ~\\
+        \ref{req:mngViewBook} \useitemtext{req:mngViewBook} ~\\
+        \ref{req:stfViewStore} \useitemtext{req:stfViewStore} ~\\
+        \ref{req:stfViewQueue} \useitemtext{req:stfViewQueue} ~\\
 
-            % TODO \ref{req:mngInsertCap} \useitemtext{req:mngInsertCap} ~\\
+        \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+        \ref{dom:categories} \useitemtext{dom:categories} ~\\
+        \ref{dom:internetStores} \useitemtext{dom:internetStores} ~\\
+        \ref{dom:storeRegistered} \useitemtext{dom:storeRegistered} ~\\
 
-            \ref{dom:qrServiceReliable} \useitemtext{dom:qrServiceReliable} ~\\
-            \ref{dom:qrServiceApi} \useitemtext{dom:qrServiceApi} ~\\
-            % TODO \ref{dom:capStores} \useitemtext{dom:capStores} ~\\
-        \end{description}
+
+        \item[\ref{goal:limitNumber}] \useitemtext{goal:limitNumber} ~\\
+
+        \ref{req:mngCapStore} \useitemtext{req:mngCapStore} ~\\
+        \ref{req:mngCapQueue} \useitemtext{req:mngCapQueue} ~\\
+        \ref{req:mngDeleteTickets} \useitemtext{req:mngDeleteTickets} ~\\
+
+        \ref{dom:smartphone} \useitemtext{dom:smartphone} ~\\
+        \ref{dom:categories} \useitemtext{dom:categories} ~\\
+        \ref{dom:internetStores} \useitemtext{dom:internetStores} ~\\
+        \ref{dom:storeRegistered} \useitemtext{dom:storeRegistered} ~\\
+        \ref{dom:timeArrival} \useitemtext{dom:timeArrival} ~\\
+        \ref{dom:capStores} \useitemtext{dom:capStores} ~\\
     \end{description}
 
     \subsection{Scenarios}
