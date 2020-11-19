@@ -133,7 +133,6 @@ In this section, it is given a complete description of the functional requiremen
         \item \itemtext{req:mngViewQueue}{The system shall allow store managers to view the current status of people in the queue.}
          \item \itemtext{req:mngViewBook}{The system shall allow store managers to view the booked visits to the store.}
         \item \itemtext{req:mngCapStore}{The system shall allow store managers to set a maximum cap of people inside the store.}
-        \item \itemtext{req:mngCapQueue}{The system shall allow store managers to set a maximum cap of people in the queue.}
         \item \itemtext{req:mngDeleteTickets}{The system shall allow store managers to delete tickets and booked visits.}
     \end{enumerate}
 
@@ -181,7 +180,6 @@ In this section, it is given a complete description of the functional requiremen
 			\printitem{req:mngViewQueue}
 			\printitem{req:mngViewBook}
 			\printitem{req:mngCapStore}
-			\printitem{req:mngCapQueue}
 			\printitem{req:mngDeleteTickets}
 			\printitem{req:stfViewStore}
 			\printitem{req:stfViewQueue}
@@ -310,7 +308,6 @@ In this section, it is given a complete description of the functional requiremen
         \item \printitem{goal:limitNumber}
 
        	\printitem{req:mngCapStore}
-       	\printitem{req:mngCapQueue}
        	\printitem{req:mngDeleteTickets}
 
        	\printitem{dom:smartphone}
@@ -359,6 +356,11 @@ In this section, it is given a complete description of the functional requiremen
 		\caption{\textit{Retrieve ticket} use case description.}
 	\end{table}
 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{sd_retrieve_ticket}
+		\caption{\textit{Retrieve ticket} sequence diagram.}
+	\end{figure}
 
 	\begin{table}[H]
     	\centering
@@ -400,6 +402,12 @@ In this section, it is given a complete description of the functional requiremen
     	\caption{\textit{Book a visit} use case description.}
     \end{table}
 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{sd_book_a_visit}
+		\caption{\textit{Book a visit} sequence diagram.}
+	\end{figure}
+
 	\begin{table}[H]
         \centering
         \begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
@@ -422,7 +430,7 @@ In this section, it is given a complete description of the functional requiremen
                 \item The customer swipes to the "My Store Pass" page;
                 \item The customer selects one of the available store passes;
                 \item The customer presses the "Delete Store Pass" button;
-                \item the customer selects "Yes" on the confirmation message;
+                \item The customer selects "Yes" on the confirmation message;
                 \item The customer is notified by the system that the store pass has been deleted successfully.
             \end{enumerate} \\
             \midrule
@@ -433,6 +441,13 @@ In this section, it is given a complete description of the functional requiremen
         \end{tabular}
         \caption{\textit{Delete a store pass} use case description.}
     \end{table}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{sd_delete_store_pass}
+		\caption{\textit{Delete a store pass} sequence diagram.}
+	\end{figure}
+
 
 	\begin{table}[H]
         \centering
@@ -469,6 +484,13 @@ In this section, it is given a complete description of the functional requiremen
         \end{tabular}
         \caption{\textit{Web platform login} use case description.}
     \end{table}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{sd_web_platform_login}
+		\caption{\textit{Web platform login} sequence diagram.}
+	\end{figure}
+
 
 	\begin{table}[H]
         \centering
@@ -508,6 +530,13 @@ In this section, it is given a complete description of the functional requiremen
         \caption{\textit{Register new store} use case description.}
     \end{table}
 
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{sd_register_new_store}
+		\caption{\textit{Register new store} sequence diagram.}
+	\end{figure}
+
+
 	\begin{table}[H]
         \centering
         \begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
@@ -543,6 +572,12 @@ In this section, it is given a complete description of the functional requiremen
         \end{tabular}
         \caption{\textit{Monitor bookings} use case description.}
     \end{table}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=\linewidth]{sd_monitor_bookings}
+		\caption{\textit{Monitor bookings} sequence diagram.}
+	\end{figure}
 
 
     \subsection{Traceability matrix}
