@@ -596,7 +596,63 @@ In this section, it is given a complete description of the functional requiremen
 
 
 \section{Performance Requirements}
+This section specifies numerical requirements placed on the software or on human interaction with the software as a whole.\newline
+All the computation will take place on the servers of the system, therefore the mobile app shall be lightweight and occupy little memory on the customers' smartphones.
+Since the majority of stores usually open only during daytime, the load in the night is expected to decrease considerably.
+Regarding the scan process to let people enter or exit the store, at least 95\% of the passes scan shall be processed in less than 1 second: this is required in order to fulfil the goals of CLup.
 
 \section{Design Constraints}
 
+\subsection{Standards Compliance}
+The system will store all the data in a database with the help of the DBMS. Indeed, the DBMS will provide a standard method to catalog, retrieve, and run queries on the data. Particular attention shall be reserved to the development of the modules interacting with the APIs of the DBMS.
+
+Another relevant aspect is the API interface that CLup offers to the external services for scanning QR codes. The external service will communicate with the CLup servers via the REST API. By using a stateless protocol and standard operations, components can be managed and updated without affecting the system as a whole.\newline
+It’s crucial to design REST APIs properly so that ease of use, security and performance will remain the core factors of the system.
+
+\subsection{Hardware Limitations}
+Since it is essential to have customers arrive at the store on time, customers smartphones shall have a GPS module to get the current location and calculate the travel time to reach the store.
+
+\subsection{Other Constraints}
+Regulatory policies have to be considered for the interaction between CLup
+and customers. The application, in fact, will ask the position of
+the customer while retrieving a ticket and while checking the queue status. Further information will be provided in the section \ref{req:privacy}.
+
 \section{Software System Attributes}
+
+\subsection{Reliability}
+In order to guarantee continuity, services are required to be fault tolerant. Errors handling and fault containment mechanisms to prevent error propagation and data loss are to be arranged.
+
+\subsection{Availability}
+It is essential to have the lowest downtime possible, specially for the plain queue function (see Section \ref{desc:prodFunc}).
+The ticketing components shall guarantee 99.9\% (\textit{three-nines}) of availability, so that only 8.76 hours of downtime per year are allowed.
+Meanwhile the book-a-visit components shall guarantee 99\% (\textit{two-nines}) of availability, so that 3.65 days of downtime per year are allowed.
+
+\subsection{Security}
+The system shall perform role based access control (RBAC): an authorization scheme that grants access rights based on the role of the use. In particular, such components shall grant user authentication and authorization:
+\begin{itemize}
+    \item \textbf{Authentication}: request and verify the identity of CLup admin, store managers and employees attempting to login using a usercode and password.
+    \item \textbf{Authorization}: verify the permissions of the logged user to perform any requested action (e.g. adding or removing a store, creating a new item category, etc.) before performing it.
+\end{itemize}
+
+\subsection{Maintainability}
+The system shall be characterized by scalable and reusable modules which will be easier to maintain and replace in case of failure. Ordinary maintenance, for bug fixes and improvements, will be scheduled during night time, when the user traffic is minimal.\newline
+The core aspects of maintainability and modularity will be addressed in the design document.
+
+\subsection{Portability}
+The web platform for store manager, staff and admin will be accessible by any web browser.\newline
+The mobile application for customers must be accessible by as many users as possible, hence it must be developed for the major mobile OSes. Since the mobile app does not demand special functions, a non native approach can be adopted to fasten the development process.
+The server side has no major requirements for portability.
+
+\subsection{Usability}
+The mobile app and the web platform of the system will be designed to be concise and user-friendly, with a graphical interface to help users identify the proper choice on the screen. It is expected that the 95\% of the users will be able to complete tasks without requiring assistance.
+
+\section{Other Requirements}
+
+\subsection{Privacy Requirements}\label{req:privacy}
+The system shall ensure that the collection and transmission of personal data is handled in accordance with user’s expectation and regulations.\newline
+In fact, to protect customers privacy, only the strictly necessary user data are requested to enjoy the app. Ensuring users privacy is protected positively influences user’s experience, acceptance and continuous use of the platform. For instance the system shall block unauthorized access to implicit information (e.g. location) and encrypt data transmission.
+
+\subsection{Installation requirements}
+For the system to work as intended, it shall be installed paired with an external solution which will carry out the scanning process of the QR codes for entering and exiting stores.\newline
+The complete solution shall be installed in the specified environment (i.e. a store) within 4 working days.\newline
+No specific installation requirements are necessary from the customer point of view. Indeed a customer may install the app right before starting to use it.
