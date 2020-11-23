@@ -61,6 +61,7 @@ abstract sig StorePass {
 sig Booking extends StorePass {
 	email: Email,
 	departureTime: Time,
+	bookingStatus: BookingStatus,
 	itemCategories: some ItemCategory
 }
 
@@ -74,6 +75,10 @@ abstract sig PassStatus {}
 one sig Valid extends PassStatus {}
 one sig Used extends PassStatus {}
 one sig Expired extends PassStatus {}
+
+abstract sig BookingStatus {}
+one sig Pending extends BookingStatus {}
+one sig Confirmed extends BookingStatus {}
 
 sig TimeSlot {
 	date: Date,
@@ -282,7 +287,7 @@ pred world1 {
 
 	one t: Ticket |  (t.passStatus = Expired or t.passStatus = Used)
 }
-run world1 for 2
+--run world1 for 2
 
 pred world2 [q: Queue] {
 	#Store = 1
