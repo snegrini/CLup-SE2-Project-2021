@@ -187,6 +187,7 @@ In this section, it is given a complete description of the functional requiremen
 			\printitem{dom:categories}
 			\printitem{dom:oneToOneQr}
 			\printitem{dom:internetStores}
+			\printitem{dom:pecStores}
 			\printitem{dom:employeeEntrance}
 			\printitem{dom:timeArrival}
 			\printitem{dom:capStores}
@@ -269,6 +270,7 @@ In this section, it is given a complete description of the functional requiremen
 
        	\printitem{dom:smartphone}
        	\printitem{dom:internetStores}
+       	\printitem{dom:pecStores}
        	\printitem{dom:storeRegistered}
        	\printitem{dom:storeKiosk}
 
@@ -286,6 +288,7 @@ In this section, it is given a complete description of the functional requiremen
        	\printitem{req:admCredentials}
 
        	\printitem{dom:internetStores}
+       	\printitem{dom:pecStores}
        	\printitem{dom:employeeEntrance}
        	\printitem{dom:storeRegistered}
        	\printitem{dom:capStores}
@@ -302,6 +305,7 @@ In this section, it is given a complete description of the functional requiremen
        	\printitem{dom:smartphone}
        	\printitem{dom:categories}
        	\printitem{dom:internetStores}
+       	\printitem{dom:pecStores}
        	\printitem{dom:storeRegistered}
 
 
@@ -313,6 +317,7 @@ In this section, it is given a complete description of the functional requiremen
        	\printitem{dom:smartphone}
        	\printitem{dom:categories}
        	\printitem{dom:internetStores}
+       	\printitem{dom:pecStores}
        	\printitem{dom:storeRegistered}
        	\printitem{dom:timeArrival}
        	\printitem{dom:capStores}
@@ -513,9 +518,9 @@ In this section, it is given a complete description of the functional requiremen
             \textbf{Flow of events} &
             \begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
                 \item The CLup admin goes to the "Add supermarket" page;
-                \item The CLup admin fills in the form providing store information: name, address, email and timetables.
+                \item The CLup admin fills in the form providing store information: name, address, PEC and timetables.
                 \item The CLup admin submits the form.
-                \item The system generates credentials for the store managers and store employee and send them to the store via email.
+                \item The system generates credentials for the store managers and store employee and send them  via email to the PEC address of the store.
             \end{enumerate} \\
             \midrule
             \textbf{Exit conditions} & The CLup admin has added a store to the platform. \\
@@ -609,13 +614,8 @@ The system will store all the data in a database with the help of the DBMS. Inde
 Another relevant aspect is the API interface that CLup offers to the external services for scanning QR codes. The external service will communicate with the CLup servers via the REST API. By using a stateless protocol and standard operations, components can be managed and updated without affecting the system as a whole.\newline
 It’s crucial to design REST APIs properly so that ease of use, security and performance will remain the core factors of the system.
 
-\subsection{Hardware Limitations}
-Since it is essential to have customers arrive at the store on time, customers smartphones shall have a GPS module to get the current location and calculate the travel time to reach the store.
-
 \subsection{Other Constraints}
-Regulatory policies have to be considered for the interaction between CLup
-and customers. The application, in fact, will ask the position of
-the customer while retrieving a ticket and while checking the queue status. Further information will be provided in the section \ref{req:privacy}.
+Regulatory policies have to be considered for the interaction between CLup and customers. The application, in fact, will ask the position of the customer while retrieving a ticket and while checking the queue status. Further information will be provided in the section \ref{req:privacy}.
 
 \section{Software System Attributes}
 

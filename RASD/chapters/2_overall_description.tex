@@ -26,28 +26,53 @@ There is also the ticketing kiosk which is a tablet with installed a modified ve
 \section{Product functions}\label{desc:prodFunc}
 This section provides a summary of the major functions that the software will perform w.r.t. the goals already described in section \ref{intro:goals}.
 
-\subsection{Queue function}
-The main function of \textit{CLup} is to manage queues. A user who wants to do grocery-shopping will join the queue for a specific store through the Mobile App.\newline
-Firstly, the user will be asked to select the store in which he desires to line-up.\newline
-Then the system will prompt the current size of the queue and an estimate of waiting time. If the user is satisfied with his choice it can subscribe to the queue, operation that will be confirmed by the emission of a ticket. The ticket comprehends a queue number, which identify user's position in the queue, and a QR code, which is used for the ticket validation. At any time the user will be able to check his position in the and the \textit{leave-at-time} (i.e. the time they need to depart from their current position to reach the store); the current position will be retrieved by the GPS of the user device. This requires the GPS service to be enabled, otherwise no time estimation will be shown.
+\subsection{Store pass function}
+	A Store pass, among other things, consists of a QR code and a pass status. The latter identifies the current status inside the pass life-cycle:
+	\begin{itemize}
+		\item VALID: pass not used yet.
+		\item ACTIVE: pass in use.
+		\item EXPIRED: pass no longer acceptable. The period of time for which it could be used has ended or the pass has been successfully used.
+	\end{itemize}
 
-\subsection{Reserve function}
-This advanced function allows customers to "book a visit" to the store. Customers are asked to select the store they want to visit. Then they need to fill in a form by indicating:
-\begin{itemize}
-	\item an \textbf{email address}, which will be needed to send a receipt and memo to the user;
-	\item the \textbf{date} of the visit;
-	\item the approximate \textbf{expected duration} of the trip;
- 	\item the main \textbf{categories of items} they intend to buy;
-    \item a \textbf{time slot} chosen from the ones suggested by the system.
-\end{itemize}
-Every field of the form is mandatory, this means that the user must complete all of them in order to submit the reservation. The time slots will be suggested according to the saturation of the grocery shelves. The system will try to balance the number of people in each section of the store.
+	The system also takes care of managing delays of customers: a delay greater than 15 minutes will result in the expiration of the pass. This implies that the customer will not be able to enter the store with that pass, instead they shall create a new one.
+	
+	Among the available store seats, about the 15\% of them are reserved only for the bookings.
 
-In addition, for long-term customers, it also suggests a time inferred by the system based on an analysis of the previous visits.
-Customers are also allowed to delete their booking at any time by going to the right section in the Mobile App or by clicking the link sent via email after the reservation.
+	\subsubsection{Queue function}
+	The main function of \textit{CLup} is to manage queues. A user who wants to do grocery-shopping will join the queue for a specific store through the Mobile App.\newline
+	Firstly, the user will be asked to select the store in which he desires to line-up.\newline
+	Then the system will prompt the current size of the queue and an estimate of waiting time. If the user is satisfied with his choice it can subscribe to the queue upon completing a CAPTCHA. The operation will be confirmed by the emission of a ticket. The ticket comprehends a queue number, which identify user's position in the queue, and a QR code, which is used for the ticket validation. At any time the user will be able to check his position in the queue and the \textit{leave-at-time} (i.e. the time they need to depart from their current position to reach the store). When the user has to leave from where he is, the system sends a notification. The current position will be retrieved by the GPS of the user device. If the GPS is disabled no notification will be shown. 
+	
+	\subsubsection{Reserve function}
+	This advanced function allows customers to "book a visit" to the store.
+	A booking has an additional status attribute (i.e. booking status) which can be:
+	\begin{itemize}
+		\item PENDING: the booking has not been confirmed via email yet.
+		\item CONFIRMED: the booking has been confirmed via email.
+	\end{itemize}
+
+	Customers are asked to select the store they want to visit. Then they need to fill in a form by indicating:
+	\begin{itemize}
+		\item an \textbf{email address}, which will be needed to send a receipt and memo to the user;
+		\item the \textbf{date} of the visit;
+		\item the approximate \textbf{expected duration} of the trip;
+	 	\item the main \textbf{categories of items} they intend to buy;
+	    \item a \textbf{time slot} chosen from the ones suggested by the system.
+	\end{itemize}
+	Every field of the form is mandatory, this means that the user must complete all of them, including the solution of a CAPTCHA, in order to submit the reservation.
+	The system will send an email with a confirmation link to the email address provided. To complete the booking process, the user must click the confirmation link.
+	
+	Customers will have to make reservations at least one day in advance.
+	The time slots will be suggested according to the saturation of the grocery shelves. The system will try to balance the number of people in each section of the store.\newline
+	Customers are also allowed to delete their booking at any time by going to the right section in the Mobile App or by clicking the link sent via email after the reservation.
+	Also this function support the \textit{leave-at-time} features, as described above in the Queue Function.
+	
+	In addition, for long-term customers, the app suggests a time inferred by the system based on an analysis of the previous visits.
 
 \subsection{Validation function}
 The system provides an API interface that can be queried to allow the validation of QR codes. The process of scanning the QR is to be handled by an external service.\newline
-Ticket validation through QR is necessary to speed up the check-in process. At the same time it helps staff to detect the authenticity of tickets brought to them.
+Ticket validation through QR is necessary to speed up the check-in process and to increase the number of people in the store. At the same time it helps staff to detect the authenticity of tickets brought to them.\newline
+The scan of the QR code will be executed also at the exit by the cashiers in order to keep track of the number of customers inside the store. In case any customer loses the QR code, then the cashiers will use a backup QR code.
 
 \subsection{Dashboard function}
 \textit{Customers Line-up} web platform grants supermarkets a way to manage queues and customers inside their stores. In particular, \textbf{upon authentication}, it offers three level of access: \textit{manager-level} and \textit{staff-level} for supermarkets and \textit{admin-level} for CLup administrators.
@@ -65,17 +90,13 @@ Ticket validation through QR is necessary to speed up the check-in process. At t
     An administrator of CLup is able to register new supermarkets and generate the respective credentials to access \textit{manager-level} and \textit{staff-level}.
 \end{itemize}
 
+
 \section{User characteristics}
 CLup has four different groups of users:
 \begin{itemize}
-	\item \textbf{Customers}: they are customers of the supermarket. They can be of all ages and don't necessarily have experience with technology. They can also be elderly
-	people who don't have a smartphone at all. For this reason the system should be as easy to use as possible and should provide an alternative way to retrieve a ticket in
-	addition to the mobile app.
-	\item \textbf{Store managers}: they are the managers of the store. They manage the number of people who can access the store and can monitor the ones that
-	are in the supermarket. It is reasonable to assume that they have at least a minimum experience with technology and the use of computer. For this reason the dashboard
-	with all the information about customers will be accessible from a web browser.
-	\item \textbf{Store employee}: they are the employees of the store. They validate the tickets at the entrance of the store. They could not have experience
-	with technology. For this reason the interaction that they should have with the dashboard is reduced to the bare minimum.
+	\item \textbf{Customers}: they are customers of the supermarket. They can be of all ages and don't necessarily have experience with technology. They can also be elderly	people who don't have a smartphone at all. For this reason the system should be as easy to use as possible and should provide an alternative way to retrieve a ticket in addition to the mobile app.
+	\item \textbf{Store managers}: they are the managers of the store. They manage the number of people who can access the store and can monitor the ones that are in the supermarket. It is reasonable to assume that they have at least a minimum experience with technology and the use of computer. For this reason the dashboard with all the information about customers will be accessible from a web browser.
+	\item \textbf{Store employee}: they are the employees of the store. They validate the tickets at the entrance of the store. They could not have experience with technology. For this reason the interaction that they should have with the dashboard is reduced to the bare minimum.
     \item \textbf{CLup admin}: an employee of CLup able to register supermarkets and generate their credentials. It can also maintain and update the system. Registration for this kind of users is forbidden and it has to be added directly during the system's installation process.
 \end{itemize}
 
@@ -83,10 +104,13 @@ CLup has four different groups of users:
 In this topic it is put on paper a general description about considerations, boundaries and items that will limit the system's options.
 
 \subsection{Regulatory policies}
-The mobile application requests the user's permission in order to retrieve and use their position at runtime. The email addresses provided when booking through CLup will not be used for commercial purposes or given to third parties.
+The mobile application requests the user's permission in order to retrieve and use their position at runtime.\newline
+The email addresses provided when booking through CLup will not be used for commercial purposes or given to third parties.\newline
+The email addresses provided by the stores during the registration process must be PEC addresses identified by a Certification Authority.
 
 \subsection{Hardware limitations}
- Here is listed where CLup is available depending on your device. Please note that not all devices are supported.
+Since it is essential to have customers arrive at the store on time, customers smartphones shall have a GPS module to get the current location and calculate the travel time to reach the store.\newline
+Here is listed where CLup is available depending on your device. Please note that not all devices are supported.
 \begin{itemize}
 	\item Mobile App
 		\begin{itemize}
@@ -116,6 +140,7 @@ The properties that hold in the analysed world will be listed below.
 	\item \itemtext{dom:smartphone}{The majority of the customers has a smartphone with internet available.}
 	\item \itemtext{dom:categories}{Customers attains to the declared categories of items.}
 	\item \itemtext{dom:internetStores}{Stores have an internet contract.}
+	\item \itemtext{dom:pecStores}{Stores have a PEC address.}
 	\item \itemtext{dom:workingGps}{GPS modules of smartphones are working properly.}
 	\item \itemtext{dom:gpsPrecision}{The precision of the GPS modules of smartphones is greater than twenty meters.}
 	\item \itemtext{dom:bringSmartphone}{Customers bring with themselves the smartphone that they used to retrieve a ticket or reserve a time slot.}
