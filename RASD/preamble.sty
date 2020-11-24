@@ -59,7 +59,7 @@
 
 % Use cases counter
 \newcounter{usecase}[section]
-\newcommand{\usecaseindex}[1] {%
-	\stepcounter{usecase}%
-	UC.\theusecase% 
+\newcommand{\usecaseindex}[1] {
+    UC.\the\numexpr\value{usecase}+1\relax
+	\refstepcounter{usecase}\label{#1}
 }

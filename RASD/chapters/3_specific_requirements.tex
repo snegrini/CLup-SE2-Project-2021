@@ -120,7 +120,7 @@ In this section, it is given a complete description of the functional requiremen
             \item \itemtext{req:custLeave}{The system shall allow customers to leave a queue.}
             \item \itemtext{req:custFilter}{The system shall allow customers to filter stores by name.}
             \item \itemtext{req:custTtl}{The system shall notify customers when it's time to leave for the store.}
-            \item \itemtext{req:custBook}{The system shall allow customers to book-a-visit to the store and send them the receipt via email.}
+            \item \itemtext{req:custBook}{The system shall allow customers to book-a-visit to the store and send them the confirmation link and receipt via email.}
             \item \itemtext{req:custItems}{The system shall allow book-a-visit customers to specify the main categories of item they intend to buy.}
             \item \itemtext{req:custDelete}{The system shall allow customers to delete a booked visit.}
             \item \itemtext{req:custNotifyDelete}{The system shall notify customers when a ticket or booked visit is deleted.}
@@ -128,7 +128,7 @@ In this section, it is given a complete description of the functional requiremen
 
     \subsubsection{Store manager}
     \begin{enumerate}[resume*=requirements]
-        \item \itemtext{req:mngLogin}{A registered store manager must be able to login to the system by using his/her credentials.}
+        \item \itemtext{req:mngLogin}{A registered store manager must be able to login to the system by using their credentials.}
         \item \itemtext{req:mngViewStore}{The system shall allow store managers to view the current status of people inside the store.}
         \item \itemtext{req:mngViewQueue}{The system shall allow store managers to view the current status of people in the queue.}
          \item \itemtext{req:mngViewBook}{The system shall allow store managers to view the booked visits to the store.}
@@ -138,7 +138,7 @@ In this section, it is given a complete description of the functional requiremen
 
     \subsubsection{Store staff}
     \begin{enumerate}[resume*=requirements]
-        \item \itemtext{req:stfLogin}{A registered store staff must be able to login to the system by using his/her credentials.}
+        \item \itemtext{req:stfLogin}{A registered store staff must be able to login to the system by using their credentials.}
         \item \itemtext{req:stfViewStore}{The system shall allow store staff to view the current status of people inside the store.}
         \item \itemtext{req:stfViewQueue}{The system shall allow store staff to view the current status of people in the queue.}
     \end{enumerate}
@@ -336,7 +336,7 @@ In this section, it is given a complete description of the functional requiremen
 			\textbf{Name} & Retrieve ticket \\
 
 			\midrule
-			\textbf{ID} & \usecaseindex ~\\
+			\textbf{ID} & \usecaseindex{uc:retrieveTicket} ~\\
 			\midrule
 			\textbf{Actors} & Customer \\
 			\midrule
@@ -374,7 +374,7 @@ In this section, it is given a complete description of the functional requiremen
     		\textbf{Name} & Book a visit \\
 
     		\midrule
-    		\textbf{ID} & \usecaseindex ~\\
+    		\textbf{ID} & \usecaseindex{uc:bookVisit} ~\\
     		\midrule
     		\textbf{Actors} & Customer \\
     		\midrule
@@ -420,7 +420,7 @@ In this section, it is given a complete description of the functional requiremen
             \textbf{Name} & Delete a store pass \\
 
             \midrule
-            \textbf{ID} & \usecaseindex ~\\
+            \textbf{ID} & \usecaseindex{uc:deletePass} ~\\
             \midrule
             \textbf{Actors} & Customer \\
             \midrule
@@ -461,7 +461,7 @@ In this section, it is given a complete description of the functional requiremen
             \textbf{Name} & Web platform login \\
 
             \midrule
-            \textbf{ID} & \usecaseindex ~\\
+            \textbf{ID} & \usecaseindex{uc:webLogin} ~\\
             \midrule
             \textbf{Actors} & Store manager, Store employee, CLup admin \\
             \midrule
@@ -504,7 +504,7 @@ In this section, it is given a complete description of the functional requiremen
             \textbf{Name} & Register new store \\
 
             \midrule
-            \textbf{ID} & \usecaseindex ~\\
+            \textbf{ID} & \usecaseindex{uc:registerStore} ~\\
             \midrule
             \textbf{Actors} & CLup admin \\
             \midrule
@@ -549,7 +549,7 @@ In this section, it is given a complete description of the functional requiremen
             \textbf{Name} & Monitor bookings \\
 
             \midrule
-            \textbf{ID} & \usecaseindex ~\\
+            \textbf{ID} & \usecaseindex{uc:monitorBookings} ~\\
             \midrule
             \textbf{Actors} & Store manager \\
             \midrule
@@ -587,18 +587,84 @@ In this section, it is given a complete description of the functional requiremen
 
     \subsection{Traceability matrix}
     \begin{center}
-        \begin{tabular}{@{}p{0.25\linewidth}cccc@{}}
+        \begin{tabular}{@{}p{0.08\linewidth}cccccccccccccccccccccc@{}}
             \toprule
-            \textbf{Item} & \textbf{\ref{req:custQueue}} & \textbf{\ref{req:custTicket}}
-            & \textbf{\ref{req:custTime}} & \textbf{\ref{req:custNum}}\\
+            \textbf{Item} &
+            \ref{req:custQueue} &
+            \ref{req:custTicket} &
+            \ref{req:custTicketKiosk} &
+            \ref{req:custNum} &
+            \ref{req:custTime} &
+            \ref{req:custGps} &
+            \ref{req:custLeave} &
+            \ref{req:custFilter} &
+            \ref{req:custTtl} &
+            \ref{req:custBook} &
+            \ref{req:custItems} &
+            \ref{req:custDelete} &
+            \ref{req:custNotifyDelete}\\
             \midrule
-            Lorem Ipsum & \cmark \\
-            Dolor Sit & & & \cmark \\
+
+            \textbf{UC.\ref{uc:retrieveTicket}} & \cmark & \cmark & & \cmark & \cmark & & & \cmark \\
+            \textbf{UC.\ref{uc:bookVisit}} & \cmark & & & & & & & \cmark & & \cmark & \cmark \\
+            \textbf{UC.\ref{uc:deletePass}} & & & & & & & \cmark & \cmark & & & & \cmark & \cmark \\
+            \textbf{UC.\ref{uc:webLogin}} & \\
+            \textbf{UC.\ref{uc:registerStore}} & \\
+            \textbf{UC.\ref{uc:monitorBookings}} & \\
+            \midrule
+            \ref{goal:custHazardSit} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark & \cmark \\
+            \ref{goal:storeHazardSit} & \\
+            \ref{goal:shortenTime} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark \\
+            \ref{goal:arriveOnTime} & \cmark & & & \cmark & \cmark & \cmark & & & \cmark & \cmark \\
+            \ref{goal:otherTasks} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark &\\
+            \ref{goal:easyExp} & & \cmark & & \cmark & \cmark & & \cmark & \cmark & & \cmark & & \cmark & \cmark \\
+            \ref{goal:enjoyService} & \cmark & & \cmark & & & & & & & \cmark \\
+            \ref{goal:monitorAccess} & \\
+            \ref{goal:knowInAdvance} & \\
+            \ref{goal:limitNumber} & \\
+
+            \bottomrule
+        \end{tabular}
+
+        \begin{tabular}{@{}p{0.08\linewidth}cccccc|ccc|cc@{}}
+            \toprule
+            \textbf{Item} &
+            \ref{req:mngLogin} &
+            \ref{req:mngViewStore} &
+            \ref{req:mngViewQueue} &
+            \ref{req:mngViewBook} &
+            \ref{req:mngCapStore} &
+            \ref{req:mngDeleteTickets} &
+
+            \ref{req:stfLogin} &
+            \ref{req:stfViewStore} &
+            \ref{req:stfViewQueue} &
+
+            \ref{req:admRegister} &
+            \ref{req:admCredentials}\\
+            \midrule
+
+            \textbf{UC.\ref{uc:retrieveTicket}} &&&&&&&&&&&\\
+            \textbf{UC.\ref{uc:bookVisit}} &&&&&&&&&&&\\
+            \textbf{UC.\ref{uc:deletePass}} &&&&&&&&&&&\\
+            \textbf{UC.\ref{uc:webLogin}} & \cmark & & & & & & \cmark & & \cmark & \cmark \\
+            \textbf{UC.\ref{uc:registerStore}} & & & & & & & & & \cmark & \cmark \\
+            \textbf{UC.\ref{uc:monitorBookings}} & \cmark & & & \cmark & & \cmark &&&&&\\
+            \midrule
+            \ref{goal:custHazardSit} &&&&&&&&&&&\\
+            \ref{goal:storeHazardSit} & & \cmark & \cmark & \cmark & \cmark & \cmark & & \cmark & \cmark \\
+            \ref{goal:shortenTime} &&&&&&&&&&&\\
+            \ref{goal:arriveOnTime} &&&&&&&&&&&\\
+            \ref{goal:otherTasks} &&&&&&&&&&&\\
+            \ref{goal:easyExp} &&&&&&&&&&&\\
+            \ref{goal:enjoyService} &&&&&&&&&&&\\
+            \ref{goal:monitorAccess} & \cmark & \cmark & \cmark & \cmark & & & \cmark & \cmark & \cmark & \cmark & \cmark \\
+            \ref{goal:knowInAdvance} & & \cmark & \cmark & \cmark & & & & \cmark & & & \\
+            \ref{goal:limitNumber} & & & & & \cmark & \cmark & & & & \\
 
             \bottomrule
         \end{tabular}
     \end{center}
-
 
 \section{Performance Requirements}
 This section specifies numerical requirements placed on the software or on human interaction with the software as a whole.\newline
