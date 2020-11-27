@@ -613,38 +613,38 @@ In this section, it is given a complete description of the functional requiremen
         \begin{tabular}{@{}p{0.08\linewidth}cccccccccccccccccccccc@{}}
             \toprule
             \textbf{Item} &
-            \ref{req:custQueue} &
-            \ref{req:custTicket} &
-            \ref{req:custTicketKiosk} &
-            \ref{req:custNum} &
-            \ref{req:custTime} &
-            \ref{req:custGps} &
-            \ref{req:custLeave} &
-            \ref{req:custFilter} &
-            \ref{req:custTtl} &
-            \ref{req:custBook} &
-            \ref{req:custItems} &
-            \ref{req:custDelete} &
-            \ref{req:custNotifyDelete}\\
+            \clupref{req:custQueue} &
+            \clupref{req:custTicket} &
+            \clupref{req:custTicketKiosk} &
+            \clupref{req:custNum} &
+            \clupref{req:custTime} &
+            \clupref{req:custGps} &
+            \clupref{req:custLeave} &
+            \clupref{req:custFilter} &
+            \clupref{req:custTtl} &
+            \clupref{req:custBook} &
+            \clupref{req:custItems} &
+            \clupref{req:custDelete} &
+            \clupref{req:custNotifyDelete}\\
             \midrule
 
-            \textbf{UC.\ref{uc:retrieveTicket}} & \cmark & \cmark & & \cmark & \cmark & \cmark & & \cmark & \cmark \\
-            \textbf{UC.\ref{uc:bookVisit}} & \cmark & & & & & \cmark & & \cmark & \cmark & \cmark & \cmark \\
-            \textbf{UC.\ref{uc:deletePass}} & & & & & & & \cmark & \cmark & & & & \cmark & \cmark \\
-            \textbf{UC.\ref{uc:webLogin}} & \\
-            \textbf{UC.\ref{uc:registerStore}} & \\
-            \textbf{UC.\ref{uc:monitorBookings}} & \\
+            \textbf{\prettyref{uc:retrieveTicket}} & \cmark & \cmark & & \cmark & \cmark & \cmark & & \cmark & \cmark \\
+            \textbf{\prettyref{uc:bookVisit}} & \cmark & & & & & \cmark & & \cmark & \cmark & \cmark & \cmark \\
+            \textbf{\prettyref{uc:deletePass}} & & & & & & & \cmark & \cmark & & & & \cmark & \cmark \\
+            \textbf{\prettyref{uc:webLogin}} & \\
+            \textbf{\prettyref{uc:registerStore}} & \\
+            \textbf{\prettyref{uc:monitorBookings}} & \\
             \midrule
-            \ref{goal:custHazardSit} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark & \cmark \\
-            \ref{goal:storeHazardSit} & \\
-            \ref{goal:shortenTime} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark \\
-            \ref{goal:arriveOnTime} & \cmark & & & \cmark & \cmark & \cmark & & & \cmark & \cmark \\
-            \ref{goal:otherTasks} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark &\\
-            \ref{goal:easyExp} & & \cmark & & \cmark & \cmark & & \cmark & \cmark & & \cmark & & \cmark & \cmark \\
-            \ref{goal:enjoyService} & \cmark & & \cmark & & & & & & & \cmark \\
-            \ref{goal:monitorAccess} & \\
-            \ref{goal:knowInAdvance} & \\
-            \ref{goal:limitNumber} & \\
+            \clupref{goal:custHazardSit} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark & \cmark \\
+            \clupref{goal:storeHazardSit} & \\
+            \clupref{goal:shortenTime} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark \\
+            \clupref{goal:arriveOnTime} & \cmark & & & \cmark & \cmark & \cmark & & & \cmark & \cmark \\
+            \clupref{goal:otherTasks} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark &\\
+            \clupref{goal:easyExp} & & \cmark & & \cmark & \cmark & & \cmark & \cmark & & \cmark & & \cmark & \cmark \\
+            \clupref{goal:enjoyService} & \cmark & & \cmark & & & & & & & \cmark \\
+            \clupref{goal:monitorAccess} & \\
+            \clupref{goal:knowInAdvance} & \\
+            \clupref{goal:limitNumber} & \\
 
             \bottomrule
         \end{tabular}
@@ -712,7 +712,7 @@ Regulatory policies have to be considered for the interaction between CLup and c
 In order to guarantee continuity, services are required to be fault tolerant. Errors handling and fault containment mechanisms to prevent error propagation and data loss are to be arranged.
 
 \subsection{Availability}
-It is essential to have the lowest downtime possible, specially for the plain queue function (see Section \ref{desc:prodFunc}).
+It is essential to have the lowest downtime possible, specially for the plain queue function (see section \clupref{desc:prodFunc}).
 The ticketing components shall guarantee 99.9\% (\textit{three-nines}) of availability, so that only 8.76 hours of downtime per year are allowed.
 Meanwhile the book-a-visit components shall guarantee 99\% (\textit{two-nines}) of availability, so that 3.65 days of downtime per year are allowed.
 

@@ -24,9 +24,16 @@
 \RequirePackage{caption}
 \RequirePackage{booktabs}
 
-\RequirePackage{todonotes}
+% Keep prettyref before the hyperref package
+\RequirePackage{prettyref}
+\newrefformat{uc}{\hyperref[{#1}]{UC.\ref*{#1}}}
 
 \RequirePackage[hidelinks]{hyperref}
+\hypersetup {
+    colorlinks = true,
+    linkcolor  = black,
+    citecolor  = black
+}
 
 \RequirePackage{graphicx}
 \graphicspath{{./figures/}{./images/}}
@@ -52,6 +59,16 @@
 
 \newcommand{\printitem}[1] {
 	\ref{#1} \useitemtext{#1}\break\par
+}
+
+\definecolor{clupgrapefruit}{RGB}{218, 64, 38}
+\newcommand{\clupautoref}[1] {%
+    \hypersetup{linkcolor=clupgrapefruit}%
+    \autoref{#1}%
+}
+\newcommand{\clupref}[1] {%
+    \hypersetup{linkcolor=clupgrapefruit}%
+    \ref{#1}%
 }
 
 % Checkmark
