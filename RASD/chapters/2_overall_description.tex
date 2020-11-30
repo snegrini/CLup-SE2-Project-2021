@@ -17,11 +17,15 @@ There is also the ticketing kiosk which is a tablet with installed a modified ve
 	\caption{CLup system diagram.}
 \end{figure}
 
+\subsection{Class diagram}
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{class_diagram}
 	\caption{Class diagram.}
 \end{figure}
+
+\subsection{State diagrams}
+
 
 \section{Product functions}\label{desc:prodFunc}
 This section provides a summary of the major functions that the software will perform w.r.t. the goals already described in section \clupref{intro:goals}.
@@ -60,9 +64,10 @@ This section provides a summary of the major functions that the software will pe
 	    \item a \textbf{time slot} chosen from the ones suggested by the system.
 	\end{itemize}
 	Every field of the form is mandatory, this means that the user must complete all of them, including the solution of a CAPTCHA, in order to submit the reservation.
-	The system will send an email with a confirmation link to the email address provided. To complete the booking process, the user must click the confirmation link.
+	
+	Customers will have to make reservations at least one day in advance.\newline
+	The system will send an email with a confirmation link to the email address provided. To complete the booking process, the user must click the confirmation link within 24 hours from the time of subscription and in any case at least 1 hour before the chosen time slot. Users who fail to do so will have their booking expired.
 
-	Customers will have to make reservations at least one day in advance.
 	The time slots will be suggested according to the saturation of the grocery shelves. The system will try to balance the number of people in each section of the store.\newline
 	Customers are also allowed to delete their booking at any time by going to the right section in the Mobile App or by clicking the link sent via email after the reservation.
 	Also this function support the \textit{leave-at-time} features, as described above in the Queue Function.

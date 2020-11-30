@@ -609,85 +609,94 @@ In this section, it is given a complete description of the functional requiremen
 
 
     \subsection{Traceability matrix}
-    \begin{center}
-        \begin{tabular}{@{}p{0.08\linewidth}cccccccccccccccccccccc@{}}
-            \toprule
-            \textbf{Item} &
-            \clupref{req:custQueue} &
-            \clupref{req:custTicket} &
-            \clupref{req:custTicketKiosk} &
-            \clupref{req:custNum} &
-            \clupref{req:custTime} &
-            \clupref{req:custGps} &
-            \clupref{req:custLeave} &
-            \clupref{req:custFilter} &
-            \clupref{req:custTtl} &
-            \clupref{req:custBook} &
-            \clupref{req:custItems} &
-            \clupref{req:custDelete} &
-            \clupref{req:custNotifyDelete}\\
-            \midrule
+    
+    \begin{table}[H]
+	    \centering
+	    \resizebox{0.85\textwidth}{!} { 
+	    \begin{tabular}{@{}p{0.08\linewidth}cccccccccccccccccccccc@{}}  
+	         \toprule
+	         \textbf{Item} &
+	         \clupref{req:custQueue} &
+	         \clupref{req:custTicket} &
+	         \clupref{req:custTicketKiosk} &
+	         \clupref{req:custNum} &
+	         \clupref{req:custTime} &
+	         \clupref{req:custGps} &
+	         \clupref{req:custLeave} &
+	         \clupref{req:custFilter} &
+	         \clupref{req:custTtl} &
+	         \clupref{req:custBook} &
+	         \clupref{req:custItems} &
+	         \clupref{req:custDelete} &
+	         \clupref{req:custNotifyDelete}\\
+	         \midrule
+	
+	         \textbf{\prettyref{uc:retrieveTicket}} & \cmark & \cmark & & \cmark & \cmark & \cmark & & \cmark & \cmark \\
+	         \textbf{\prettyref{uc:bookVisit}} & \cmark & & & & & \cmark & & \cmark & \cmark & \cmark & \cmark \\
+	         \textbf{\prettyref{uc:deletePass}} & & & & & & & \cmark & \cmark & & & & \cmark & \cmark \\
+	         \textbf{\prettyref{uc:webLogin}} & \\
+	         \textbf{\prettyref{uc:registerStore}} & \\
+	         \textbf{\prettyref{uc:monitorBookings}} & \\
+	         \midrule
+	         \clupref{goal:custHazardSit} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark & \cmark \\
+	         \clupref{goal:storeHazardSit} & \\
+	         \clupref{goal:shortenTime} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark \\
+	         \clupref{goal:arriveOnTime} & \cmark & & & \cmark & \cmark & \cmark & & & \cmark & \cmark \\
+	         \clupref{goal:otherTasks} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark &\\
+	         \clupref{goal:easyExp} & & \cmark & & \cmark & \cmark & & \cmark & \cmark & & \cmark & & \cmark & \cmark \\
+	         \clupref{goal:enjoyService} & \cmark & & \cmark & & & & & & & \cmark \\
+	         \clupref{goal:monitorAccess} & \\
+	         \clupref{goal:knowInAdvance} & \\
+	         \clupref{goal:limitNumber} & \\
+	
+	         \bottomrule
+	     \end{tabular}}
+     	\caption{\textit{Traceability matrix} for requirements R.1 to R.13.}
+ 	 \end{table}
 
-            \textbf{\prettyref{uc:retrieveTicket}} & \cmark & \cmark & & \cmark & \cmark & \cmark & & \cmark & \cmark \\
-            \textbf{\prettyref{uc:bookVisit}} & \cmark & & & & & \cmark & & \cmark & \cmark & \cmark & \cmark \\
-            \textbf{\prettyref{uc:deletePass}} & & & & & & & \cmark & \cmark & & & & \cmark & \cmark \\
-            \textbf{\prettyref{uc:webLogin}} & \\
-            \textbf{\prettyref{uc:registerStore}} & \\
-            \textbf{\prettyref{uc:monitorBookings}} & \\
-            \midrule
-            \clupref{goal:custHazardSit} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark & \cmark \\
-            \clupref{goal:storeHazardSit} & \\
-            \clupref{goal:shortenTime} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark \\
-            \clupref{goal:arriveOnTime} & \cmark & & & \cmark & \cmark & \cmark & & & \cmark & \cmark \\
-            \clupref{goal:otherTasks} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark &\\
-            \clupref{goal:easyExp} & & \cmark & & \cmark & \cmark & & \cmark & \cmark & & \cmark & & \cmark & \cmark \\
-            \clupref{goal:enjoyService} & \cmark & & \cmark & & & & & & & \cmark \\
-            \clupref{goal:monitorAccess} & \\
-            \clupref{goal:knowInAdvance} & \\
-            \clupref{goal:limitNumber} & \\
-
-            \bottomrule
-        \end{tabular}
-
-        \begin{tabular}{@{}p{0.08\linewidth}cccccc|ccc|cc@{}}
-            \toprule
-            \textbf{Item} &
-            \ref{req:mngLogin} &
-            \ref{req:mngViewStore} &
-            \ref{req:mngViewQueue} &
-            \ref{req:mngViewBook} &
-            \ref{req:mngCapStore} &
-            \ref{req:mngDeleteTickets} &
-
-            \ref{req:stfLogin} &
-            \ref{req:stfViewStore} &
-            \ref{req:stfViewQueue} &
-
-            \ref{req:admRegister} &
-            \ref{req:admCredentials}\\
-            \midrule
-
-            \textbf{UC.\ref{uc:retrieveTicket}} &&&&&&&&&&&\\
-            \textbf{UC.\ref{uc:bookVisit}} &&&&&&&&&&&\\
-            \textbf{UC.\ref{uc:deletePass}} &&&&&&&&&&&\\
-            \textbf{UC.\ref{uc:webLogin}} & \cmark & & & & & & \cmark & & \cmark & \cmark \\
-            \textbf{UC.\ref{uc:registerStore}} & & & & & & & & & & \cmark & \cmark \\
-            \textbf{UC.\ref{uc:monitorBookings}} & \cmark & & & \cmark & & \cmark &&&&&\\
-            \midrule
-            \ref{goal:custHazardSit} &&&&&&&&&&&\\
-            \ref{goal:storeHazardSit} & & \cmark & \cmark & \cmark & \cmark & \cmark & & \cmark & \cmark \\
-            \ref{goal:shortenTime} &&&&&&&&&&&\\
-            \ref{goal:arriveOnTime} &&&&&&&&&&&\\
-            \ref{goal:otherTasks} &&&&&&&&&&&\\
-            \ref{goal:easyExp} &&&&&&&&&&&\\
-            \ref{goal:enjoyService} &&&&&&&&&&&\\
-            \ref{goal:monitorAccess} & \cmark & \cmark & \cmark & \cmark & & & \cmark & \cmark & \cmark & \cmark & \cmark \\
-            \ref{goal:knowInAdvance} & & \cmark & \cmark & \cmark & & & & \cmark & & & \\
-            \ref{goal:limitNumber} & & & & & \cmark & \cmark & & & & \\
-
-            \bottomrule
-        \end{tabular}
-    \end{center}
+	 \begin{table}[H]
+		 \centering
+	     \resizebox{0.85\textwidth}{!} {
+	     \begin{tabular}{@{}p{0.08\linewidth}cccccc|ccc|cc@{}} 
+	         \toprule
+	         \textbf{Item} &
+	         \ref{req:mngLogin} &
+	         \ref{req:mngViewStore} &
+	         \ref{req:mngViewQueue} &
+	         \ref{req:mngViewBook} &
+	         \ref{req:mngCapStore} &
+	         \ref{req:mngDeleteTickets} &
+	
+	         \ref{req:stfLogin} &
+	         \ref{req:stfViewStore} &
+	         \ref{req:stfViewQueue} &
+	
+	         \ref{req:admRegister} &
+	         \ref{req:admCredentials}\\
+	         \midrule
+	
+	         \textbf{\prettyref{uc:retrieveTicket}} & & & & & & & & & & &\\
+	         \textbf{\prettyref{uc:bookVisit}} & & & & & & & & & & &\\
+	         \textbf{\prettyref{uc:deletePass}} & & & & & & & & & & &\\
+	         \textbf{\prettyref{uc:webLogin}} & \cmark & & & & & & \cmark & & \cmark & \cmark \\
+	         \textbf{\prettyref{uc:registerStore}} & & & & & & & & & & \cmark & \cmark \\
+	         \textbf{\prettyref{uc:monitorBookings}} & \cmark & & & \cmark & & \cmark &&&&&\\
+	         \midrule
+	         \ref{goal:custHazardSit} & & & & & & & & & & &\\
+	         \ref{goal:storeHazardSit} & & \cmark & \cmark & \cmark & \cmark & \cmark & & \cmark & \cmark \\
+	         \ref{goal:shortenTime} & & & & & & & & & & &\\
+	         \ref{goal:arriveOnTime} & & & & & & & & & & &\\
+	         \ref{goal:otherTasks} & & & & & & & & & & &\\
+	         \ref{goal:easyExp} & & & & & & & & & & &\\
+	         \ref{goal:enjoyService} & & & & & & & & & & &\\
+	         \ref{goal:monitorAccess} & \cmark & \cmark & \cmark & \cmark & & & \cmark & \cmark & \cmark & \cmark & \cmark \\
+	         \ref{goal:knowInAdvance} & & \cmark & \cmark & \cmark & & & & \cmark & & & \\
+	         \ref{goal:limitNumber} & & & & & \cmark & \cmark & & & & \\
+	
+	         \bottomrule
+	     \end{tabular}}
+     	 \caption{\textit{Traceability matrix} for requirements R.14 to R.24.}
+    \end{table}
 
 \section{Performance Requirements}
 This section specifies numerical requirements placed on the software or on human interaction with the software as a whole.\newline
