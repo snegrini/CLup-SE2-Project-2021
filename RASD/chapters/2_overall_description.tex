@@ -3,19 +3,36 @@
 \section{Product perspective}
 
 The system will be developed from scratch and it will completely replace the legacy system. \newline
-It is composed by a client part and a server part.
-The latter is composed by an application server (CLup Server) where all the logic is located. It also comprehends the web server, the database server and the mail server,
-which all communicate with the CLup Server.
-It has an interface, the API Manager, which exposes the public CLup API, for the QR validation. It also makes use of an External Map API for querying data about the
-distance of the user from the store. This information will be used to inform the user of when leave the current place.\newline
-The solution for the client part includes two interfaces based on the user type: the mobile app for the customers and the browser for supermarkets' employee and managers.
-There is also the ticketing kiosk which is a tablet with installed a modified version of the mobile app able to print the ticket on place.
-\vspace{1em}
+
+\vspace{0.8em}
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.45]{product_perspective_diagram}
 	\caption{CLup system diagram.}
 \end{figure}
+
+
+It is composed by a client part and a server part:
+\begin{itemize}
+	\item \textbf{Server side:}
+	\begin{itemize}
+		\item \textit{Application Server (CLup Server):} server where all the logic is located. It communicates with other servers an is the central point of the system.
+		\item \textit{Web Server:} server used for the communication with the clients.
+		\item \textit{Database Server:} server where all data are stored.
+		\item \textit{Mail Server:} server used to send confirmation emails about the bookings.
+		\item \textit{API Manager:} Manage the APIs of the system.
+			\begin{itemize}
+				\item Public CLup API: API that are exposed by the system. Enables to executer queries about the validity of scanned QRs.
+				\item External map API: API used to retrieve data about the distance of the user from the store. This information will be used to inform the user of when leave the current place.
+			\end{itemize}
+	\end{itemize}
+	\item \textbf{Client side:}
+	\begin{itemize}
+		\item \textit{Mobile App:} Application installed on customers smartphone. It allows to retrieve a ticket or book a visit.
+		\item \textit{Ticketing Kiosk:} Tablet installed at the entrance of the store to which a printer is attached. It has installed a modified version of the mobile app which is able to print the ticket on place.
+		\item \textit{Web Browser:} Used by store employees and managers to use the web dashboard.
+	\end{itemize}
+\end{itemize}
 
 \subsection{Class diagram}
 \begin{figure}[H]
