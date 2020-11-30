@@ -36,7 +36,8 @@ Below are presented the goals of CLup. Further description will be discussed in 
 Customer Line-up (CLup) is an \textit{easy-to-use} application which aims to settle for various queuing problems faced by supermarkets and their customers.\newline
 On the one side, it allows store managers to regulate the influx of people in the building and, on the other side, it saves people from having to line up and stand outside of stores for hours on end.
 
-Customers can enter a queue in \textit{real-time} by taking a ticket via different channels such as Self Service Ticketing Kiosk and Mobile App. During this process, the user is given an estimation of the waiting time and the \textit{leave-at-time} (i.e. the time they need to depart from their current position to reach the store). This ticket comprehends a queue number, which identify user's position in the queue, and a QR code, which is used for the ticket validation.
+Customers can enter a queue in \textit{real-time} by taking a ticket via different channels such as Self Service Ticketing Kiosk and Mobile App. During this process, the user is given an estimation of the waiting time and the \textit{leave-at-time} (i.e. the time they need to depart from their current position to reach the store). This ticket comprehends a queue number, which identify user's position in the queue, and a QR code, which is used for the ticket validation.\newline
+The validation process will be performed by a store employee using a dedicated application (Store App).
 
 The system offers a web platform providing performance insights via reports and dashboards accessible to the store managers, which can monitor the customers flow and check the journey map of all the clients inside the store at a given time.
 
@@ -61,6 +62,8 @@ This application works as a digital counterpart to the common situation where pe
 	\item Ticket is retrieved from the customer at the local kiosk.
 	\item Customers can book a time-slot at the store.
 	\item Customers check the queue status of the store.
+	\item Ticket are validated via Staff App.
+	\item Supermarkets monitor store data via dashboard. 
 \end{enumerate}
 
 \section{Glossary}
@@ -73,6 +76,7 @@ This application works as a digital counterpart to the common situation where pe
 		Supermarkets & Used in this document to mean supermarket managers.\\
 		Stores & Used in this document to mean the physical building of the supermarket.\\
 		Customers & Supermarket customers which are also the users of CLup.\\
+		Employees & Used in this document to mean both entrance-staff and cashiers.\\
 		Store Pass & General term that comprehends both tickets and bookings.\\
 		Ticket & Pass generated from the system which is comprehensive of the Queue number and QR code.\\
 		Booking, Reservation & Pass generated from the system as a result of the reservation process.\\
@@ -80,6 +84,8 @@ This application works as a digital counterpart to the common situation where pe
 		QR code & Type of matrix barcode, used by the system for the ticket validation.\\
 		System & Totality of the hardware/software applications that contribute to provide the service concerned. Also referred as CLup, Application, Platform.\\
 		Legacy System & Used in this document to mean the physical ticketing system where you retrieve a ticket from a stand.\\
+		User App & CLup mobile application which targets are the customers of the store.\\
+		Store App & CLup mobile application which targets are the employees of the store.\\
 		\bottomrule
 	\end{tabular}
 \end{center}
