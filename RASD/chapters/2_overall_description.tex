@@ -40,7 +40,7 @@ It is composed by a client part and a server part:
 \end{figure}
 
 \section{Product functions}\label{desc:prodFunc}
-This section provides a summary of the major functions that the software will perform w.r.t. the goals already described in section \ref{intro:goals}.
+This section provides a summary of the major functions that the software will perform w.r.t. the goals already described in section \clupref{intro:goals}.
 
 \subsection{Store pass function}
 	A Store pass, among other things, consists of a QR code and a pass status. The latter identifies the current status inside the pass life-cycle:
@@ -51,14 +51,14 @@ This section provides a summary of the major functions that the software will pe
 	\end{itemize}
 
 	The system also takes care of managing delays of customers: a delay greater than 15 minutes will result in the expiration of the pass. This implies that the customer will not be able to enter the store with that pass, instead they shall create a new one.
-	
+
 	Among the available store seats, about the 15\% of them are reserved only for the bookings.
 
 	\subsubsection{Queue function}
 	The main function of \textit{CLup} is to manage queues. A user who wants to do grocery-shopping will join the queue for a specific store through the Mobile App.\newline
 	Firstly, the user will be asked to select the store in which he desires to line-up.\newline
-	Then the system will prompt the current size of the queue and an estimate of waiting time. If the user is satisfied with his choice it can subscribe to the queue upon completing a CAPTCHA. The operation will be confirmed by the emission of a ticket. The ticket comprehends a queue number, which identify user's position in the queue, and a QR code, which is used for the ticket validation. At any time the user will be able to check his position in the queue and the \textit{leave-at-time} (i.e. the time they need to depart from their current position to reach the store). When the user has to leave from where he is, the system sends a notification. The current position will be retrieved by the GPS of the user device. If the GPS is disabled no notification will be shown. 
-	
+	Then the system will prompt the current size of the queue and an estimate of waiting time. If the user is satisfied with his choice it can subscribe to the queue upon completing a CAPTCHA. The operation will be confirmed by the emission of a ticket. The ticket comprehends a queue number, which identify user's position in the queue, and a QR code, which is used for the ticket validation. At any time the user will be able to check his position in the queue and the \textit{leave-at-time} (i.e. the time they need to depart from their current position to reach the store). When the user has to leave from where he is, the system sends a notification. The current position will be retrieved by the GPS of the user device. If the GPS is disabled no notification will be shown.
+
 	\subsubsection{Reserve function}
 	This advanced function allows customers to "book a visit" to the store.
 	A booking has an additional status attribute (i.e. booking status) which can be:
@@ -77,12 +77,12 @@ This section provides a summary of the major functions that the software will pe
 	\end{itemize}
 	Every field of the form is mandatory, this means that the user must complete all of them, including the solution of a CAPTCHA, in order to submit the reservation.
 	The system will send an email with a confirmation link to the email address provided. To complete the booking process, the user must click the confirmation link.
-	
+
 	Customers will have to make reservations at least one day in advance.
 	The time slots will be suggested according to the saturation of the grocery shelves. The system will try to balance the number of people in each section of the store.\newline
 	Customers are also allowed to delete their booking at any time by going to the right section in the Mobile App or by clicking the link sent via email after the reservation.
 	Also this function support the \textit{leave-at-time} features, as described above in the Queue Function.
-	
+
 	In addition, for long-term customers, the app suggests a time inferred by the system based on an analysis of the previous visits.
 
 \subsection{Validation function}
@@ -113,7 +113,7 @@ CLup has four different groups of users:
 	\item \textbf{Customers}: they are customers of the supermarket. They can be of all ages and don't necessarily have experience with technology. They can also be elderly	people who don't have a smartphone at all. For this reason the system should be as easy to use as possible and should provide an alternative way to retrieve a ticket in addition to the mobile app.
 	\item \textbf{Store managers}: they are the managers of the store. They manage the number of people who can access the store and can monitor the ones that are in the supermarket. It is reasonable to assume that they have at least a minimum experience with technology and the use of computer. For this reason the dashboard with all the information about customers will be accessible from a web browser.
 	\item \textbf{Store employee}: they are the employees of the store. They validate the tickets at the entrance of the store. They could not have experience with technology. For this reason the interaction that they should have with the dashboard is reduced to the bare minimum.
-    \item \textbf{CLup admin}: an employee of CLup able to register supermarkets and generate their credentials. It can also maintain and update the system. Registration for this kind of users is forbidden and it has to be added directly during the system's installation process.
+    \item \textbf{CLup admin}: an employee of CLup able to login to the platform by using his special credentials. It can register supermarkets and generate their credentials. It can also maintain and update the system. Registration for this kind of users is forbidden and it has to be added directly during the system's installation process.
 \end{itemize}
 
 \section{Constraints}

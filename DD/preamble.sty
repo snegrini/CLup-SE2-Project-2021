@@ -24,16 +24,9 @@
 \RequirePackage{caption}
 \RequirePackage{booktabs}
 
-% Keep prettyref before the hyperref package
-\RequirePackage{prettyref}
-\newrefformat{uc}{\hyperref[{#1}]{UC.\ref*{#1}}}
+\RequirePackage{todonotes}
 
 \RequirePackage[hidelinks]{hyperref}
-\hypersetup {
-    colorlinks = true,
-    linkcolor  = black,
-    citecolor  = black
-}
 
 \RequirePackage{graphicx}
 \graphicspath{{./figures/}{./images/}}
@@ -61,22 +54,5 @@
 	\ref{#1} \useitemtext{#1}\break\par
 }
 
-\definecolor{clupgrapefruit}{RGB}{218, 64, 38}
-\newcommand{\clupautoref}[1] {%
-    \hypersetup{linkcolor=clupgrapefruit}%
-    \autoref{#1}%
-}
-\newcommand{\clupref}[1] {%
-    \hypersetup{linkcolor=clupgrapefruit}%
-    \ref{#1}%
-}
-
 % Checkmark
 \newcommand{\cmark}{\ding{51}}
-
-% Use cases counter
-\newcounter{usecase}[section]
-\newcommand{\usecaseindex}[1] {
-    UC.\the\numexpr\value{usecase}+1\relax
-	\refstepcounter{usecase}\label{#1}
-}

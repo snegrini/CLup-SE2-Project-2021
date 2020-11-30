@@ -1,7 +1,6 @@
 \documentclass[a4paper, 11pt, oneside, openright, english]{memoir}
 
 \usepackage{preamble}
-\usepackage{alloy_language}
 
 \begin{document}
 	\include{structure/title_page}
@@ -12,12 +11,16 @@
 
 	\tableofcontents
 
+    \listoftodos
+    \clearpage
+
 	\pagenumbering{arabic}
 
 	\include{chapters/1_introduction}
-	\include{chapters/2_overall_description}
-	\include{chapters/3_specific_requirements}
-	\include{chapters/4_alloy}
-	\include{chapters/5_effort}
-	\include{chapters/6_appendices}
+	\include{chapters/2_architectural_design}
+	\include{chapters/3_user_interface_design}
+	\include{chapters/4_requirements_traceability}
+    \include{chapters/5_iit_plan}
+	\include{chapters/6_effort}
+	\include{chapters/7_appendices}
 \end{document}

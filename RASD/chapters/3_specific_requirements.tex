@@ -120,7 +120,7 @@ In this section, it is given a complete description of the functional requiremen
             \item \itemtext{req:custLeave}{The system shall allow customers to leave a queue.}
             \item \itemtext{req:custFilter}{The system shall allow customers to filter stores by name.}
             \item \itemtext{req:custTtl}{The system shall notify customers when it's time to leave for the store.}
-            \item \itemtext{req:custBook}{The system shall allow customers to book-a-visit to the store and send them the receipt via email.}
+            \item \itemtext{req:custBook}{The system shall allow customers to book-a-visit to the store and send them the confirmation link and receipt via email.}
             \item \itemtext{req:custItems}{The system shall allow book-a-visit customers to specify the main categories of item they intend to buy.}
             \item \itemtext{req:custDelete}{The system shall allow customers to delete a booked visit.}
             \item \itemtext{req:custNotifyDelete}{The system shall notify customers when a ticket or booked visit is deleted.}
@@ -128,7 +128,7 @@ In this section, it is given a complete description of the functional requiremen
 
     \subsubsection{Store manager}
     \begin{enumerate}[resume*=requirements]
-        \item \itemtext{req:mngLogin}{A registered store manager must be able to login to the system by using his/her credentials.}
+        \item \itemtext{req:mngLogin}{A registered store manager must be able to login to the system by using their credentials.}
         \item \itemtext{req:mngViewStore}{The system shall allow store managers to view the current status of people inside the store.}
         \item \itemtext{req:mngViewQueue}{The system shall allow store managers to view the current status of people in the queue.}
          \item \itemtext{req:mngViewBook}{The system shall allow store managers to view the booked visits to the store.}
@@ -138,7 +138,7 @@ In this section, it is given a complete description of the functional requiremen
 
     \subsubsection{Store staff}
     \begin{enumerate}[resume*=requirements]
-        \item \itemtext{req:stfLogin}{A registered store staff must be able to login to the system by using his/her credentials.}
+        \item \itemtext{req:stfLogin}{A registered store staff must be able to login to the system by using their credentials.}
         \item \itemtext{req:stfViewStore}{The system shall allow store staff to view the current status of people inside the store.}
         \item \itemtext{req:stfViewQueue}{The system shall allow store staff to view the current status of people in the queue.}
     \end{enumerate}
@@ -328,7 +328,7 @@ In this section, it is given a complete description of the functional requiremen
     \subsection{Scenarios}
 		\subsubsection{Scenario 1}
 		John has to go to the supermarket to buy some groceries. Since there is a pandemic going on, he would like to go there as safely as possible.\newline
-		So he opens CLup, chooses his trusted supermarket and takes a queue ticket. The application tells him to go to the supermarket at 12:30 and since John is about ten minutes away from the store it notifies him to leave at 12:20. Once in the store an employee checks the ticket by scanning his QR code and John can enter the supermarket. 
+		So he opens CLup, chooses his trusted supermarket and takes a queue ticket. The application tells him to go to the supermarket at 12:30 and since John is about ten minutes away from the store it notifies him to leave at 12:20. Once in the store an employee checks the ticket by scanning his QR code and John can enter the supermarket.
 		At the exit the cashier will scan again the QR to notify the exit of a customer from the store.
 		\subsubsection{Scenario 2}
 		Tomorrow John is going to go for work near the largest Essecorta in the province. There is no better opportunity to go shopping in his favourite supermarket.\newline
@@ -337,11 +337,11 @@ In this section, it is given a complete description of the functional requiremen
 		John's business appointment near the famous Essecorta has been cancelled. For this reason, he can no longer go to the store.\newline
 		Since John is a model citizen, he decides to delete the booking that he did with CLup. So he opens the app, he goes to the store pass section and deletes the bookings.
 		\subsubsection{Scenario 4}
-		The CLup admin Bob was contacted from the manager of Superal store near the Cathedral to provide CLup to his customers. After asking him some informations about the store, like Name and PEC, the admin fills the form for register a new store on the dashboard. From now on the customers of Superal can enjoy the service. 
+		The CLup admin Bob was contacted from the manager of Superal store near the Cathedral to provide CLup to his customers. After asking him some informations about the store, like Name and PEC, the admin fills the form for register a new store on the dashboard. From now on the customers of Superal can enjoy the service.
 		\subsubsection{Scenario 5}
-		The Superal store has recently expanded due to some renovation works. The manager Alice wants to increase the number of maximum customer inside the store and monitor them.\newline 
-		For doing so, she goes to the CLup dashboard, logs in and increases the maximum cap. From that page she also watches the number of customers inside the store. 
-	
+		The Superal store has recently expanded due to some renovation works. The manager Alice wants to increase the number of maximum customer inside the store and monitor them.\newline
+		For doing so, she goes to the CLup dashboard, logs in and increases the maximum cap. From that page she also watches the number of customers inside the store.
+
 	\clearpage
     \subsection{Use cases description}
     Use cases capture functional requirements of a system from the users' perspective.
@@ -353,7 +353,7 @@ In this section, it is given a complete description of the functional requiremen
 			\textbf{Name} & Retrieve ticket \\
 
 			\midrule
-			\textbf{ID} & \usecaseindex ~\\
+			\textbf{ID} & \usecaseindex{uc:retrieveTicket} ~\\
 			\midrule
 			\textbf{Actors} & Customer \\
 			\midrule
@@ -367,12 +367,16 @@ In this section, it is given a complete description of the functional requiremen
 				\begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
 					\item The customer selects a store from the home page;
 					\item The customer presses the "Retrieve Ticket" button.
+                    \item If the GPS is enabled, the application notifies the customer when it's time to leave.
 				\end{enumerate} \\
 			\midrule
 			\textbf{Exit conditions} & The customer has retrieved a ticket for the selected store. \\
 			\midrule
-			\textbf{Exceptions} & If the customer has already retrieved a ticket for a store, the system displays an error message telling the customer they cannot get more than one ticket simultaneously. \\
-
+			\textbf{Exceptions} &
+                \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+                    \item If the customer has already retrieved a ticket for a store, the system displays an error message telling the customer they cannot get more than one ticket simultaneously.
+                    \item If the system fails to retrieve the GPS location, no notification will be shown.
+                \end{itemize} \\
 			\bottomrule
 		\end{tabular}
 		\caption{\textit{Retrieve ticket} use case description.}
@@ -391,7 +395,7 @@ In this section, it is given a complete description of the functional requiremen
     		\textbf{Name} & Book a visit \\
 
     		\midrule
-    		\textbf{ID} & \usecaseindex ~\\
+    		\textbf{ID} & \usecaseindex{uc:bookVisit} ~\\
     		\midrule
     		\textbf{Actors} & Customer \\
     		\midrule
@@ -409,6 +413,7 @@ In this section, it is given a complete description of the functional requiremen
     			\item The customer selects the time slot;
                 \item The customer submits the form;
                 \item The system shows to the customer the booked visit.
+                \item If the GPS is enabled, the application notifies the customer when it's time to leave.
     		\end{enumerate} \\
     		\midrule
     		\textbf{Exit conditions} & The customer has retrieved a ticket for the selected store. \\
@@ -417,6 +422,7 @@ In this section, it is given a complete description of the functional requiremen
             \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
                 \item If the customer has already booked a visit to a store in a certain date, the system displays an error message telling the customer it cannot book again for the same day at the same store;
                 \item If the customer selects a date so that there are no more available time slots, the system displays an error message telling the customer to select a different date.
+                \item If the system fails to retrieve the GPS location, no notification will be shown.
             \end{itemize} \\
 
     		\bottomrule
@@ -437,7 +443,7 @@ In this section, it is given a complete description of the functional requiremen
             \textbf{Name} & Delete a store pass \\
 
             \midrule
-            \textbf{ID} & \usecaseindex ~\\
+            \textbf{ID} & \usecaseindex{uc:deletePass} ~\\
             \midrule
             \textbf{Actors} & Customer \\
             \midrule
@@ -478,7 +484,7 @@ In this section, it is given a complete description of the functional requiremen
             \textbf{Name} & Web platform login \\
 
             \midrule
-            \textbf{ID} & \usecaseindex ~\\
+            \textbf{ID} & \usecaseindex{uc:webLogin} ~\\
             \midrule
             \textbf{Actors} & Store manager, Store employee, CLup admin \\
             \midrule
@@ -521,7 +527,7 @@ In this section, it is given a complete description of the functional requiremen
             \textbf{Name} & Register new store \\
 
             \midrule
-            \textbf{ID} & \usecaseindex ~\\
+            \textbf{ID} & \usecaseindex{uc:registerStore} ~\\
             \midrule
             \textbf{Actors} & CLup admin \\
             \midrule
@@ -566,7 +572,7 @@ In this section, it is given a complete description of the functional requiremen
             \textbf{Name} & Monitor bookings \\
 
             \midrule
-            \textbf{ID} & \usecaseindex ~\\
+            \textbf{ID} & \usecaseindex{uc:monitorBookings} ~\\
             \midrule
             \textbf{Actors} & Store manager \\
             \midrule
@@ -604,18 +610,84 @@ In this section, it is given a complete description of the functional requiremen
 
     \subsection{Traceability matrix}
     \begin{center}
-        \begin{tabular}{@{}p{0.25\linewidth}cccc@{}}
+        \begin{tabular}{@{}p{0.08\linewidth}cccccccccccccccccccccc@{}}
             \toprule
-            \textbf{Item} & \textbf{\ref{req:custQueue}} & \textbf{\ref{req:custTicket}}
-            & \textbf{\ref{req:custTime}} & \textbf{\ref{req:custNum}}\\
+            \textbf{Item} &
+            \clupref{req:custQueue} &
+            \clupref{req:custTicket} &
+            \clupref{req:custTicketKiosk} &
+            \clupref{req:custNum} &
+            \clupref{req:custTime} &
+            \clupref{req:custGps} &
+            \clupref{req:custLeave} &
+            \clupref{req:custFilter} &
+            \clupref{req:custTtl} &
+            \clupref{req:custBook} &
+            \clupref{req:custItems} &
+            \clupref{req:custDelete} &
+            \clupref{req:custNotifyDelete}\\
             \midrule
-            Lorem Ipsum & \cmark \\
-            Dolor Sit & & & \cmark \\
+
+            \textbf{\prettyref{uc:retrieveTicket}} & \cmark & \cmark & & \cmark & \cmark & \cmark & & \cmark & \cmark \\
+            \textbf{\prettyref{uc:bookVisit}} & \cmark & & & & & \cmark & & \cmark & \cmark & \cmark & \cmark \\
+            \textbf{\prettyref{uc:deletePass}} & & & & & & & \cmark & \cmark & & & & \cmark & \cmark \\
+            \textbf{\prettyref{uc:webLogin}} & \\
+            \textbf{\prettyref{uc:registerStore}} & \\
+            \textbf{\prettyref{uc:monitorBookings}} & \\
+            \midrule
+            \clupref{goal:custHazardSit} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark & \cmark \\
+            \clupref{goal:storeHazardSit} & \\
+            \clupref{goal:shortenTime} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark \\
+            \clupref{goal:arriveOnTime} & \cmark & & & \cmark & \cmark & \cmark & & & \cmark & \cmark \\
+            \clupref{goal:otherTasks} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark &\\
+            \clupref{goal:easyExp} & & \cmark & & \cmark & \cmark & & \cmark & \cmark & & \cmark & & \cmark & \cmark \\
+            \clupref{goal:enjoyService} & \cmark & & \cmark & & & & & & & \cmark \\
+            \clupref{goal:monitorAccess} & \\
+            \clupref{goal:knowInAdvance} & \\
+            \clupref{goal:limitNumber} & \\
+
+            \bottomrule
+        \end{tabular}
+
+        \begin{tabular}{@{}p{0.08\linewidth}cccccc|ccc|cc@{}}
+            \toprule
+            \textbf{Item} &
+            \ref{req:mngLogin} &
+            \ref{req:mngViewStore} &
+            \ref{req:mngViewQueue} &
+            \ref{req:mngViewBook} &
+            \ref{req:mngCapStore} &
+            \ref{req:mngDeleteTickets} &
+
+            \ref{req:stfLogin} &
+            \ref{req:stfViewStore} &
+            \ref{req:stfViewQueue} &
+
+            \ref{req:admRegister} &
+            \ref{req:admCredentials}\\
+            \midrule
+
+            \textbf{UC.\ref{uc:retrieveTicket}} &&&&&&&&&&&\\
+            \textbf{UC.\ref{uc:bookVisit}} &&&&&&&&&&&\\
+            \textbf{UC.\ref{uc:deletePass}} &&&&&&&&&&&\\
+            \textbf{UC.\ref{uc:webLogin}} & \cmark & & & & & & \cmark & & \cmark & \cmark \\
+            \textbf{UC.\ref{uc:registerStore}} & & & & & & & & & & \cmark & \cmark \\
+            \textbf{UC.\ref{uc:monitorBookings}} & \cmark & & & \cmark & & \cmark &&&&&\\
+            \midrule
+            \ref{goal:custHazardSit} &&&&&&&&&&&\\
+            \ref{goal:storeHazardSit} & & \cmark & \cmark & \cmark & \cmark & \cmark & & \cmark & \cmark \\
+            \ref{goal:shortenTime} &&&&&&&&&&&\\
+            \ref{goal:arriveOnTime} &&&&&&&&&&&\\
+            \ref{goal:otherTasks} &&&&&&&&&&&\\
+            \ref{goal:easyExp} &&&&&&&&&&&\\
+            \ref{goal:enjoyService} &&&&&&&&&&&\\
+            \ref{goal:monitorAccess} & \cmark & \cmark & \cmark & \cmark & & & \cmark & \cmark & \cmark & \cmark & \cmark \\
+            \ref{goal:knowInAdvance} & & \cmark & \cmark & \cmark & & & & \cmark & & & \\
+            \ref{goal:limitNumber} & & & & & \cmark & \cmark & & & & \\
 
             \bottomrule
         \end{tabular}
     \end{center}
-
 
 \section{Performance Requirements}
 This section specifies numerical requirements placed on the software or on human interaction with the software as a whole.\newline
@@ -640,7 +712,7 @@ Regulatory policies have to be considered for the interaction between CLup and c
 In order to guarantee continuity, services are required to be fault tolerant. Errors handling and fault containment mechanisms to prevent error propagation and data loss are to be arranged.
 
 \subsection{Availability}
-It is essential to have the lowest downtime possible, specially for the plain queue function (see Section \ref{desc:prodFunc}).
+It is essential to have the lowest downtime possible, specially for the plain queue function (see section \clupref{desc:prodFunc}).
 The ticketing components shall guarantee 99.9\% (\textit{three-nines}) of availability, so that only 8.76 hours of downtime per year are allowed.
 Meanwhile the book-a-visit components shall guarantee 99\% (\textit{two-nines}) of availability, so that 3.65 days of downtime per year are allowed.
 
