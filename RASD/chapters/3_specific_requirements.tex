@@ -72,7 +72,7 @@ In this section, it is given a complete description of the functional requiremen
             \item \itemtext{req:custTicketKiosk}{The system shall allow customers which do not have a smartphone to get a ticket in place.}
             \item \itemtext{req:custNum}{The system shall allow customers to view the number of people lined up in a queue.}
             \item \itemtext{req:custTime}{The system shall give customers an estimated waiting time.}
-            \item \itemtext{req:custGps}{The system shall retrieve the GPS position while the user is subscribed to a queue.}
+            \item \itemtext{req:custGps}{The system shall fetch the GPS position while the user has retrieved a store pass.}
             \item \itemtext{req:custLeave}{The system shall allow customers to leave a queue.}
             \item \itemtext{req:custFilter}{The system shall allow customers to filter stores by name.}
             \item \itemtext{req:custTtl}{The system shall notify customers when it's time to leave for the store.}
@@ -80,6 +80,7 @@ In this section, it is given a complete description of the functional requiremen
             \item \itemtext{req:custItems}{The system shall allow book-a-visit customers to specify the main categories of item they intend to buy.}
             \item \itemtext{req:custDelete}{The system shall allow customers to delete a booked visit.}
             \item \itemtext{req:custNotifyDelete}{The system shall notify customers when a ticket or booked visit is deleted.}
+            \item \itemtext{req:balanceBooking}{The system shall accept bookings based onto the already booked category items.}
         \end{enumerate}
 
     \subsubsection{Store manager}
@@ -124,6 +125,7 @@ In this section, it is given a complete description of the functional requiremen
 			\printitem{req:custTtl}
 			\printitem{req:custBook}
 			\printitem{req:custItems}
+			\printitem{req:balanceBooking}
 
 			\printitem{dom:smartphone}
 			\printitem{dom:categories}
@@ -133,7 +135,8 @@ In this section, it is given a complete description of the functional requiremen
 
 
 			\item \textbf{\printitem{goal:storeHazardSit}}
-
+			
+			\printitem{req:balanceBooking}
 			\printitem{req:mngViewStore}
 			\printitem{req:mngViewQueue}
 			\printitem{req:mngViewBook}
@@ -238,7 +241,8 @@ In this section, it is given a complete description of the functional requiremen
 
 
         \item \textbf{\printitem{goal:monitorAccess}}
-
+        
+		\printitem{req:balanceBooking}
        	\printitem{req:mngLogin}
        	\printitem{req:mngViewStore}
        	\printitem{req:mngViewQueue}
@@ -274,7 +278,8 @@ In this section, it is given a complete description of the functional requiremen
 
 
         \item \textbf{\printitem{goal:limitNumber}}
-
+        
+		\printitem{req:balanceBooking}
        	\printitem{req:mngCapStore}
        	\printitem{req:mngDeleteTickets}
        	\printitem{req:stfQrCode}
@@ -313,31 +318,32 @@ In this section, it is given a complete description of the functional requiremen
 	         \ref{req:custBook} &
 	         \ref{req:custItems} &
 	         \ref{req:custDelete} &
-	         \ref{req:custNotifyDelete}\\
+	         \ref{req:custNotifyDelete} &
+	         \ref{req:balanceBooking}\\
 	         \midrule
 
 	         \textbf{\prettyref{uc:retrieveTicket}} & \cmark & \cmark & & \cmark & \cmark & \cmark & & \cmark & \cmark \\
-	         \textbf{\prettyref{uc:bookVisit}} & \cmark & & & & & \cmark & & \cmark & \cmark & \cmark & \cmark \\
+	         \textbf{\prettyref{uc:bookVisit}} & \cmark & & & & & \cmark & & \cmark & \cmark & \cmark & \cmark & & & \cmark \\
 	         \textbf{\prettyref{uc:deletePass}} & & & & & & & \cmark & \cmark & & & & \cmark & \cmark \\
 	         \textbf{\prettyref{uc:webLogin}} & \\
 	         \textbf{\prettyref{uc:registerStore}} & \\
 	         \textbf{\prettyref{uc:monitorBookings}} & \\
              \textbf{\prettyref{uc:validatePass}} & \\
 	         \midrule
-	         \ref{goal:custHazardSit} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark & \cmark \\
-	         \ref{goal:storeHazardSit} & \\
+	         \ref{goal:custHazardSit} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark & \cmark & & & \cmark \\
+	         \ref{goal:storeHazardSit} & & & & & & & & & & & & & & \cmark \\
 	         \ref{goal:shortenTime} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark \\
 	         \ref{goal:arriveOnTime} & \cmark & & & \cmark & \cmark & \cmark & & & \cmark & \cmark \\
 	         \ref{goal:otherTasks} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark &\\
 	         \ref{goal:easyExp} & & \cmark & & \cmark & \cmark & & \cmark & \cmark & & \cmark & & \cmark & \cmark \\
 	         \ref{goal:enjoyService} & \cmark & & \cmark & & & & & & & \cmark \\
-	         \ref{goal:monitorAccess} & \\
+	         \ref{goal:monitorAccess} & & & & & & & & & & & & & & \cmark \\
 	         \ref{goal:knowInAdvance} & \\
-	         \ref{goal:limitNumber} & \\
+	         \ref{goal:limitNumber} & & & & & & & & & & & & & & \cmark \\
 
 	         \bottomrule
 	     \end{tabular}}
-     	\caption{\textit{Traceability matrix} for requirements R.1 to R.13.}
+     	\caption{\textit{Traceability matrix} for requirements R.1 to R.14.}
  	 \end{table}
 
 	 \begin{table}[H]
@@ -384,7 +390,7 @@ In this section, it is given a complete description of the functional requiremen
 
 	         \bottomrule
 	     \end{tabular}}
-     	 \caption{\textit{Traceability matrix} for requirements R.14 to R.26.}
+     	 \caption{\textit{Traceability matrix} for requirements R.15 to R.27.}
     \end{table}
 
 	\begin{table}[H]

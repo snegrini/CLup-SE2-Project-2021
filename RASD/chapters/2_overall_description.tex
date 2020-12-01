@@ -42,7 +42,6 @@ This section provides a summary of the major functions that the software will pe
 	\end{itemize}
 
 	The system also takes care of managing delays of customers: a delay greater than 15 minutes will result in the expiration of the pass. This implies that the customer will not be able to enter the store with that pass, instead they shall create a new one.\newline
-	Among the available store seats, about the 15\% of them are reserved only for the bookings.
 
 	Note that to benefit from these functions, the GPS service on customers' smartphones must be enabled, otherwise the application will not work.
 
@@ -74,8 +73,11 @@ This section provides a summary of the major functions that the software will pe
 
 	Customers will have to make reservations at least one day in advance.\newline
 	The system will send an email with a confirmation link to the email address provided. To complete the booking process, the user must click the confirmation link within 24 hours from the time of subscription and in any case at least 1 hour before the chosen time slot. Users who fail to do so will have their booking expired.
-
-	The time slots will be suggested according to the saturation of the grocery shelves. The system will try to balance the number of people in each section of the store.\newline
+	
+	Among the available store seats, about the 15\% of them are reserved only for the bookings.\newline
+	The time slots will be suggested according to the saturation of the grocery shelves.\newline
+	The system will try to balance the number of people in each section of the store. In case of a particularly crowded shelve, the system will disable the booking for that time slot.
+	
 	Customers are also allowed to delete their booking at any time by going to the right section or by clicking the link sent via email after the reservation.
 	Also this function support the \textit{leave-at-time} features, as described above in the Queue Function.
 
@@ -156,7 +158,7 @@ Use cases capture functional requirements of a system from the users' perspectiv
         \begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
             \item The customer selects a store from the home page;
             \item The customer presses the "Retrieve Ticket" button.
-            \item If the GPS is enabled, the application notifies the customer when it's time to leave.
+            \item The application notifies the customer when it's time to leave.
         \end{enumerate} \\
         \midrule
         \textbf{Exit conditions} & The customer has retrieved a ticket for the selected store. \\
@@ -202,7 +204,7 @@ Use cases capture functional requirements of a system from the users' perspectiv
             \item The customer selects the time slot;
             \item The customer submits the form;
             \item The system shows to the customer the booked visit.
-            \item If the GPS is enabled, the application notifies the customer when it's time to leave.
+            \item The application notifies the customer when it's time to leave.
         \end{enumerate} \\
         \midrule
         \textbf{Exit conditions} & The customer has retrieved a ticket for the selected store. \\
