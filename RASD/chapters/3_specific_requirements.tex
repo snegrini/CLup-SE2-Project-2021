@@ -1,131 +1,9 @@
 \chapter{Specific Requirements}
 This section is devoted to a specific description of every kind of requirement the
 system has to deal with in order to achieve all the functionalities described.
+
 \section{External interface Requirements}
 \subsection{User Interfaces}
-The User App is the interface which permit customers to enjoy CLup services. Whether installed on a smartphone or on a ticketing kiosk, it is the only way for a customer to use CLup.
-User interface mockups of most important pages of the app are shown below.
-
-\vspace{0.5cm}
-\begin{minipage}{.5\textwidth}
-	\centering
-	\includegraphics[scale=0.8]{home}
-	\captionsetup{type=figure}
-	\caption{App home.}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-	\centering
-	\includegraphics[scale=0.8]{my_tickets}
-	\captionsetup{type=figure}
-	\caption{Tickets list.}
-\end{minipage}
-
-\clearpage
-
-\begin{minipage}{.5\textwidth}
-	\centering
-	\includegraphics[scale=0.8]{store}
-	\captionsetup{type=figure}
-	\caption{Store page.}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-	\centering
-	\includegraphics[scale=0.8]{ticket}
-	\captionsetup{type=figure}
-	\caption{Ticket Retrieved.}
-\end{minipage}
-
-\vspace{1cm}
-
-\begin{minipage}{.5\textwidth}
-	\centering
-	\includegraphics[scale=0.8]{book1}
-	\captionsetup{type=figure}
-	\caption{Book a visit (1/2).}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-	\centering
-	\includegraphics[scale=0.8]{book2}
-	\captionsetup{type=figure}
-	\caption{Book a visit (2/2).}
-\end{minipage}
-
-\vspace{1cm}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.8]{book3}
-	\caption{Visit booked.}
-\end{figure}
-
-\clearpage
-The Store App is the interface used by employees to scan store pass QRs.
-User interface mockups of most important pages of the app are shown below.
-\vspace{0.5cm}
-
-\begin{minipage}{.5\textwidth}
-\centering
-\includegraphics[scale=0.8]{login_app}
-\captionsetup{type=figure}
-\caption{Login page.}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-\centering
-\includegraphics[scale=0.8]{scan_ticket}
-\captionsetup{type=figure}
-\caption{Home page.}
-\end{minipage}
-
-\vspace{1cm}
-
-\begin{minipage}{.5\textwidth}
-\centering
-\includegraphics[scale=0.8]{ticket_scanned1}
-\captionsetup{type=figure}
-\caption{Ticket Scanned (accepted).}
-\end{minipage}%
-\begin{minipage}{.5\textwidth}
-\centering
-\includegraphics[scale=0.8]{ticket_scanned2}
-\captionsetup{type=figure}
-\caption{Ticket Scanned (rejected).}
-\end{minipage}
-
-\clearpage
-
-Store managers and store employees use a web based interface for enjoying CLup features. The CLup admins can login at the same interface as well.
-User interface mockups of most important pages of the web dashboard are shown below.
-\vspace{0.5cm}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.64\linewidth]{login}
-	\caption{Dashboard login.}
-\end{figure}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.64\linewidth]{employee}
-	\caption{Employee homepage.}
-\end{figure}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.64\linewidth]{dashboard1}
-	\caption{Manager homepage.}
-\end{figure}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.64\linewidth]{dashboard2}
-	\caption{Item categories page.}
-\end{figure}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.64\linewidth]{dashboard3}
-	\caption{Bookings list page.}
-\end{figure}
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.64\linewidth]{new_store}
-	\caption{Admin new supermarket page.}
-\end{figure}
 
 \clearpage
 
@@ -133,7 +11,7 @@ User interface mockups of most important pages of the web dashboard are shown be
 In addition to interfacing with computers (via a web browser), CLup interfaces with smartphones and their GPS and camera modules.
 
 \subsection{Software Interfaces}
-The system interfaces with a external map API for computing the distance between current place and store.
+The system interfaces with a external map service for computing the distance between current place and store.
 
 \subsection{Communication Interfaces}
 All the communications from and to CLup are made via HTTPS.
@@ -161,7 +39,7 @@ In this section, it is given a complete description of the functional requiremen
 
     \subsubsection{Store manager}
     \begin{enumerate}[resume*=requirements]
-        \item \itemtext{req:mngLogin}{A registered store manager must be able to login to the system by using their credentials.}
+        \item \itemtext{req:mngLogin}{The system shall allow a registered store manager to login by using their credentials.}
         \item \itemtext{req:mngViewStore}{The system shall allow store managers to view the current status of people inside the store.}
         \item \itemtext{req:mngViewQueue}{The system shall allow store managers to view the current status of people in the queue.}
          \item \itemtext{req:mngViewBook}{The system shall allow store managers to view the booked visits to the store.}
@@ -171,7 +49,7 @@ In this section, it is given a complete description of the functional requiremen
 
     \subsubsection{Store employee}
     \begin{enumerate}[resume*=requirements]
-        \item \itemtext{req:stfLogin}{A registered store employee must be able to login to the system by using their credentials.}
+        \item \itemtext{req:stfLogin}{The system shall allow a registered store employee to login by using their credentials.}
         \item \itemtext{req:stfViewStore}{The system shall allow store employee to view the current status of people inside the store.}
         \item \itemtext{req:stfViewQueue}{The system shall allow store employee to view the current status of people in the queue.}
         \item \itemtext{req:stfQrCode}{The system shall allow store employee to scan QR codes.}
@@ -369,296 +247,13 @@ In this section, it is given a complete description of the functional requiremen
 
     \end{description}
 
-	\clearpage
-    \subsection{Scenarios}
-		\subsubsection{Scenario 1}
-		John has to go to the supermarket to buy some groceries. Since there is a pandemic going on, he would like to go there as safely as possible.\newline
-		So he opens CLup, chooses his trusted supermarket and takes a queue ticket. The application tells him to go to the supermarket at 12:30 and since John is about ten minutes away from the store it notifies him to leave at 12:20. Once in the store an employee checks the ticket by scanning his QR code and John can enter the supermarket.
-		At the exit the cashier will scan again the QR to notify the exit of a customer from the store.
-		\subsubsection{Scenario 2}
-		Tomorrow John is going to go for work near the largest Essecorta in the province. There is no better opportunity to go shopping in his favourite supermarket.\newline
-		However, since he will be tight on time, he needs to book a visit to the store so he won't lose even a minute. Thus, he takes his phone and opens CLup, he chooses the store from the list and enters some informations, like the category of items he would like to buy. He adds the desired time slot and finally opens the email that just arrived and confirms his booking: he is now ready to go.
-		\subsubsection{Scenario 3}
-		John's business appointment near the famous Essecorta has been cancelled. For this reason, he can no longer go to the store.\newline
-		Since John is a model citizen, he decides to delete the booking that he did with CLup. So he opens the app, he goes to the store pass section and deletes the bookings.
-		\subsubsection{Scenario 4}
-		The CLup admin Bob was contacted from the manager of Superal store near the Cathedral to provide CLup to his customers. After asking him some informations about the store, like Name and PEC, the admin fills the form for register a new store on the dashboard. From now on the customers of Superal can enjoy the service.
-		\subsubsection{Scenario 5}
-		The Superal store has recently expanded due to some renovation works. The manager Alice wants to increase the number of maximum customer inside the store and monitor them.\newline
-		For doing so, she goes to the CLup dashboard, logs in and increases the maximum cap. From that page she also watches the number of customers inside the store.
-
-	\clearpage
-    \subsection{Use cases description}
-    Use cases capture functional requirements of a system from the users' perspective.
-
-	\begin{table}[H]
-    	\centering
-		\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
-			\toprule
-			\textbf{Name} & Retrieve ticket \\
-
-			\midrule
-			\textbf{ID} & \usecaseindex{uc:retrieveTicket} ~\\
-			\midrule
-			\textbf{Actors} & Customer \\
-			\midrule
-			\textbf{Entry conditions} &
-				\begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-					\item The customer has installed the application on their device;
-					\item The application is running.
-				\end{itemize} \\
-			\midrule
-			\textbf{Flow of events} &
-				\begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-					\item The customer selects a store from the home page;
-					\item The customer presses the "Retrieve Ticket" button.
-                    \item If the GPS is enabled, the application notifies the customer when it's time to leave.
-				\end{enumerate} \\
-			\midrule
-			\textbf{Exit conditions} & The customer has retrieved a ticket for the selected store. \\
-			\midrule
-			\textbf{Exceptions} &
-                \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                    \item If the customer has already retrieved a ticket for a store, the system displays an error message telling the customer they cannot get more than one ticket simultaneously.
-                    \item If the system fails to retrieve the GPS location, no notification will be shown.
-                \end{itemize} \\
-			\bottomrule
-		\end{tabular}
-		\caption{\textit{Retrieve ticket} use case description.}
-	\end{table}
-
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth]{sd_retrieve_ticket}
-		\caption{\textit{Retrieve ticket} sequence diagram.}
-	\end{figure}
-
-	\begin{table}[H]
-    	\centering
-    	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
-    		\toprule
-    		\textbf{Name} & Book a visit \\
-
-    		\midrule
-    		\textbf{ID} & \usecaseindex{uc:bookVisit} ~\\
-    		\midrule
-    		\textbf{Actors} & Customer \\
-    		\midrule
-    		\textbf{Entry conditions} &
-    		\begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-    			\item The customer has installed the application on their device;
-    			\item The application is running.
-    		\end{itemize} \\
-    		\midrule
-    		\textbf{Flow of events} &
-    		\begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-    			\item The customer selects a store from the home page;
-    			\item The customer presses the "Book a visit" button;
-    			\item The customer inserts their email address, the date, the approximate duration of the visit and the main categories of items they intend to buy;
-    			\item The customer selects the time slot;
-                \item The customer submits the form;
-                \item The system shows to the customer the booked visit.
-                \item If the GPS is enabled, the application notifies the customer when it's time to leave.
-    		\end{enumerate} \\
-    		\midrule
-    		\textbf{Exit conditions} & The customer has retrieved a ticket for the selected store. \\
-    		\midrule
-    		\textbf{Exceptions} &
-            \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item If the customer has already booked a visit to a store in a certain date, the system displays an error message telling the customer it cannot book again for the same day at the same store;
-                \item If the customer selects a date so that there are no more available time slots, the system displays an error message telling the customer to select a different date.
-                \item If the system fails to retrieve the GPS location, no notification will be shown.
-            \end{itemize} \\
-
-    		\bottomrule
-    	\end{tabular}
-    	\caption{\textit{Book a visit} use case description.}
-    \end{table}
-
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth]{sd_book_a_visit}
-		\caption{\textit{Book a visit} sequence diagram.}
-	\end{figure}
-
-	\begin{table}[H]
-        \centering
-        \begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
-            \toprule
-            \textbf{Name} & Delete a store pass \\
-
-            \midrule
-            \textbf{ID} & \usecaseindex{uc:deletePass} ~\\
-            \midrule
-            \textbf{Actors} & Customer \\
-            \midrule
-            \textbf{Entry conditions} &
-            \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item The customer has installed the application on their device;
-                \item The application is running.
-            \end{itemize} \\
-            \midrule
-            \textbf{Flow of events} &
-            \begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item The customer swipes to the "My Store Pass" page;
-                \item The customer selects one of the available store passes;
-                \item The customer presses the "Delete Store Pass" button;
-                \item The customer selects "Yes" on the confirmation message;
-                \item The customer is notified by the system that the store pass has been deleted successfully.
-            \end{enumerate} \\
-            \midrule
-            \textbf{Exit conditions} & The customer has deleted successfully a store pass. \\
-            \midrule
-            \textbf{Exceptions} & If the customer has no store pass, the system displays a label: "No store pass available". \\
-            \bottomrule
-        \end{tabular}
-        \caption{\textit{Delete a store pass} use case description.}
-    \end{table}
-
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth]{sd_delete_store_pass}
-		\caption{\textit{Delete a store pass} sequence diagram.}
-	\end{figure}
-
-
-	\begin{table}[H]
-        \centering
-        \begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
-            \toprule
-            \textbf{Name} & Web platform login \\
-
-            \midrule
-            \textbf{ID} & \usecaseindex{uc:webLogin} ~\\
-            \midrule
-            \textbf{Actors} & Store manager, Store employee, CLup admin \\
-            \midrule
-            \textbf{Entry conditions} &
-            \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item The web platform is running.
-            \end{itemize} \\
-            \midrule
-            \textbf{Flow of events} &
-            \begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item The actor goes to the login page;
-                \item The actor inserts their username and password;
-                \item The actor submits the form.
-            \end{enumerate} \\
-            \midrule
-            \textbf{Exit conditions} & The actor has successfully logged into the web platform. \\
-            \midrule
-            \textbf{Exceptions} &
-            \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item If the username is not recognized by the system, the credentials are not registered or the username is incorrect. The system notifies the actor and the procedure is aborted.
-                \item If the inserted password is wrong, the system notifies the actor and the procedure is aborted.
-            \end{itemize} \\
-
-            \bottomrule
-        \end{tabular}
-        \caption{\textit{Web platform login} use case description.}
-    \end{table}
-
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth]{sd_web_platform_login}
-		\caption{\textit{Web platform login} sequence diagram.}
-	\end{figure}
-
-
-	\begin{table}[H]
-        \centering
-        \begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
-            \toprule
-            \textbf{Name} & Register new store \\
-
-            \midrule
-            \textbf{ID} & \usecaseindex{uc:registerStore} ~\\
-            \midrule
-            \textbf{Actors} & CLup admin \\
-            \midrule
-            \textbf{Entry conditions} &
-            \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item The web platform is running.
-                \item The CLup admin is logged in.
-                \item The CLup admin has been contacted by a store manager.
-            \end{itemize} \\
-            \midrule
-            \textbf{Flow of events} &
-            \begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item The CLup admin goes to the "Add supermarket" page;
-                \item The CLup admin fills in the form providing store information: name, address, PEC and timetables.
-                \item The CLup admin submits the form.
-                \item The system generates credentials for the store managers and store employee and send them  via email to the PEC address of the store.
-            \end{enumerate} \\
-            \midrule
-            \textbf{Exit conditions} & The CLup admin has added a store to the platform. \\
-            \midrule
-            \textbf{Exceptions} &
-            \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item If the store name is already used by another store, the system displays an error message asking the CLup admin to insert a different one.
-            \end{itemize} \\
-
-            \bottomrule
-        \end{tabular}
-        \caption{\textit{Register new store} use case description.}
-    \end{table}
-
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth]{sd_register_new_store}
-		\caption{\textit{Register new store} sequence diagram.}
-	\end{figure}
-
-
-	\begin{table}[H]
-        \centering
-        \begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
-            \toprule
-            \textbf{Name} & Monitor bookings \\
-
-            \midrule
-            \textbf{ID} & \usecaseindex{uc:monitorBookings} ~\\
-            \midrule
-            \textbf{Actors} & Store manager \\
-            \midrule
-            \textbf{Entry conditions} &
-            \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item The web platform is running.
-                \item The store manager is logged in.
-            \end{itemize} \\
-            \midrule
-            \textbf{Flow of events} &
-            \begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item The Store manager go to the "Manage bookings list" page;
-                \item The Store manager can filter bookings by date, time slot and categories;
-                \item The system provides to the store manager a list with all the bookings that match the filter. If no filter are provided, a full list of all the bookings is shown.
-            \end{enumerate} \\
-            \midrule
-            \textbf{Exit conditions} & The Store manager view the bookings. \\
-            \midrule
-            \textbf{Exceptions} &
-            \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-                \item If no bookings are available, an error is prompted to the store manager.
-            \end{itemize} \\
-
-            \bottomrule
-        \end{tabular}
-        \caption{\textit{Monitor bookings} use case description.}
-    \end{table}
-
-	\begin{figure}[H]
-		\centering
-		\includegraphics[width=\linewidth]{sd_monitor_bookings}
-		\caption{\textit{Monitor bookings} sequence diagram.}
-	\end{figure}
-
 
     \subsection{Traceability matrix}
-    
+
     \begin{table}[H]
 	    \centering
-	    \resizebox{0.85\textwidth}{!} { 
-	    \begin{tabular}{@{}p{0.08\linewidth}cccccccccccccccccccccc@{}}  
+	    \resizebox{0.85\textwidth}{!} {
+	    \begin{tabular}{@{}p{0.08\linewidth}cccccccccccccccccccccc@{}}
 	         \toprule
 	         \textbf{Item} &
 	         \ref{req:custQueue} &
@@ -675,13 +270,14 @@ In this section, it is given a complete description of the functional requiremen
 	         \ref{req:custDelete} &
 	         \ref{req:custNotifyDelete}\\
 	         \midrule
-	
+
 	         \textbf{\prettyref{uc:retrieveTicket}} & \cmark & \cmark & & \cmark & \cmark & \cmark & & \cmark & \cmark \\
 	         \textbf{\prettyref{uc:bookVisit}} & \cmark & & & & & \cmark & & \cmark & \cmark & \cmark & \cmark \\
 	         \textbf{\prettyref{uc:deletePass}} & & & & & & & \cmark & \cmark & & & & \cmark & \cmark \\
 	         \textbf{\prettyref{uc:webLogin}} & \\
 	         \textbf{\prettyref{uc:registerStore}} & \\
 	         \textbf{\prettyref{uc:monitorBookings}} & \\
+             \textbf{\prettyref{uc:validatePass}} & \\
 	         \midrule
 	         \ref{goal:custHazardSit} & \cmark & & & \cmark & \cmark & & & & \cmark & \cmark & \cmark \\
 	         \ref{goal:storeHazardSit} & \\
@@ -693,7 +289,7 @@ In this section, it is given a complete description of the functional requiremen
 	         \ref{goal:monitorAccess} & \\
 	         \ref{goal:knowInAdvance} & \\
 	         \ref{goal:limitNumber} & \\
-	
+
 	         \bottomrule
 	     \end{tabular}}
      	\caption{\textit{Traceability matrix} for requirements R.1 to R.13.}
@@ -702,7 +298,7 @@ In this section, it is given a complete description of the functional requiremen
 	 \begin{table}[H]
 		 \centering
 	     \resizebox{0.85\textwidth}{!} {
-	     \begin{tabular}{@{}p{0.08\linewidth}cccccc|ccccc|cc@{}} 
+	     \begin{tabular}{@{}p{0.08\linewidth}cccccc|ccccc|cc@{}}
 	         \toprule
 	         \textbf{Item} &
 	         \ref{req:mngLogin} &
@@ -711,23 +307,24 @@ In this section, it is given a complete description of the functional requiremen
 	         \ref{req:mngViewBook} &
 	         \ref{req:mngCapStore} &
 	         \ref{req:mngDeleteTickets} &
-	
+
 	         \ref{req:stfLogin} &
 	         \ref{req:stfViewStore} &
 	         \ref{req:stfViewQueue} &
 	         \ref{req:stfQrCode} &
 	         \ref{req:stfValidatePass} &
-	
+
 	         \ref{req:admRegister} &
 	         \ref{req:admCredentials}\\
 	         \midrule
-	
+
 	         \textbf{\prettyref{uc:retrieveTicket}} & & & & & & & & & & &\\
 	         \textbf{\prettyref{uc:bookVisit}} & & & & & & & & & & & & &\\
 	         \textbf{\prettyref{uc:deletePass}} & & & & & & & & & & & & &\\
 	         \textbf{\prettyref{uc:webLogin}} & \cmark & & & & & & \cmark & & \cmark & & & \cmark \\
 	         \textbf{\prettyref{uc:registerStore}} & & & & & & & & & & & & \cmark & \cmark \\
 	         \textbf{\prettyref{uc:monitorBookings}} & \cmark & & & \cmark & & \cmark & & & & & & &\\
+             \textbf{\prettyref{uc:validatePass}} & & & & & & & \cmark & \cmark & \cmark & \cmark & \cmark & &\\
 	         \midrule
 	         \ref{goal:custHazardSit} & & & & & & & & & & & & &\\
 	         \ref{goal:storeHazardSit} & & \cmark & \cmark & \cmark & \cmark & \cmark & & \cmark & \cmark & &\\
@@ -739,10 +336,35 @@ In this section, it is given a complete description of the functional requiremen
 	         \ref{goal:monitorAccess} & \cmark & \cmark & \cmark & \cmark & & & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark & \cmark\\
 	         \ref{goal:knowInAdvance} & & \cmark & \cmark & \cmark & & & & \cmark & & & \\
 	         \ref{goal:limitNumber} & & & & & \cmark & \cmark & & & & \cmark & \cmark & & \\
-	
+
 	         \bottomrule
 	     \end{tabular}}
-     	 \caption{\textit{Traceability matrix} for requirements R.14 to R.24.}
+     	 \caption{\textit{Traceability matrix} for requirements R.14 to R.26.}
+    \end{table}
+
+	\begin{table}[H]
+    \centering
+        \begin{tabular}{@{}p{0.08\linewidth}ccccccc@{}}
+            \toprule
+            \textbf{Item} &
+            \textbf{\prettyref{uc:retrieveTicket}} &
+            \textbf{\prettyref{uc:bookVisit}} &
+            \textbf{\prettyref{uc:deletePass}} &
+            \textbf{\prettyref{uc:webLogin}} &
+            \textbf{\prettyref{uc:registerStore}} &
+            \textbf{\prettyref{uc:monitorBookings}} &
+            \textbf{\prettyref{uc:validatePass}}\\
+            \midrule
+
+            \ref{sc:first} & \cmark & & & & & & \cmark \\
+            \ref{sc:second} & & \cmark \\
+            \ref{sc:third} & & & \cmark \\
+            \ref{sc:fourth} & & & & \cmark & \cmark \\
+            \ref{sc:fifth} & & & & \cmark & & \cmark \\
+
+            \bottomrule
+        \end{tabular}
+        \caption{\textit{Traceability matrix} for scenarios and use cases.}
     \end{table}
 
 \section{Performance Requirements}
@@ -754,10 +376,10 @@ Regarding the scan process to let people enter or exit the store, at least 95\% 
 \section{Design Constraints}
 
 \subsection{Standards Compliance}
-The system will store all the data in a database with the help of the DBMS. Indeed, the DBMS will provide a standard method to catalog, retrieve, and run queries on the data. Particular attention shall be reserved to the development of the modules interacting with the APIs of the DBMS.
+The system will store all the data submitted to it in a standardized form. In this way, it will be easier to catalog, retrieve, and run queries on the data.
 
-Another relevant aspect is the communication between client-side and server-side. The applications will communicate with the CLup servers via the REST API. By using a stateless protocol and standard operations, components can be managed and updated without affecting the system as a whole.\newline
-It’s crucial to design REST APIs properly so that ease of use, security and performance will remain the core factors of the system.
+CLup system shall use stateless protocols and standard operations to allow components to be managed and updated without affecting the system as a whole.\newline
+It’s crucial to design modules properly so that ease of use, security and performance will remain the core factors of the system.
 
 \subsection{Other Constraints}
 Regulatory policies have to be considered for the interaction between CLup and customers. The application, in fact, will ask the position of the customer while retrieving a ticket and while checking the queue status. Further information will be provided in the section \ref{req:privacy}.

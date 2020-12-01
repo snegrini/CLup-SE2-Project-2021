@@ -73,7 +73,7 @@ sig Ticket extends StorePass {
 
 abstract sig PassStatus {}
 one sig Valid extends PassStatus {}
-one sig Used extends PassStatus {}
+one sig Active extends PassStatus {}
 one sig Expired extends PassStatus {}
 
 abstract sig BookingStatus {}
@@ -285,9 +285,9 @@ pred world1 {
 	#TimeSlot = 0
 	#Ticket = 2
 
-	one t: Ticket |  (t.passStatus = Expired or t.passStatus = Used)
+	one t: Ticket |  (t.passStatus = Active or t.passStatus = Expired)
 }
---run world1 for 2
+run world1 for 2
 
 pred world2 [q: Queue] {
 	#Store = 1
@@ -305,5 +305,4 @@ pred world3 {
 	#TimeSlot = 0
 	#ItemCategory = 2
 }
-
 run world3 for 5
