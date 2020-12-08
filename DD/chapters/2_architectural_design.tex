@@ -31,6 +31,130 @@ It is composed by a client part and a server part:
 \end{itemize}
 
 \section{Component view}
+The following component diagram highlights all the components of the system and describes both his internal and external interactions.
+A general overview of the whole system is shown in \clupautoref{fig:cmp_high_level}. Further details will be provided in the subsequent diagrams.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[origin=c,width=\textwidth]{cmp_high_level}
+	\caption{\textit{High level} component diagram.}
+	\label{fig:cmp_high_level}
+\end{figure}
+
+The components in \clupautoref{fig:cmp_high_level} are:
+\begin{itemize}
+	\item \textbf{CLup Server}: contains the business logic of the entire system. This component offers to both customers and supermarkets the features of \textit{CLup}. On the one side, the interfaces provided by this components allow the client side (mobile apps and web app) to communicate with the server. On the other side, it interfaces with external systems such as the database server, the email server and the maps service. Further detailed in \clupautoref{fig:cmp_clup_server}.
+	
+	\item \textbf{Customer App}: represents the mobile application installed on the customers' devices. Upon authentication via the \textbf{Token Interface}, it allows customers to access the store pass functions of \textit{CLup} by using the \textbf{StorePass Interface}.
+	
+	\item \textbf{Store App}: represents the mobile application	installed on the devices of the store. Upon authentication with credentials via the \textbf{Token Interface}, it allows the store employees to access the scan functions of \textit{CLup} by using the \textbf{Scan Interface}.
+	
+	\item \textbf{Web App}: represents the web application reachable by any modern web browser by the store managers. Upon authentication with credentials via the \textbf{Auth Interface}:
+	\begin{itemize}
+		\item allows the store managers to access the dashboard functions of \textit{CLup} by using the \textbf{Dashboard Interface};
+		\item allows CLup admins to register and delete stores from the system by using the \textbf{Dashboard Interface}.
+	\end{itemize}
+	
+	\item \textbf{Database Server}:	provides the interface to the \textit{CLup Server} to deal with the data management process. 
+	
+	\item \textbf{Mail Server}: provides the interface to the \textit{CLup Server} to deal with the email sending and receiving services needed. The email system is necessary for both the process of registration of stores and the validation of the customers' booking.
+	
+	\item \textbf{Maps Service}: provides the interface to the \textit{CLup Server} to deal with the maps data. It is required to retrieve the best possible path between two positions and to calculate the \textit{leave-at-time}.
+\end{itemize}
+
+
+The following component diagrams describe the internal structure of the application server, which contains the business logic of the system.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[angle=90,origin=c,height=\textwidth]{cmp_clup_server}
+	\caption{\textit{CLup Server} component diagram.}
+	\label{fig:cmp_clup_server}
+\end{figure}
+\clearpage
+
+The components in \clupautoref{fig:cmp_clup_server} are:
+\begin{itemize}
+	\item \textbf{StorePassManager}: handles the main feature offered to the customers to line up at stores. In particular, it manages all the logic of store passes life-cycle, from their creation to expiration and deletion. Further detailed in \clupautoref{fig:cmp_store_pass}.
+	
+	\item \textbf{ScanManager}: handles the main feature offered to the store employees. In particular, it manages all the logic of store passes scan and validation. Further detailed in \clupautoref{fig:cmp_scan}.
+	
+	\item \textbf{TokenManager}: deals with token generation and validation for the mobile applications. It interfaces with the AuthManager through the \textbf{TokenAuth Interface} to integrate the authentication when using credentials.
+	
+	\item \textbf{AuthManager}: deals with the authentication of CLup admins, store managers and employees. Allows the generation of store credentials. Further detailed in \clupautoref{fig:cmp_auth}
+	
+	\item \textbf{DashboardManager}: handles the main feature offered to the store managers. In particular, it offers a dashboard that allows:
+	\begin{itemize}
+		\item \textbf{Store managers}:
+				\begin{itemize}
+					\item to monitor the status of their store;
+					\item to change the maximum number of people inside the store;
+					\item to manage the bookings of the customers.
+				\end{itemize}
+			
+		\item \textbf{Store employees}: to view the next store passes that will be called.
+		\item \textbf{CLup admins}: to manage the creation and deletion of stores.
+	\end{itemize}
+	
+	\item \textbf{Model}: high-level component which represent the data on the server and acts as a mask to the database server. Since it is the entry point to the data, almost every component needs to interface with this component.
+	
+	\item \textbf{EntityManager}: deals with all the management of the data needed by the system. It perform object-relational mapping to the \textbf{Model} component and uses the methods provided by the \textbf{DBMS API} to execute queries on the database.
+	
+	\item \textbf{MailManager}: interfaces with the Mail API to send emails.	
+	
+	\item \textbf{MapsManager}: deals with the maps data. It retrieves the best possible path between two positions and to calculate the \textit{leave-at-time}.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[origin=c,width=\textwidth]{cmp_store_pass}
+	\caption{\textit{Store Pass Manager} component diagram.}
+	\label{fig:cmp_store_pass}
+\end{figure}
+
+The components in \clupautoref{fig:cmp_store_pass} are:
+\begin{itemize}
+	\item \textbf{TicketManager}: handles the tickets creation for a specific store. Provides methods to the Customer App to update the current status of the queue and through the \textbf{Model Interface} can access the maps data to provide the leave-at-time.
+	
+	\item \textbf{BookingManager}: handles the booking creation for a specific store. Provides methods to the Customer App to update the current status of the queue and through the \textbf{Model Interface} can access the maps data to provide the leave-at-time.
+	
+	\item \textbf{QueueManager}: deals with the queue management for each stores subscribed. It offers an interface to the \textit{Ticket Manager} which allows it to add and remove tickets from the queues.
+\end{itemize}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[origin=c,width=\textwidth]{cmp_auth}
+	\caption{\textit{Auth Manager} component diagram.}
+	\label{fig:cmp_auth}
+\end{figure}
+
+The components in \clupautoref{fig:cmp_auth} are:
+\begin{itemize}
+	\item \textbf{LoginManager}: handles the login and credentials check of CLup admins, store managers and store employees in the system. It interfaces with the RoleManager through the \textbf{RoleInterface} to give the right permissions to the logged user.
+	
+	\item \textbf{RegisterManager}: handles the registration of new stores in the system. It communicate with the Model in order to save the registered stores.
+	
+	\item \textbf{RoleManager}: handles the role based access control (RBAC): an authorization scheme that grants access rights based on the role of the use. In particular, this components grants user authentication and authorization:
+	\begin{itemize}
+		\item Authentication: request and verify the identity of CLup admin, store managers and employees attempting to login using a usercode and password;
+		\item Authorization: verify the permissions of the logged user to perform any requested action (e.g. adding or removing a store, creating a new item category, etc.) before performing it.
+	\end{itemize}
+		
+	\item \textbf{CredentialsGenerator}: handles the credentials generation when a CLup Admin adds a new store to the system. It interfaces with the MailManager to send the credentials to the store PEC address.
+\end{itemize}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[origin=c,width=\textwidth]{cmp_scan}
+	\caption{\textit{Scan Manager} component diagram.}
+	\label{fig:cmp_scan}
+\end{figure}
+
+The components in \clupautoref{fig:cmp_scan} are:
+\begin{itemize}
+	\item \textbf{QRCheckManager}: it handles the scanning and validation process of QR codes. The scanned code validity will be checked versus the one stored in the Model via the ModelInterface.
+\end{itemize}
 
 \section{Deployment view}
 
