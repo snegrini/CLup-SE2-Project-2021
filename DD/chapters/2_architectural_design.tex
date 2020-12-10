@@ -31,6 +31,8 @@ It is composed by a client part and a server part:
 \end{itemize}
 
 \section{Component view}
+
+\subsection{High Level}
 The following component diagram highlights all the components of the system and describes both his internal and external interactions.
 A general overview of the whole system is shown in \clupautoref{fig:cmp_high_level}. Further details will be provided in the subsequent diagrams.
 
@@ -62,7 +64,9 @@ The components in \clupautoref{fig:cmp_high_level} are:
 	\item \textbf{Maps Service}: provides the interface to the \textit{CLup Server} to deal with the maps data. It is required to retrieve the best possible path between two positions and to calculate the \textit{leave-at-time}.
 \end{itemize}
 
+\clearpage
 
+\subsection{CLup Server}
 The following component diagrams describe the internal structure of the application server, which contains the business logic of the system.
 
 \begin{figure}[H]
@@ -105,6 +109,10 @@ The components in \clupautoref{fig:cmp_clup_server} are:
 	\item \textbf{MapsManager}: deals with the maps data. It retrieves the best possible path between two positions and to calculate the \textit{leave-at-time}.
 \end{itemize}
 
+\clearpage
+
+\subsection{Store Pass Manager}
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[origin=c,width=\textwidth]{cmp_store_pass}
@@ -118,8 +126,11 @@ The components in \clupautoref{fig:cmp_store_pass} are:
 	
 	\item \textbf{BookingManager}: handles the booking creation for a specific store. Provides methods to the Customer App to update the current status of the queue and through the \textbf{Model Interface} can access the maps data to provide the leave-at-time.
 	
-	\item \textbf{QueueManager}: deals with the queue management for each stores subscribed. It offers an interface to the \textit{Ticket Manager} which allows it to add and remove tickets from the queues.
+	\item \textbf{QueueManager}: deals with the queue management for each stores subscribed and calculates the estimated waiting time in queue. It offers an interface to the \textit{Ticket Manager} which allows it to add and remove tickets from the queues. Furthermore, the \textbf{ViewStatusInterface} provides the current status of the queue.
 \end{itemize}
+
+
+\subsection{Auth Manager}
 
 \begin{figure}[H]
 	\centering
@@ -144,6 +155,8 @@ The components in \clupautoref{fig:cmp_auth} are:
 \end{itemize}
 
 
+\subsection{Scan Manager}
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[origin=c,width=\textwidth]{cmp_scan}
@@ -155,10 +168,29 @@ The components in \clupautoref{fig:cmp_scan} are:
 \begin{itemize}
 	\item \textbf{QRCheckManager}: it handles the scanning and validation process of QR codes. The scanned code validity will be checked versus the one stored in the Model via the ModelInterface.
 \end{itemize}
+\clearpage
 
 \section{Deployment view}
+The system presents a three tier architecture \clupautoref{fig:depl_diag}:
+\begin{itemize}
+	\item \textbf{Tier 1: presentation tier}. The Customer App is installed on compatible Android or iOS phones. Distribution of the appropriate executable will be handled by the corresponding app stores. For the Local Ticketing Kiosk, a custom non-public executable will be installed on an Android tablet.\newline
+	The Store App is installed on Android or iOS phones and will not be publicly available.\newline
+	Finally, the Web App will be accessible through web browser by connecting to a dedicated website.
+	
+	\item \textbf{Tier 2: logic tier}. The CLup Server App is installed on a dedicated server with a running instance of Apache TomEE 8.
+	
+	\item \textbf{Tier 3: data tier}. All data is stored in a persistent way into a MySQL database.
+\end{itemize}
 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\linewidth]{depl_diag}
+	\caption{\textit{Deployment diagram} of the CLup system.}
+	\label{fig:depl_diag}
+\end{figure}
 \clearpage
+
 \section{Runtime view}
 This section describes the most important components interactions of the system.\newline
 For the sake of simplicity the sequence diagrams are based on the first level of components. 
