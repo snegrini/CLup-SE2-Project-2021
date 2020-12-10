@@ -1,1 +1,70 @@
 \chapter{Requirements Traceability}
+\section{Customer}
+\begin{enumerate}[series=requirements, label=\textbf{R.\arabic*}]
+	\item The system shall allow customers to line-up remotely in a store queue.
+	\newline\textbf{CustomerApp}, \textbf{TokenManager}, \textbf{TicketManager}, \textbf{QueueManager}
+	\item The system shall generate a new ticket when a customer enters a queue.
+	\newline\textbf{TicketManager}
+	\item The system shall allow customers which do not have a smartphone to get a ticket in place.
+	\newline\textbf{CustomerApp}, \textbf{TokenManager}, \textbf{TicketManager}
+	\item The system shall allow customers to view the number of people lined up in a queue.
+	\newline\textbf{CustomerApp}, \textbf{TokenManager}, \textbf{QueueManager}
+	\item The system shall give customers an estimated waiting time.
+	\newline\textbf{CustomerApp}, \textbf{TokenManager}, \textbf{QueueManager}
+	\item The system shall fetch the GPS position while the user has retrieved a store pass.
+	\newline\textbf{MapsManager}
+	\item The system shall allow customers to leave a queue.
+	\newline\textbf{CustomerApp}, \textbf{TokenManager}, \textbf{TicketManager}, \textbf{QueueManager}
+	\item The system shall allow customers to filter stores by name.
+	\newline\textbf{CustomerApp}, \textbf{TokenManager}, \textbf{View Info Manager}
+	\item The system shall notify customers when it's time to leave for the store.
+	\newline\textbf{CustomerApp}, \textbf{TokenManager}, \textbf{MapsManager}
+	\item The system shall allow customers to book-a-visit to the store and send them the confirmation link and receipt via email.
+	\newline\textbf{CustomerApp}, \textbf{TokenManager}, \textbf{BoookingManager}, \textbf{MailManager}
+	\item The system shall allow book-a-visit customers to specify the main categories of item they intend to buy.
+	\newline\textbf{CustomerApp}, \textbf{TokenManager}
+	\item The system shall allow customers to delete a booked visit.
+	\newline\textbf{CustomerApp}, \textbf{TokenManager}, \textbf{BoookingManager}
+	\item The system shall notify customers when a ticket or booked visit is deleted.
+	\newline\textbf{CustomerApp} \textbf{TokenManager}
+	\item The system shall accept bookings based onto the already booked category items.
+	\newline\textbf{BoookingManager}
+\end{enumerate}
+
+\section{Store manager}
+\begin{enumerate}[resume*=requirements]
+	\item The system shall allow a registered store manager to login by using their credentials.
+	\newline\textbf{WebApp}, \textbf{AuthManager}
+	\item The system shall allow store managers to view the current status of people inside the store.
+	\newline\textbf{WebApp}, \textbf{AuthManager}, \textbf{DashboardManager}
+	\item The system shall allow store managers to view the current status of people in the queue.
+	\newline\textbf{WebApp}, \textbf{AuthManager}, \textbf{DashboardManager}
+	\item The system shall allow store managers to view the booked visits to the store.
+	\newline\textbf{WebApp}, \textbf{AuthManager}, \textbf{DashboardManager}
+	\item The system shall allow store managers to set a maximum cap of people inside the store.
+	\newline\textbf{WebApp}, \textbf{AuthManager}, \textbf{DashboardManager}
+	\item The system shall allow store managers to delete tickets and booked visits.
+	\newline\textbf{WebApp}, \textbf{AuthManager}, \textbf{DashboardManager}
+\end{enumerate}
+
+\section{Store employee}
+\begin{enumerate}[resume*=requirements]
+	\item The system shall allow a registered store employee to login by using their credentials.
+	\newline\textbf{WebApp}, \textbf{StoreApp}, \textbf{AuthManager}
+	\item The system shall allow store employee to view the current status of people inside the store.
+	\newline\textbf{WebApp}, \textbf{AuthManager}, \textbf{DashboardManager}
+	\item The system shall allow store employee to view the current status of people in the queue.
+	\newline\textbf{WebApp}, \textbf{AuthManager}, \textbf{DashboardManager}
+	\item The system shall allow store employee to scan QR codes.
+	\newline\textbf{StoreApp}, \textbf{AuthManager}
+	\item The system shall allow store employee to validate store passes.
+	\newline\textbf{StoreApp}, \textbf{AuthManager}, \textbf{ScanManager}
+\end{enumerate}
+
+\section{CLup admin}
+\begin{enumerate}[resume*=requirements]
+	\item The system shall allow CLup admins to register new supermarkets.
+	\newline\textbf{WebApp}, \textbf{AuthManager}, \textbf{Dashboard Manager}
+	\item The system shall generate new manager and staff credential for each supermarket registered.
+	\newline\textbf{WebApp}, \textbf{AuthManager}
+\end{enumerate}
