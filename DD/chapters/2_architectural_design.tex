@@ -37,7 +37,7 @@ A general overview of the whole system is shown in \clupautoref{fig:cmp_high_lev
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[origin=c,width=\textwidth]{cmp_high_level}
+	\includegraphics[origin=c,width=\textwidth]{component/cmp_high_level}
 	\caption{\textit{High level} component diagram.}
 	\label{fig:cmp_high_level}
 \end{figure}
@@ -70,7 +70,7 @@ The following component diagrams describe the internal structure of the applicat
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[angle=90,origin=c,height=\textwidth]{cmp_clup_server}
+	\includegraphics[angle=90,origin=c,height=\textwidth]{component/cmp_clup_server}
 	\caption{\textit{CLup Server} component diagram.}
 	\label{fig:cmp_clup_server}
 \end{figure}
@@ -99,7 +99,7 @@ The components in \clupautoref{fig:cmp_clup_server} are:
 		\item \textbf{CLup admins}: to manage the creation and deletion of stores.
 	\end{itemize}
 	
-	\item \textbf{Model}: high-level component which represent the data on the server and acts as a mask to the database server. Since it is the entry point to the data, almost every component needs to interface with this component.
+	\item \textbf{Model}: high-level component which represent the data on the server and acts as a mask to the database server. Since it is the entry point to the data, almost every component needs to interface with this one.
 	
 	\item \textbf{EntityManager}: deals with all the management of the data needed by the system. It perform object-relational mapping to the \textbf{Model} component and uses the methods provided by the \textbf{DBMS API} to execute queries on the database.
 	
@@ -114,7 +114,7 @@ The components in \clupautoref{fig:cmp_clup_server} are:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[origin=c,width=\textwidth]{cmp_store_pass}
+	\includegraphics[origin=c,width=\textwidth]{component/cmp_store_pass}
 	\caption{\textit{Store Pass Manager} component diagram.}
 	\label{fig:cmp_store_pass}
 \end{figure}
@@ -133,7 +133,7 @@ The components in \clupautoref{fig:cmp_store_pass} are:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[origin=c,width=\textwidth]{cmp_auth}
+	\includegraphics[origin=c,width=\textwidth]{component/cmp_auth}
 	\caption{\textit{Auth Manager} component diagram.}
 	\label{fig:cmp_auth}
 \end{figure}
@@ -158,7 +158,7 @@ The components in \clupautoref{fig:cmp_auth} are:
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[origin=c,width=\textwidth]{cmp_scan}
+	\includegraphics[origin=c,width=\textwidth]{component/cmp_scan}
 	\caption{\textit{Scan Manager} component diagram.}
 	\label{fig:cmp_scan}
 \end{figure}
@@ -199,9 +199,9 @@ This process is really important because the token is the only way to identify a
 This is an automatic process and no action is performed by the user during the operation.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{token_seq}
+	\includegraphics[width=0.8\linewidth]{sequence/seq_token}
 	\caption{Customer app token request.}
-	\label{fig:token_seq}
+	\label{fig:seq_token}
 \end{figure}
 \clearpage
 
@@ -210,9 +210,9 @@ The request for a ticket starts from the Customer App and contains both token an
 \vspace{0.1cm}
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{ticket_seq}
+	\includegraphics[width=\linewidth]{sequence/seq_ticket}
 	\caption{Ticket request.}
-	\label{fig:ticket_seq}
+	\label{fig:seq_ticket}
 \end{figure}
 
 \clearpage
@@ -222,9 +222,9 @@ A user can book a visit for a store if he hasn't booked a visit to the same stor
 Since a booking must be confirmed via a link, an email is sent at the end of the whole process through the mail server.
 \begin{figure}[H]
 	\centering
-	\includegraphics[angle=90,origin=c,height=\linewidth]{booking_seq}
+	\includegraphics[angle=90,origin=c,height=\linewidth]{sequence/seq_booking}
 	\caption{Booking request.}
-	\label{fig:booking_seq}
+	\label{fig:seq_booking}
 \end{figure}
 
 \clearpage
@@ -233,54 +233,54 @@ The Customer App reminds the user to leave the place where he is in order to ens
 The server fetches all the valid store passes and computes the distance of the customer from the respective store. If the customer should leave the place where he is, a notification is sent to him.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.75\linewidth]{leave_seq}
+	\includegraphics[width=0.75\linewidth]{sequence/seq_leave}
 	\caption{Leave at time function.}
-	\label{fig:leave_seq}
+	\label{fig:seq_leave}
 \end{figure}
 
 \subsection{Web App login}
 The following sequence diagram represents the login process to the Web App. CLup admins, store managers and store employees will authenticate to the system by submitting their credentials via a form.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.75\linewidth]{login_seq}
+	\includegraphics[width=0.75\linewidth]{sequence/seq_login}
 	\caption{Web App login.}
-	\label{fig:login_seq}
+	\label{fig:seq_login}
 \end{figure}
 
 \subsection{Check store status}
 After logging in, the store managers can see the store status, for instance the visits booked. The following sequence diagram represents this process. 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.75\linewidth]{check_status_seq}
+	\includegraphics[width=0.75\linewidth]{sequence/seq_check_status}
 	\caption{Check store status.}
-	\label{fig:check_status_seq}
+	\label{fig:seq_check_status}
 \end{figure}
 
 \subsection{Store App login}
 As the Customer App, Store App also has a token to operate. This time there is a login process before the generation of the token.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.75\linewidth]{app_login_seq}
+	\includegraphics[width=0.75\linewidth]{sequence/seq_app_login}
 	\caption{Store app login.}
-	\label{fig:app_login_seq}
+	\label{fig:seq_app_login}
 \end{figure}
 
 \subsection{QR Code scan}
 The scan of the QR is the most important part of the Store App. After the token validation, the QR code is validated as the sequence diagram shows. If the pass is valid, his status is updated.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.85\linewidth]{scan_pass_seq}
+	\includegraphics[width=0.85\linewidth]{sequence/seq_scan_pass}
 	\caption{Store app scan process.}
-	\label{fig:scan_pass_seq}
+	\label{fig:seq_scan_pass}
 \end{figure}
 
 \subsection{Store registration}
 The store registration is performed by a CLup admin via the Web App after his login. Prompted informations are checked from the system and then, if the store doesn't already exist, the store is saved into the database. After that, the credentials for the store managers and store employees are generated and sent to the store PEC address.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.85\linewidth]{store_registration_seq}
+	\includegraphics[width=0.85\linewidth]{sequence/seq_store_registration}
 	\caption{Store registration.}
-	\label{fig:store_registration_seq}
+	\label{fig:seq_store_registration}
 \end{figure}
 
 \section{Component interfaces}
