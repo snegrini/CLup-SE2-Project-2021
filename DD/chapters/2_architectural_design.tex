@@ -284,6 +284,128 @@ The store registration is performed by a CLup admin via the Web App after his lo
 \end{figure}
 
 \section{Component interfaces}
+This section lists all the methods that each component interface provides to the other components.
+
+\begin{itemize}
+	\item \textbf{ViewInfoInterface}
+	\begin{itemize}
+		\item getStores(token, filters)
+		\item getStoreInfo(token, store)
+	\end{itemize}
+
+	
+	\item \textbf{StorePassInterface}
+	\begin{itemize}
+		\item retrieveTicket(token, store)
+		\item bookingForm(token, store, email, date, duration, categories)
+		\item pickTimeSlot(timeslot, store, mail, date, duration, categories)
+		\item getPassesList(token)
+		\item getPassInfo(token, pass)
+		\item deletePass(token, pass)
+	\end{itemize}
+
+	\item \textbf{ScanInterface}
+	\begin{itemize}
+		\item scan(qrcode)
+	\end{itemize}
+	
+	\item \textbf{TokenInterface}
+	\begin{itemize}
+		\item requestToken()
+		\item checkToken(token)
+		\item login(user, psw)
+	\end{itemize}
+
+	\item \textbf{AuthInterface}
+	\begin{itemize}
+		\item login(user, psw)
+	\end{itemize}
+
+	\item \textbf{DashboardInterface}
+	\begin{itemize}
+		\item getStoreStatus()
+		\item getTickets()
+		\item getBookings()
+		\item deletePass(pass)
+		\item updateStoreInfo(info)
+		\item addSupermarket(name, pec, address, timetable)
+		\item regenerateCredentials(store)
+	\end{itemize}
+
+	\item \textbf{TokenAuthInterface}
+	\begin{itemize}
+		\item login(user, psw)
+	\end{itemize}
+
+	\item \textbf{AuthCredentialsInterface}
+	\begin{itemize}
+		\item generateCredentials()
+	\end{itemize}
+
+	\item \textbf{TokenCheckInterface}
+	\begin{itemize}
+		\item checkToken(token)
+	\end{itemize}
+
+	\item \textbf{MailManagerInterface}
+	\begin{itemize}
+		\item sendMail(email, message)
+	\end{itemize}
+
+	\item \textbf{ModelInterface}
+	\begin{itemize}
+		\item retrieveTicket(store, customer)
+		\item bookingForm(store, mail, date, duration, categories)
+		\item addBooking(timeslot, store, mail, date, duration, categories)
+		\item login(user, psw)
+		\item getBookings()
+		\item scan(qrcode)
+		\item updateStatus(qrcode, status)
+		\item checkStore(name, pec)
+		\item saveStore(name, pec, address, timetable)
+		\item storeCredentials(man, pswMan, emp, pswEmp)
+		\item updateCredentials(store, man, pswMan, emp, pswEmp)
+		\item getStores(filters)
+		\item getStoreInfo(store)
+		\item getPassesList(customer)
+		\item getPassInfo(pass)
+		\item deletePass(pass)
+		\item getStoreStatus()
+		\item getTickets()
+		\item deletePass(pass)
+		\item updateStoreInfo(info)
+	\end{itemize}
+
+	\item \textbf{EntityManagerInterface}
+	\begin{itemize}
+		\item getCustomerTicket(store, customer)
+		\item getStoreQueue(store)
+		\item addTicket(store, customer)
+		\item getCustomerBooking(store, customer, date)
+		\item getTimeSlot(store, date)
+		\item addBooking(timeslot, store, mail, date, duration, categories)
+		\item getAllStorePasses(store)
+		\item getUserInfo(user, psw)
+		\item getBookingList(store)
+		\item getStorePass(qrcode)
+		\item updateStatus(qrcode, status)
+		\item getStoreInfo(name, pec)
+		\item insertStore(name, pec, address, timetable)
+		\item insertCredentials(man, pswMan, emp, pswEmp)
+		\item updateCredentials(store, man, pswMan, emp, pswEmp)
+		\item getStores(filters)
+		\item getStoreInfo(store)
+		\item getPassesList(customer)
+		\item getPassInfo(pass)
+		\item deletePass(pass)
+		\item getStoreStatus(store)
+		\item getTickets(store)
+		\item deletePass(pass)
+		\item updateStoreInfo(store, info)
+	\end{itemize}
+\end{itemize}
+
+\clearpage
 
 \section{Selected architectural styles and patterns}
 
