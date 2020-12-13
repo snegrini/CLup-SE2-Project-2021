@@ -43,6 +43,25 @@
 \chapterstyle{bianchi}
 \setlength{\beforechapskip}{0pt}
 
+% Header & Footer
+\newcommand{\footerText}{\emph{CLup}\quad \textbf{D}esign \textbf{D}ocument}
+
+\makeevenhead{headings}{\slshape\rightmark}{}{}
+\makeoddhead{headings}{\slshape\rightmark}{}{}
+
+\makeevenfoot{headings}{\footerText}{}{\thepage}
+\makeoddfoot{headings}{\footerText}{}{\thepage}
+
+\copypagestyle{plainnotice}{plain}
+\makeevenfoot{plainnotice}{\footerText}{}{\thepage}
+\makeoddfoot{plainnotice}{\footerText}{}{\thepage}
+\aliaspagestyle{chapter}{plainnotice}
+
+\makeheadrule{headings}{\textwidth}{\normalrulethickness}
+
+\makefootrule{headings}{\textwidth}{\normalrulethickness}{1ex}
+\makefootrule{plain}{\textwidth}{\normalrulethickness}{1ex}
+
 \setcounter{tocdepth}{2}
 \setcounter{secnumdepth}{2}
 
