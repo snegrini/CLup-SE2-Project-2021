@@ -60,7 +60,8 @@ The components in \clupautoref{fig:cmp_high_level} are:
 	
 	\item \textbf{Mail Server}: provides the interface to the \textit{CLup Server} to deal with the email sending and receiving services needed. The email system is necessary for both the process of registration of stores and the validation of the customers' booking.
 	
-	\item \textbf{Maps Service}: provides the interface to the \textit{CLup Server} to deal with the maps data. It is required to retrieve the best possible path between two positions and to calculate the \textit{leave-at-time}.
+	\item \textbf{Maps Service}: provides the interface to the \textit{CLup Server} to deal with the maps data. It is required to retrieve the best possible path between two positions and to calculate the \textit{leave-at-time}.\newline
+	The service is Google Distance Matrix API and provides travel distance and time for a matrix of origins and destinations, based on the recommended route between start and end points.
 \end{itemize}
 
 \clearpage
@@ -82,9 +83,9 @@ The components in \clupautoref{fig:cmp_clup_server} are:
 	
 	\item \textbf{ScanManager}: handles the main feature offered to the store employees. In particular, it manages all the logic of store passes scan and validation. Further detailed in \clupautoref{fig:cmp_scan}.
 	
-	\item \textbf{TokenManager}: deals with token generation and validation for the mobile applications. It interfaces with the AuthManager through the \textbf{TokenAuth Interface} to integrate the authentication when using credentials.
+	\item \textbf{TokenManager}: deals with token generation, decoding and verification for the mobile applications. It interfaces with the AuthManager through the \textbf{TokenAuth Interface} to integrate the authentication when using credentials. It is based on the JWT an internet standard for creating JSON token with a payload. Further detail are provided in \clupautoref{iit:tech}.
 	
-	\item \textbf{AuthManager}: deals with the authentication of CLup admins, store managers and employees. Allows the generation of store credentials. Further detailed in \clupautoref{fig:cmp_auth}
+	\item \textbf{AuthManager}: deals with the authentication of CLup admins, store managers and employees. Allows the generation of store credentials. Further detailed in \clupautoref{fig:cmp_auth}.
 	
 	\item \textbf{DashboardManager}: handles the main feature offered to the store managers. In particular, it offers a dashboard that allows:
 	\begin{itemize}

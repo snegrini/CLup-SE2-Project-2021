@@ -48,7 +48,7 @@ External services do not need to be unit tested since it is assumed that they ar
 
 \clearpage
 
-\section{Technologies}
+\section{Technologies}\label{iit:tech}
 This section will analyse the possible technologies available to develop each component of the system.
 
 \subsection{Mobile}
@@ -68,3 +68,9 @@ Java templating with Thymeleaf will be used for the web app interface.
 
 \subsection{Database}
 MySQL server is one of the world’s most popular databases. It is open source, reliable, cost-effective and easy to manage. For this reason, it is chosen for the data storage system.
+
+\subsection{Token System}
+For the token system the choice fell on JSON Web Token which is an internet standard.\newline
+When the store employee successfully logs in using their credentials or a customer opens the app for the first time, a JSON Web Token is returned and saved locally in the app, instead of the traditional approach of creating a session in the server and returning a cookie.\newline
+When the client wants to access a route the token is sent in the HTTPS request. This is a stateless authentication mechanism as the user state is never saved in server memory. The server's protected routes will check for a valid JWT in the request, and if it is present, the user will be allowed to the resources.\newline
+As JWTs are self-contained, all the necessary information is there, reducing the need to query the database multiple times.
