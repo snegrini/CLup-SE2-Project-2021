@@ -230,10 +230,10 @@ Since a booking must be confirmed via a link, an email is sent at the end of the
 \clearpage
 \subsection{Leave At Time}
 The Customer App reminds the user to leave the place where he is in order to ensure that he arrives on time.\newline
-The server fetches all the valid store passes and computes the distance of the customer from the respective store. If the customer should leave the place where he is, a notification is sent to him.
+The server fetches all the valid store passes and computes the distance of the customer from the respective store. If the customer should leave the place where he is, a notification is sent to him. For the sake of simplicity the token validation process is omitted.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.75\linewidth]{sequence/seq_leave}
+	\includegraphics[width=0.8\linewidth]{sequence/seq_leave}
 	\caption{Leave at time function.}
 	\label{fig:seq_leave}
 \end{figure}
@@ -242,7 +242,7 @@ The server fetches all the valid store passes and computes the distance of the c
 The following sequence diagram represents the login process to the Web App. CLup admins, store managers and store employees will authenticate to the system by submitting their credentials via a form.
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.75\linewidth]{sequence/seq_login}
+	\includegraphics[width=0.8\linewidth]{sequence/seq_login}
 	\caption{Web App login.}
 	\label{fig:seq_login}
 \end{figure}
@@ -282,6 +282,8 @@ The store registration is performed by a CLup admin via the Web App after his lo
 	\caption{Store registration.}
 	\label{fig:seq_store_registration}
 \end{figure}
+
+\clearpage
 
 \section{Component interfaces}
 This section lists all the methods that each component interface provides to the other components.
@@ -346,6 +348,8 @@ This section lists all the methods that each component interface provides to the
 	\begin{itemize}
 		\item checkToken(token)
 	\end{itemize}
+
+	\clearpage
 
 	\item \textbf{MailManagerInterface}
 	\begin{itemize}
