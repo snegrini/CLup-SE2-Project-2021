@@ -170,21 +170,24 @@ The components in \clupautoref{fig:cmp_scan} are:
 \clearpage
 
 \section{Deployment view}
-The system presents a three tier architecture \clupautoref{fig:depl_diag}:
+The system presents a three-tier architecture as shown in \clupautoref{fig:depl_diag}. This is a well-established software application architecture that organizes applications into three logical and physical computing tiers. The chief benefit of three-tier architecture is that because each tier runs on its own infrastructure, each tier can be developed simultaneously by separate developers and can be updated or scaled as needed without impacting the other tiers.
+
 \begin{itemize}
-	\item \textbf{Tier 1: presentation tier}. The Customer App is installed on compatible Android or iOS phones. Distribution of the appropriate executable will be handled by the corresponding app stores. For the Local Ticketing Kiosk, a custom non-public executable will be installed on an Android tablet.\newline
+	\item \textbf{Tier 1: presentation tier}. It is the front end layer in the three-tier system and consists of the user interface. It communicates with others layers via API calls on the HTTPS protocol.\newline
+	The Customer App is installed on compatible Android or iOS phones. Distribution of the appropriate executable will be handled by the corresponding app stores. For the Local Ticketing Kiosk, a custom non-public executable will be installed on an Android tablet.\newline
 	The Store App is installed on Android or iOS phones and will not be publicly available.\newline
 	Finally, the Web App will be accessible through web browser by connecting to a dedicated website.
 	
-	\item \textbf{Tier 2: logic tier}. The CLup Server App is installed on a dedicated server with a running instance of Apache TomEE 8.
+	\item \textbf{Tier 2: business logic tier}. It contains the functional business logic which drives the application’s core capabilities. Multiple client components can access the this tier simultaneously, so this layer must manage its own transactions.\newline
+	The CLup Server App is installed on a dedicated server with a running instance of Apache TomEE 8.
 	
-	\item \textbf{Tier 3: data tier}. All data is stored in a persistent way into a MySQL database.
+	\item \textbf{Tier 3: data management tier}. It comprises of the database/data storage system and data access layer. Data is stored in a persistent way into a MySQL database and accessed by the business logic tier via API calls.
 \end{itemize}
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=\linewidth]{depl_diag}
+	\includegraphics[width=0.9\linewidth]{depl_diag}
 	\caption{\textit{Deployment diagram} of the CLup system.}
 	\label{fig:depl_diag}
 \end{figure}
