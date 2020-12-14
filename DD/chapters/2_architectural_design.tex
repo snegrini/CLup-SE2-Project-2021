@@ -338,6 +338,8 @@ This section lists all the methods that each component interface provides to the
 		\item updateStoreInfo(info)
 		\item addSupermarket(name, pec, address, timetable)
 		\item regenerateCredentials(store)
+		\item deleteBooking(delete_code)
+		\item confirmBooking(confirm_code)
 	\end{itemize}
 
 	\item \textbf{TokenAuthInterface}
@@ -389,6 +391,7 @@ This section lists all the methods that each component interface provides to the
 		\item getTickets()
 		\item deletePass(pass)
 		\item updateStoreInfo(info)
+		\item confirmBooking(booking)
 	\end{itemize}
 
 	\item \textbf{EntityManagerInterface}
@@ -417,6 +420,7 @@ This section lists all the methods that each component interface provides to the
 		\item getTickets(store)
 		\item deletePass(pass)
 		\item updateStoreInfo(store, info)
+		\item confirmBooking(booking)
 	\end{itemize}
 \end{itemize}
 
