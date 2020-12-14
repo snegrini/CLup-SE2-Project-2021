@@ -55,6 +55,7 @@ The components in \clupautoref{fig:cmp_high_level} are:
 		\item allows the store managers to access the dashboard functions of \textit{CLup} by using the \textbf{Dashboard Interface};
 		\item allows CLup admins to register and delete stores from the system by using the \textbf{Dashboard Interface}.
 	\end{itemize}
+	Furthermore, it offers to the customers the landing pages of both the \textit{confirmation} and \textit{deletion links} required by the booking process via the \textbf{Dashboard Interface}.
 	
 	\item \textbf{Database Server}:	provides the interface to the \textit{CLup Server} to deal with the data management process. 
 	
@@ -98,6 +99,7 @@ The components in \clupautoref{fig:cmp_clup_server} are:
 			
 		\item \textbf{Store employees}: to view the next store passes that will be called.
 		\item \textbf{CLup admins}: to manage the creation and deletion of stores.
+		\item \textbf{Customers}: to confirm and delete their bookings via link.
 	\end{itemize}
 	
 	\item \textbf{Model}: high-level component which represent the data on the server and acts as a mask to the database server. Since it is the entry point to the data, almost every component needs to interface with this one.
@@ -151,7 +153,7 @@ The components in \clupautoref{fig:cmp_auth} are:
 		\item Authorization: verify the permissions of the logged user to perform any requested action (e.g. adding or removing a store, creating a new item category, etc.) before performing it.
 	\end{itemize}
 		
-	\item \textbf{CredentialsGenerator}: handles the credentials generation when a CLup Admin adds a new store to the system. It interfaces with the MailManager to send the credentials to the store PEC address.
+	\item \textbf{CredentialsGenerator}: handles the credentials generation when a CLup Admin adds a new store to the system. It interfaces with the MailManager to send the credentials to the store PEC address. In the event that the CLup admin request new credentials for stores, this component will generate new ones.
 \end{itemize}
 
 
@@ -170,7 +172,7 @@ The components in \clupautoref{fig:cmp_scan} are:
 \end{itemize}
 \clearpage
 
-\section{Deployment view}
+\section{Deployment view}\label{sec:deployment_view}
 The system presents a three-tier architecture as shown in \clupautoref{fig:depl_diag}. This is a well-established software application architecture that organizes applications into three logical and physical computing tiers. The chief benefit of three-tier architecture is that because each tier runs on its own infrastructure, each tier can be developed simultaneously by separate developers and can be updated or scaled as needed without impacting the other tiers.
 
 \begin{itemize}
@@ -422,12 +424,27 @@ This section lists all the methods that each component interface provides to the
 
 \section{Selected architectural styles and patterns}
 
+\begin{itemize}
+	\item \textbf{Three-tiers architecture}: as stated in \clupautoref{sec:deployment_view}, the CLup system adopt this well-established software application architecture.
+	
+	\item \textbf{Client-Server architecture}: in this architecture, clients and servers are separate logical objects that communicate over a network to perform tasks together. A client makes a request for a service and receives a reply to that request; a server receives and processes a request, and sends back the required response.
+	
+	\item \textbf{REST API}: Representational State Transfer (REST) is a set of commands commonly used with web transactions. It allows the usage of HTTP to obtain data and generate operations on those data in all possible formats, such as XML and JSON.
+	
+	\item \textbf{Model-View-Controller}: software design pattern that divides the program logic into three interconnected elements.
+	\begin{itemize}
+		\item Model: central component of the pattern. It is the application's dynamic data structure, independent of the user interface. It directly manages the data, logic and rules of the application.
+		\item View: any visual representation of  such as a chart, diagram or table.
+		\item Controller: responds to the user input and performs interactions on the data model objects. The controller receives the input, optionally validates it and then passes the input to the model.
+	\end{itemize}
+\end{itemize}
+
 \clearpage
 
 \section{Other design decisions}
 \subsection{Database Structure}
 As already mentioned all the data will be stored in a database. The chosen DBMS is MySQL since it is an \textbf{open-source relational database management system} (\textbf{RDBMS}).\newline
-The following diagram explain how the database is structured. 
+The following diagram explain how the database is structured.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{er_diagram}
