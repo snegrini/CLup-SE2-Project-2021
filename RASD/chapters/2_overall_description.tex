@@ -72,19 +72,21 @@ This section provides a summary of the major functions that the software will pe
 	Every field of the form is mandatory, this means that the user must complete all of them, including the solution of a CAPTCHA, in order to submit the reservation.
 
 	Customers will have to make reservations at least one day in advance.\newline
-	The system will send an email with a confirmation link to the email address provided. To complete the booking process, the user must click the confirmation link within 24 hours from the time of subscription and in any case at least 1 hour before the chosen time slot. Users who fail to do so will have their booking expired.
+	The system will send an email with a \textit{confirmation link} to the email address provided. To complete the booking process, the user must click the confirmation link within 24 hours from the time of subscription and in any case at least 1 hour before the chosen time slot. Users who fail to do so will have their booking expired.
 	
 	Among the available store seats, about the 15\% of them are reserved only for the bookings.\newline
 	The time slots will be suggested according to the saturation of the grocery shelves.\newline
 	The system will try to balance the number of people in each section of the store. In case of a particularly crowded shelve, the system will disable the booking for that time slot.
 	
-	Customers are also allowed to delete their booking at any time by going to the right section or by clicking the link sent via email after the reservation.
+	Customers are also allowed to delete their booking at any time by going to the right section of the application or by clicking the \textit{deletion link} sent via email after the reservation.
 	Also this function support the \textit{leave-at-time} features, as described above in the Queue Function.
+	
+	Both the \textit{confirmation} and \textit{deletion links} will land the user to a page of CLup where they will receive a response of the requested operation.
 
 	In addition, for long-term customers, the app suggests a time inferred by the system based on an analysis of the previous visits.
 
 \subsection{Validation function}
-The system provides an interface that allows to scan QR codes by using the smartphone camera. This process is required in order to validate store passes.\newline
+The system provides an interface that, \textbf{upon authentication}, allows to scan QR codes by using the smartphone camera. This process is required in order to validate store passes.\newline
 Ticket validation allows to speed up the check-in process and to increase the number of people in the store. At the same time it helps staff to detect the authenticity of tickets brought to them.\newline
 The scan of the QR code will be executed:
 \begin{itemize}
@@ -93,22 +95,25 @@ The scan of the QR code will be executed:
 \end{itemize}
 
 \subsection{Monitor function}
-\textit{Customers Line-up} platform grants supermarkets a way to manage queues and customers inside their stores. In particular, \textbf{upon authentication}, it offers three level of access: \textit{manager level} and \textit{entrance-staff level} for supermarkets and \textit{admin level} for CLup administrators.
+\textit{Customers Line-up} platform grants supermarkets a way to manage queues and customers inside their stores. In particular, \textbf{upon authentication}, it offers two level of access: \textit{manager level} and \textit{entrance-staff level}.
 
 \begin{itemize}
 	\item \textbf{Manager level}\newline
-	With the \textbf{dashboard UI}, store managers have access to tables and data visualizations of their customers visits and behaviours. In particular, they can monitor the number of people in the queue and the ones inside the store. Then, based on those data they can setup the maximum cap of people inside the store.\newline
+	With the \textbf{dashboard}, store managers have access to tables and data visualizations of their customers visits and behaviours. In particular, they can monitor the number of people in the queue and the ones inside the store. Then, based on those data they can setup the maximum cap of people inside the store.\newline
 	Store managers can view, edit and delete the list of reservations made by the customer.\newline
 	Last but not least, they can inspect information about the booked visits at any given time.
 
 	\item \textbf{Entrance-staff level}\newline
-	A store employee is able to view data about the number of people in the queue and inside the building. This is needed during the validation of tickets when the check-in staff scans QR and allows customers inside the store.
-
-    \item \textbf{Admin level}\newline
-    An administrator of CLup is able to register new supermarkets and generate the respective credentials to access \textit{manager-level} and \textit{staff-level}.
+	A store employee is able to view data about the number of people in the building and the store passes which will be admitted inside.
+	This is needed during the validation of tickets when the check-in staff scans QR and allows customers inside the store.
 \end{itemize}
 
-	\clearpage
+\subsection{Register function}
+The system also grants CLup administrators an \textit{admin level} access to register and manage stores.
+Specifically, an administrator of CLup is able to register new supermarkets and generate the respective credentials to access \textit{manager-level} and \textit{staff-level}. These credentials will be sent automatically via PEC to the respective stores.\newline
+In the event that the supermarkets credentials get lost or there is a need to change them, the administrator will generate new ones from the dashboard.
+
+\clearpage
 
 
 \subsection{Scenarios}
@@ -334,7 +339,7 @@ Use cases capture functional requirements of a system from the users' perspectiv
             \item The CLup admin goes to the "Add supermarket" page;
             \item The CLup admin fills in the form providing store information: name, address, PEC and timetables.
             \item The CLup admin submits the form.
-            \item The system generates credentials for the store managers and store employee and send them  via email to the PEC address of the store.
+            \item The system generates credentials for the store managers and store employee and send them via email to the PEC address of the store.
         \end{enumerate} \\
         \midrule
         \textbf{Exit conditions} & The CLup admin has added a store to the platform. \\
