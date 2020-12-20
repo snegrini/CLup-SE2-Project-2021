@@ -4,7 +4,19 @@
 
 The system will be developed from scratch and it will completely replace the legacy system.
 \subsection{Class diagram}
-The class diagram in \clupautoref{fig:class_diagram} is a high-level representation of the system as a whole.
+The class diagram in \clupautoref{fig:class_diagram} is a high-level representation of the system as a whole.\newline
+The main elements in the class diagram are:
+\begin{itemize}
+	\item \textbf{User}: identifies three categories of users which can access the system with credentials: \textbf{Manager}, \textbf{Employee} and \textbf{Admin}. This distinction is necessary to assign different levels of permissions. 
+	\item \textbf{Store}: identifies a store with all the relevant information about it.
+	\item \textbf{TimeSlot}: identifies the time slots a store can have and it comprehends a list of the bookings that are assigned to them.
+	\item \textbf{OpeningHours}: identifies the opening hours of a store.
+	\item \textbf{Queue}: identifies the virtual queue of tickets in a store.
+	\item \textbf{StorePass}: identifies the parent class of both \textbf{Ticket} and \textbf{Booking}. It contains information shared with both.
+	\item \textbf{PassStatus}: identifies the status of a store pass which can be: \textbf{Valid}, \textbf{Active} or \textbf{Expired}.
+	\item \textbf{BookingStatus}: identifies the confirmation status of a booking: \textbf{Pending} or \textbf{Confirmed}.
+	\item \textbf{ItemCategory}: identifies the categories of items that are present in a store. 
+\end{itemize}
 
 \begin{figure}[H]
 	\centering
@@ -13,20 +25,31 @@ The class diagram in \clupautoref{fig:class_diagram} is a high-level representat
 	\label{fig:class_diagram}
 \end{figure}
 
+\clearpage
 
 \subsection{State diagrams}
 State diagrams describe the behaviour of the system while considering all possible states the objects can have when an event occurs. This analysis helps to clarify the most critical aspects of the system.
+
+The state diagram in \clupautoref{fig:stm_booking} represents the life cycle of a \textit{Booking}, starting from the creation to the expiration.\newline
+After filling a form, the data is sent to the system where the availability of time slots is checked and also that the customer has not already booked for that day. A failure in any of these checks will abort the booking creation process.\newline
+Then the booking is created, its status is set to \textit{Pending} and a confirmation link is sent via email. If the time for the confirmation expires the booking is deleted.\newline
+Otherwise, its status is updated to \textit{Confirmed} and is ready for validation by the store (see \clupautoref{fig:stm_pass_validation} for further details).
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{stm_booking}
 	\caption{State diagram: Booking.}
+	\label{fig:stm_booking}
 \end{figure}
+
+The state diagram in \clupautoref{fig:stm_pass_validation} represents the validation process of a store pass.\newline
+Upon scanning a QR code, a validation request is sent to the system. Then the code existence is checked, if it does not exist the validation process fails. Otherwise, the process flow is inferred by the current status of the store pass.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{stm_pass_validation}
 	\caption{State diagram: Pass validation.}
+	\label{fig:stm_pass_validation}
 \end{figure}
 
 
@@ -34,7 +57,7 @@ State diagrams describe the behaviour of the system while considering all possib
 This section provides a summary of the major functions that the software will perform w.r.t. the goals already described in section \clupref{intro:goals}.
 
 \subsection{Store pass function}
-	A Store pass, among other things, consists of a QR code and a pass status. The latter identifies the current status inside the pass life-cycle:
+	A Store pass consists of a QR code and a pass status. The latter identifies the current status inside the pass life-cycle:
 	\begin{itemize}
 		\item VALID: pass generated but not used yet.
 		\item ACTIVE: pass in use.
@@ -63,7 +86,7 @@ This section provides a summary of the major functions that the software will pe
 
 	Customers are asked to select the store they want to visit. Then they need to fill in a form by indicating:
 	\begin{itemize}
-		\item an \textbf{email address}, which will be needed to send a receipt and memo to the user;
+		\item an \textbf{email address}, which will be needed to send a receipt with the confirmation and deletion links;
 		\item the \textbf{date} of the visit;
 		\item the approximate \textbf{expected duration} of the trip;
 	 	\item the main \textbf{categories of items} they intend to buy;
@@ -95,7 +118,7 @@ The scan of the QR code will be executed:
 \end{itemize}
 
 \subsection{Monitor function}
-\textit{Customers Line-up} platform grants supermarkets a way to manage queues and customers inside their stores. In particular, \textbf{upon authentication}, it offers two level of access: \textit{manager level} and \textit{entrance-staff level}.
+\textit{Customers Line-up} platform grants supermarkets a way to manage queues and customers inside their stores. In particular, \textbf{upon authentication}, it offers two levels of access: \textit{manager level} and \textit{entrance-staff level}.
 
 \begin{itemize}
 	\item \textbf{Manager level}\newline
@@ -120,19 +143,19 @@ In the event that the supermarkets credentials get lost or there is a need to ch
 
 \subsubsection{Scenario 1}\label{sc:first}
 John has to go to the supermarket to buy some groceries. Since there is a pandemic going on, he would like to go there as safely as possible.\newline
-So he opens CLup, chooses his trusted supermarket and takes a queue ticket. The application tells him to go to the supermarket at 12:30 and since John is about ten minutes away from the store it notifies him to leave at 12:20. Once in the store an employee checks the ticket by scanning his QR code and John can enter the supermarket.
+So he opens CLup, chooses his trusted supermarket and takes a queue ticket. The application tells him to go to the supermarket at 12:30 and since John is about ten minutes away from the store it notifies him to leave at 12:15. Once in the store, an employee checks the ticket by scanning his QR code and John can enter the supermarket.
 At the exit the cashier will scan again the QR to notify the exit of a customer from the store.
 
 \subsubsection{Scenario 2}\label{sc:second}
 Tomorrow John is going to go for work near the largest Essecorta in the province. There is no better opportunity to go shopping in his favourite supermarket.\newline
-However, since he will be tight on time, he needs to book a visit to the store so he won't lose even a minute. Thus, he takes his phone and opens CLup, he chooses the store from the list and enters some informations, like the category of items he would like to buy. He adds the desired time slot and finally opens the email that just arrived and confirms his booking: he is now ready to go.
+However, since he will be tight on time, he needs to book a visit to the store so he won't lose even a minute. Thus, he takes his phone and opens CLup, he chooses the store from the list and enters some information, like the category of items he would like to buy. He adds the desired time slot and finally opens the email that just arrived and confirms his booking: he is now ready to go.
 
 \subsubsection{Scenario 3}\label{sc:third}
 John's business appointment near the famous Essecorta has been cancelled. For this reason, he can no longer go to the store.\newline
-Since John is a model citizen, he decides to delete the booking that he did with CLup. So he opens the app, he goes to the store pass section and deletes the bookings.
+Since John is a model citizen, he decides to delete the booking that he did with CLup. So he opens the app, he goes to the store pass section and deletes the booking.
 
 \subsubsection{Scenario 4}\label{sc:fourth}
-The CLup admin Bob was contacted from the manager of Superal store near the Cathedral to provide CLup to his customers. After asking him some informations about the store, like Name and PEC, the admin fills the form to register a new store. From now on the customers of Superal can enjoy the service.
+The CLup admin Bob was contacted from the manager of Superal store near the Cathedral to provide CLup to his customers. After asking him some information about the store, like name and PEC address, the admin fills the form to register a new store.
 
 \subsubsection{Scenario 5}\label{sc:fifth}
 The Superal store has recently expanded due to some renovation works. The manager Alice wants to increase the number of maximum customer inside the store and monitor them.\newline
@@ -197,7 +220,7 @@ Use cases capture functional requirements of a system from the users' perspectiv
         \midrule
         \textbf{Entry conditions} &
         \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-            \item The customer has installed the application on their device;
+            \item The customer has access to the application on their device;
             \item The application is running.
         \end{itemize} \\
         \midrule
@@ -212,7 +235,7 @@ Use cases capture functional requirements of a system from the users' perspectiv
             \item The application notifies the customer when it's time to leave.
         \end{enumerate} \\
         \midrule
-        \textbf{Exit conditions} & The customer has retrieved a ticket for the selected store. \\
+        \textbf{Exit conditions} & The customer has booked a visit for the selected store. \\
         \midrule
         \textbf{Exceptions} &
         \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
@@ -245,13 +268,13 @@ Use cases capture functional requirements of a system from the users' perspectiv
         \midrule
         \textbf{Entry conditions} &
         \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-            \item The customer has installed the application on their device;
+            \item The customer has access to the application on their device;
             \item The application is running.
         \end{itemize} \\
         \midrule
         \textbf{Flow of events} &
         \begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-            \item The customer swipes to the "My Store Pass" page;
+            \item The customer goes to the "My Store Pass" page;
             \item The customer selects one of the available store passes;
             \item The customer presses the "Delete Store Pass" button;
             \item The customer selects "Yes" on the confirmation message;
@@ -286,13 +309,13 @@ Use cases capture functional requirements of a system from the users' perspectiv
         \midrule
         \textbf{Entry conditions} &
         \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-            \item The web platform is running.
+            \item The platform is running.
         \end{itemize} \\
         \midrule
         \textbf{Flow of events} &
         \begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
             \item The actor goes to the login page;
-            \item The actor inserts their username and password;
+            \item The actor inserts their usercode and password;
             \item The actor submits the form.
         \end{enumerate} \\
         \midrule
@@ -300,7 +323,7 @@ Use cases capture functional requirements of a system from the users' perspectiv
         \midrule
         \textbf{Exceptions} &
         \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-            \item If the username is not recognized by the system, the credentials are not registered or the username is incorrect. The system notifies the actor and the procedure is aborted.
+            \item If the username is not recognized by the system, the credentials are not registered or the usercode is incorrect. The system notifies the actor and the procedure is aborted.
             \item If the inserted password is wrong, the system notifies the actor and the procedure is aborted.
         \end{itemize} \\
 
@@ -385,7 +408,7 @@ Use cases capture functional requirements of a system from the users' perspectiv
             \item The system provides to the store manager a list with all the bookings that match the filter. If no filter are provided, a full list of all the bookings is shown.
         \end{enumerate} \\
         \midrule
-        \textbf{Exit conditions} & The Store manager view the bookings. \\
+        \textbf{Exit conditions} & The Store manager views the bookings. \\
         \midrule
         \textbf{Exceptions} &
         \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
@@ -416,15 +439,15 @@ Use cases capture functional requirements of a system from the users' perspectiv
         \midrule
         \textbf{Entry conditions} &
         \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-            \item The platform is running.
+            \item The employee has access to the application on a device;
             \item The store employee is logged in.
         \end{itemize} \\
         \midrule
         \textbf{Flow of events} &
         \begin{enumerate}[label=\roman*.,leftmargin=.5cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-            \item The store employee click on "Scan QR";
+            \item The store employee clicks on "Scan QR";
             \item The store employee points the camera to the customer's QR code;
-            \item The system prompt a response about the validity of the pass;
+            \item The system prompts a response about the validity of the pass;
         \end{enumerate} \\
         \midrule
         \textbf{Exit conditions} & The store pass is accepted. \\
@@ -451,8 +474,11 @@ Use cases capture functional requirements of a system from the users' perspectiv
 CLup has four different groups of users:
 \begin{itemize}
 	\item \textbf{Customers}: they are customers of the supermarket. They can be of all ages and don't necessarily have experience with technology. They can also be elderly	people who don't have a smartphone at all. For this reason the system should be as easy to use as possible and should provide an alternative way to retrieve a ticket in addition to the mobile app.
-	\item \textbf{Store managers}: they are the managers of the store. They manage the number of people who can access the store and can monitor the ones that are in the supermarket. It is reasonable to assume that they have at least a minimum experience with technology and the use of computer. For this reason the dashboard with all the information about customers will be accessible from a web browser.
-	\item \textbf{Store employee}: they are the employees of the store. They validate the tickets at the entrance/exit of the store. They could not have experience with technology. For this reason the Store App and the dashboard have a simple interface and the interaction that they should have with them is reduced to the bare minimum.
+	
+	\item \textbf{Store managers}: they are the managers of the store. They manage the number of people who can access the store and can monitor the ones that are in the supermarket. It is reasonable to assume that they have at least a minimum experience with technology and the use of computer.
+	
+	\item \textbf{Store employee}: they are the employees of the store. They validate the tickets at the entrance/exit of the store. They could not have experience with technology. For this reason the platform has a simple interface and the interaction that they should have with it is reduced to the bare minimum.
+	
     \item \textbf{CLup admin}: an operator of CLup able to login to the platform by using his special credentials. It can register supermarkets and generate their credentials. It can also maintain and update the system. Registration for this kind of users is forbidden and it has to be added directly during the system's installation process.
 \end{itemize}
 
@@ -498,10 +524,9 @@ The properties that hold in the analysed world will be listed below.
     \item \itemtext{dom:oneToOneQr}{A ticket or a booked visit is associated with exactly one person.}
     \item \itemtext{dom:custEmail}{Customers who want to book-a-visit have an email address.}
 	\item \itemtext{dom:uniqueName}{Stores have unique names.}
-	\item \itemtext{dom:employeeEntrance}{Each store has an employee at the entrance which check-in people.}
+	\item \itemtext{dom:employeeEntrance}{Each store has an employee at the entrance which checks-in people.}
 	\item \itemtext{dom:empSmartphone}{Store employees have a supplied smartphone with camera.}
 	\item \itemtext{dom:empCamera}{The cameras of employees' smartphone are working properly.}
-	\item \itemtext{dom:storeRegistered}{Store managers have registered their stores in CLup.}
 	\item \itemtext{dom:timeArrival}{Customers comply with the arrival time assigned by the mobile app.}
 	\item \itemtext{dom:capStores}{Store managers know the maximum capacity of customers in the building.}
    	\item \itemtext{dom:storeKiosk}{Each store has a Self Service Ticketing Kiosk accessible.}

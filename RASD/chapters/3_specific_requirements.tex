@@ -53,7 +53,7 @@ Figures below will present the hypothetical early phase user interfaces of the c
 \clearpage
 
 \subsection{Hardware Interfaces}
-In order to operate correctly the system needs several devices which supermarkets shall acquire:
+In order to operate correctly, the system needs several devices which supermarkets shall acquire:
 \begin{itemize}
 	\item smartphones equipped with camera module for employees (one for the store entrance staff and one for each cash desk);
 	\item a device with an attached display to show the store pass calls at the entrance;
@@ -61,7 +61,7 @@ In order to operate correctly the system needs several devices which supermarket
 \end{itemize}
 
 For the normal usage, customers enjoy CLup using smartphones and their GPS module. 
-Store managers and CLup admins will access CLup services through web browser of their devices.
+Store managers, store employees and CLup admins will access CLup services through web browser of their devices.
 
 \subsection{Software Interfaces}
 The system interfaces with a external map service for computing the distance between current place and store.
@@ -113,7 +113,7 @@ In this section, it is given a complete description of the functional requiremen
     \subsubsection{CLup admin}
     \begin{enumerate}[resume*=requirements]
         \item \itemtext{req:admRegister}{The system shall allow CLup admins to register new supermarkets.}
-        \item \itemtext{req:admCredentials}{The system shall generate new manager and staff credential for each supermarket registered.}
+        \item \itemtext{req:admCredentials}{The system shall generate new manager and staff credentials for each supermarket registered.}
     \end{enumerate}
 
     \subsection{Goal mapping on requirements}
@@ -231,7 +231,6 @@ In this section, it is given a complete description of the functional requiremen
        	\printitem{dom:workingGps}
        	\printitem{dom:uniqueName}
        	\printitem{dom:empSmartphone}
-       	\printitem{dom:storeRegistered}
        	\printitem{dom:storeKiosk}
 
 
@@ -244,7 +243,6 @@ In this section, it is given a complete description of the functional requiremen
        	\printitem{dom:smartphone}
        	\printitem{dom:internetStores}
        	\printitem{dom:pecStores}
-       	\printitem{dom:storeRegistered}
        	\printitem{dom:storeKiosk}
 
 
@@ -266,7 +264,6 @@ In this section, it is given a complete description of the functional requiremen
        	\printitem{dom:internetStores}
        	\printitem{dom:pecStores}
        	\printitem{dom:employeeEntrance}
-       	\printitem{dom:storeRegistered}
        	\printitem{dom:capStores}
 
 
@@ -282,7 +279,6 @@ In this section, it is given a complete description of the functional requiremen
        	\printitem{dom:categories}
        	\printitem{dom:internetStores}
        	\printitem{dom:pecStores}
-       	\printitem{dom:storeRegistered}
 
 
         \item \textbf{\printitem{goal:limitNumber}}
@@ -299,7 +295,6 @@ In this section, it is given a complete description of the functional requiremen
        	\printitem{dom:pecStores}
        	\printitem{dom:empSmartphone}
        	\printitem{dom:empCamera}
-       	\printitem{dom:storeRegistered}
        	\printitem{dom:timeArrival}
        	\printitem{dom:capStores}
 
@@ -441,7 +436,7 @@ CLup system shall use stateless protocols and standard operations to allow compo
 It’s crucial to design modules properly so that ease of use, security and performance will remain the core factors of the system.
 
 \subsection{Other Constraints}
-Regulatory policies have to be considered for the interaction between CLup and customers. The application, in fact, will ask the position of the customer while retrieving a ticket and while checking the queue status. Further information will be provided in the section \ref{req:privacy}.
+Regulatory policies have to be considered for the interaction between CLup and customers. The application, in fact, will ask the position of the customer while retrieving a store pass and while checking the pass status. Further information will be provided in the section \ref{req:privacy}.
 
 \section{Software System Attributes}
 
