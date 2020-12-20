@@ -12438,9 +12438,9 @@
 												"$ref": "AAAAAAF2WK3MzB7ofXE="
 											},
 											"font": "Arial;13;0",
-											"left": 368,
+											"left": 354,
 											"top": 142,
-											"width": 161.1162109375,
+											"width": 188.58251953125,
 											"height": 13,
 											"alpha": 1.5707963267948966,
 											"distance": 10,
@@ -12448,7 +12448,7 @@
 												"$ref": "AAAAAAF2WK3MzB7pAW0="
 											},
 											"edgePosition": 1,
-											"text": "2 : getPassesList(customer)"
+											"text": "2 : getPassesList(customer, day)"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -12549,9 +12549,9 @@
 												"$ref": "AAAAAAF2WK5+2B8Fjmo="
 											},
 											"font": "Arial;13;0",
-											"left": 595,
+											"left": 581,
 											"top": 160,
-											"width": 161.1162109375,
+											"width": 188.58251953125,
 											"height": 13,
 											"alpha": 1.5707963267948966,
 											"distance": 10,
@@ -12559,7 +12559,7 @@
 												"$ref": "AAAAAAF2WK5+2B8Gp34="
 											},
 											"edgePosition": 1,
-											"text": "3 : getPassesList(customer)"
+											"text": "3 : getPassesList(customer, day)"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -12660,9 +12660,9 @@
 												"$ref": "AAAAAAF2WLL3UB9V7b8="
 											},
 											"font": "Arial;13;0",
-											"left": 827,
+											"left": 813,
 											"top": 176,
-											"width": 161.1162109375,
+											"width": 188.58251953125,
 											"height": 13,
 											"alpha": 1.5707963267948966,
 											"distance": 10,
@@ -12670,7 +12670,7 @@
 												"$ref": "AAAAAAF2WLL3Uh9WhlU="
 											},
 											"edgePosition": 1,
-											"text": "4 : executeQuery(customer)"
+											"text": "4 : executeQuery(customer, day)"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -14462,7 +14462,7 @@
 							"target": {
 								"$ref": "AAAAAAF2PLvxLZ7LOJo="
 							},
-							"arguments": "customer"
+							"arguments": "customer, day"
 						},
 						{
 							"_type": "UMLMessage",
@@ -14477,7 +14477,7 @@
 							"target": {
 								"$ref": "AAAAAAF2PLi2/531P2k="
 							},
-							"arguments": "customer"
+							"arguments": "customer, day"
 						},
 						{
 							"_type": "UMLMessage",
@@ -14492,7 +14492,7 @@
 							"target": {
 								"$ref": "AAAAAAF2WLKdQx8xy2k="
 							},
-							"arguments": "customer"
+							"arguments": "customer, day"
 						},
 						{
 							"_type": "UMLMessage",
@@ -22416,9 +22416,9 @@
 												"$ref": "AAAAAAF2PX/pZWSYwio="
 											},
 											"font": "Arial;13;0",
-											"left": 377,
+											"left": 373,
 											"top": 128,
-											"width": 93.9326171875,
+											"width": 100.4326171875,
 											"height": 13,
 											"alpha": 1.5707963267948966,
 											"distance": 10,
@@ -22426,7 +22426,7 @@
 												"$ref": "AAAAAAF2PX/pZWSZDUw="
 											},
 											"edgePosition": 1,
-											"text": "2 : scan(qrcode)"
+											"text": "2 : check(qrcode)"
 										},
 										{
 											"_type": "EdgeLabelView",
@@ -24085,7 +24085,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2PVJ+T2FZYJk="
 							},
-							"name": "scan",
+							"name": "check",
 							"source": {
 								"$ref": "AAAAAAF2PXQHnGP1gxc="
 							},
