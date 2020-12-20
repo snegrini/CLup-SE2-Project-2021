@@ -6,15 +6,15 @@ This document contains the complete design description of the \textit{Customers 
 The primary audiences of this document are the software developers and testers.
 
 \section{Scope}
-Customer Line-up (CLup) is an \textit{easy-to-use} application which aims to settle for various queuing problems faced by supermarkets and their customers.\newline
+Customer Line-up (CLup) is an \textbf{easy-to-use} application which aims to settle for various queuing problems faced by supermarkets and their customers.\newline
 On the one side, it allows store managers to regulate the influx of people in the building and, on the other side, it saves people from having to line up and stand outside of stores for hours on end.
 
-Customers can enter a queue in \textit{real-time} by taking a ticket via different channels such as Self Service Ticketing Kiosk and a Mobile App called Customer App. During this process, the user is given an estimation of the waiting time and the \textit{leave-at-time} (i.e. the time they need to depart from their current position to reach the store). This ticket comprehends a queue number, which identify user's position in the queue, and a QR code, which is used for the ticket validation.\newline
+Customers can enter a queue in \textit{real-time} by \textbf{taking a ticket} via different channels such as Self Service Ticketing Kiosk and a Mobile App called Customer App. During this process, the user is given an estimation of the waiting time and the \textbf{leave-at-time} (i.e. the time they need to depart from their current position to reach the store). This ticket comprehends a queue number, which identify user's position in the queue, and a QR code, which is used for the ticket validation.\newline
 The validation process will be performed by a store employee using a dedicated application (Store App), which will allow them to scan QR codes and submit data to the CLup Server.
 
 The Web App, accessible through any modern web browser, will provide store managers a dashboard from which they can monitor customers flow and check the journey map of all the clients inside the store at a given time.
 
-The Customer App also support an \textit{advanced functionality} where a customer can "book a visit" to the store by indicating the approximate expected duration of the trip and the main categories of items they intend to buy. For long-term customers, it suggests a time inferred by the system based on an analysis of the previous visits.
+The Customer App also support an \textit{advanced functionality} where a customer can \textbf{book a visit} to the store by indicating the approximate expected duration of the trip and the main categories of items they intend to buy. For long-term customers, it suggests a time inferred by the system based on an analysis of the previous visits.
 
 This application works as a digital counterpart to the common situation where people who are in line for a service retrieve a number that gives their position in the queue. The \textit{legacy system} will be completely superseded by the application. Indeed, its effectiveness is strictly bound to the number of users who use it.
 
@@ -25,9 +25,8 @@ This application works as a digital counterpart to the common situation where pe
 		\toprule
 		\textbf{Term} & \textbf{Definition}\\
 		\midrule
-		Supermarkets & Used in this document to mean supermarket managers.\\
-		Stores & Used in this document to mean the physical building of the supermarket.\\
-		Customers & Supermarket customers which are also the users of CLup.\\
+		Customers &  Identifies the store customers.\\
+		Employees & Used in this document to mean both entrance-staff and cashiers.\\
 		Store Pass & General term that comprehends both tickets and bookings.\\
 		Ticket & Pass generated from the system which is comprehensive of the Queue number and QR code.\\
 		Booking, Reservation & Pass generated from the system as a result of the reservation process.\\
@@ -69,6 +68,7 @@ This application works as a digital counterpart to the common situation where pe
 		\midrule
 		e.g. & Exempli gratia\\
 		i.e. & Id est\\
+		R & Requirement\\		
 		\bottomrule
 	\end{tabular}
 \end{center}

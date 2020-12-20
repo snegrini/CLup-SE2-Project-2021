@@ -14,7 +14,7 @@ In the first step (\clupautoref{fig:bottom_up_1}) the Model and the EntityManage
 	\label{fig:bottom_up_1}
 \end{figure}
 
-In the second step (\clupautoref{fig:bottom_up_2}) the components responsible for the authentication are implemented. A stub is introduced to simulate the MailManager component. This is to give priority to the access and permissions mechanism of the system, required by other components.
+In the second step (\clupautoref{fig:bottom_up_2}) the components responsible for the authentication are implemented. This is to give priority to the access and permissions mechanism of the system, required by other components.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\linewidth]{bottom_up/bottom_up_2}
@@ -23,7 +23,7 @@ In the second step (\clupautoref{fig:bottom_up_2}) the components responsible fo
 \end{figure}
 
 
-The third step (\clupautoref{fig:bottom_up_3}) shows the implementation of the DashboardManager.
+The third step (\clupautoref{fig:bottom_up_3}) shows the implementation of the DashboardManager. A stub is introduced to simulate the MailManager component.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.5\linewidth]{bottom_up/bottom_up_3}
@@ -69,15 +69,16 @@ The mobile applications must be accessible by as many users as possible, hence i
 In order to achieve this, it is possible to adopt a cross-platform development framework which  avoid the burden of having to use two different native codebases.
 A lot of alternatives are available, most of them consisting of a web view, such as Apache Cordova and Ionic. 
 However, for scalability and performance reasons, these options are discarded, in favour of a more native approach with Flutter, an open-source UI software development kit created by Google.
-Since this framework compiles to native code, it provides better performance and scalability. A the same time, the availability of a big standard library of UI components avoids the need of third party packages which allows for faster development.
+Since this framework compiles to native code, it provides better performance and scalability. At the same time, the availability of a big standard library of UI components avoids the need of third party packages which allows for faster development.
 
 \subsection{Back-end server}
-The back-end will be implemented in Java EE with the TomEE application/web server.
-It allows for fast development and easy integration with documentation tools that help speed up the work.\newline
+The back-end will be implemented in Java EE with the TomEE application/web server. Java EE consists of a powerful set of specifications and
+APIs which facilitates development of Enterprise Applications and allows developers to focus on the most important aspects of the application.
+It allows fast development and easy integration with documentation tools that help speed up the work.\newline
 The web server will conform to the REST architectural design, providing a REST API, which allows for great flexibility.
  
 \subsection{Front-end web app}
-Java templating with Thymeleaf will be used for the web app interface.
+Java templating with Thymeleaf will be used for the web app interface. Its \textit{natural templating} capability ensures templates can be prototyped without a back-end. This makes development faster than other popular template engines such as JSP.
 
 \subsection{Database}
 MySQL server is one of the world’s most popular databases. It is open source, reliable, cost-effective and easy to manage. For this reason, it is chosen for the data storage system.

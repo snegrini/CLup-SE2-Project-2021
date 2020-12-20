@@ -22,10 +22,11 @@ It is composed by a client part and a server part:
 	\end{itemize}
 	\item \textbf{Client side:}
 	\begin{itemize}
-		\item \textit{User App:} Application installed on customers smartphone. It allows to retrieve a ticket or book a visit.
-		\item \textit{Store App:} Application installed on employees smartphone. It allows to validate store passes.
-		\item \textit{Ticketing Kiosk:} Tablet installed at the entrance of the store to which a printer is attached. It has installed a modified version of the customer app which is able to print the ticket on place.
-		\item \textit{Web Browser:} Used by store employees and managers to access the web dashboard.
+		\item \textit{Customer App:} application installed on customers smartphone. It allows to retrieve a ticket or book a visit.
+		\item \textit{Store App:} application installed on employees smartphone. It allows to validate store passes.
+		\item \textit{Ticketing Kiosk:} tablet installed at the entrance of the store to which a printer is attached. It has installed a modified version of the Customer App which is able to print the ticket on place. The application is bounded to the store it is installed at. It works exactly as a normal Customer App, it allows you to take tickets only for bounded store but not to make reservations.\newline
+		This component will be omitted in the next sections because, for the functions it provides, it behaves just as a Customer App.
+		\item \textit{Web Browser:} used by store employees and managers to access the web dashboard.
 	\end{itemize}
 \end{itemize}
 
@@ -46,7 +47,7 @@ The components in \clupautoref{fig:cmp_high_level} are:
 \begin{itemize}
 	\item \textbf{CLup Server}: contains the business logic of the entire system. This component offers to both customers and supermarkets the features of \textit{CLup}. On the one side, the interfaces provided by this components allow the client side (mobile apps and web app) to communicate with the server. On the other side, it interfaces with external systems such as the database server, the email server and the maps service. Further detailed in \clupautoref{fig:cmp_clup_server}.
 	
-	\item \textbf{Customer App}: represents the mobile application installed on the customers' devices. Upon authentication via the \textbf{Token Interface}, it allows customers to access the store pass functions of \textit{CLup} by using the \textbf{StorePass Interface}.
+	\item \textbf{Customer App}: represents the mobile application installed on the customers' devices. Upon authentication via the \textbf{Token Interface}, it allows customers to access the store pass functions of \textit{CLup} by using the \textbf{StorePass Interface}. Periodically, it asks the server for information on store passes and distance from stores. In case of updates, for example a store pass is deleted or it's time to leave, it shows a notification to the user.
 	
 	\item \textbf{Store App}: represents the mobile application	installed on the devices of the store. Upon authentication with credentials via the \textbf{Token Interface}, it allows the store employees to access the scan functions of \textit{CLup} by using the \textbf{Scan Interface}.
 	
@@ -84,11 +85,11 @@ The components in \clupautoref{fig:cmp_clup_server} are:
 	
 	\item \textbf{ScanManager}: handles the main feature offered to the store employees. In particular, it manages all the logic of store passes scan and validation. Further detailed in \clupautoref{fig:cmp_scan}.
 	
-	\item \textbf{TokenManager}: deals with token generation, decoding and verification for the mobile applications. It interfaces with the AuthManager through the \textbf{TokenAuth Interface} to integrate the authentication when using credentials. It is based on the JWT an internet standard for creating JSON token with a payload. Further detail are provided in \clupautoref{iit:tech}.
+	\item \textbf{TokenManager}: deals with token generation, decoding and verification for the mobile applications. It interfaces with the AuthManager through the \textbf{TokenAuth Interface} to integrate the authentication when using credentials. It is based on the JWT an internet standard for creating JSON token with a payload. Further details are provided in \clupautoref{iit:tech}.
 	
 	\item \textbf{AuthManager}: deals with the authentication of CLup admins, store managers and employees. Allows the generation of store credentials. Further detailed in \clupautoref{fig:cmp_auth}.
 	
-	\item \textbf{DashboardManager}: handles the main feature offered to the store managers. In particular, it offers a dashboard that allows:
+	\item \textbf{DashboardManager}: handles the main features offered through the WebApp. In particular, it offers a dashboard that allows:
 	\begin{itemize}
 		\item \textbf{Store managers}:
 				\begin{itemize}
@@ -98,7 +99,7 @@ The components in \clupautoref{fig:cmp_clup_server} are:
 				\end{itemize}
 			
 		\item \textbf{Store employees}: to view the next store passes that will be called.
-		\item \textbf{CLup admins}: to manage the creation and deletion of stores.
+		\item \textbf{CLup admins}: to manage the creation and deletion of stores. It interfaces with the MailManager to send the credentials to the store PEC address.
 		\item \textbf{Customers}: to confirm and delete their bookings via link.
 	\end{itemize}
 	
@@ -122,11 +123,11 @@ The components in \clupautoref{fig:cmp_clup_server} are:
 	\label{fig:cmp_store_pass}
 \end{figure}
 
-The components in \clupautoref{fig:cmp_store_pass} are:
+This component depends from the \textbf{TokenAuthInterface} because it is necessary to check the validity of the auth token. The components in \clupautoref{fig:cmp_store_pass} are:
 \begin{itemize}
-	\item \textbf{TicketManager}: handles the tickets creation for a specific store. Provides methods to the Customer App to update the current status of the queue and through the \textbf{Model Interface} can access the maps data to provide the leave-at-time.
+	\item \textbf{TicketManager}: handles the tickets creation for a specific store. Provides methods to the Customer App to update the current status of the queue and through the \textbf{MapsInterface} can access the maps data to provide the leave-at-time.
 	
-	\item \textbf{BookingManager}: handles the booking creation for a specific store. Provides methods to the Customer App to update the current status of the queue and through the \textbf{Model Interface} can access the maps data to provide the leave-at-time.
+	\item \textbf{BookingManager}: handles the booking creation for a specific store. It calculates the expected booking time for a customer, based on an analysis of the previous visits. It provides methods to the Customer App to update the current status of the queue and through the \textbf{MapsInterface} can access the maps data to provide the leave-at-time.
 	
 	\item \textbf{QueueManager}: deals with the queue management for each stores subscribed and calculates the estimated waiting time in queue. It offers an interface to the \textit{Ticket Manager} which allows it to add and remove tickets from the queues. Furthermore, the \textbf{ViewStatusInterface} provides the current status of the queue.
 \end{itemize}
@@ -145,15 +146,13 @@ The components in \clupautoref{fig:cmp_auth} are:
 \begin{itemize}
 	\item \textbf{LoginManager}: handles the login and credentials check of CLup admins, store managers and store employees in the system. It interfaces with the RoleManager through the \textbf{RoleInterface} to give the right permissions to the logged user.
 	
-	\item \textbf{RegisterManager}: handles the registration of new stores in the system. It communicate with the Model in order to save the registered stores.
-	
 	\item \textbf{RoleManager}: handles the role based access control (RBAC): an authorization scheme that grants access rights based on the role of the use. In particular, this components grants user authentication and authorization:
 	\begin{itemize}
 		\item Authentication: request and verify the identity of CLup admin, store managers and employees attempting to login using a usercode and password;
 		\item Authorization: verify the permissions of the logged user to perform any requested action (e.g. adding or removing a store, creating a new item category, etc.) before performing it.
 	\end{itemize}
 		
-	\item \textbf{CredentialsGenerator}: handles the credentials generation when a CLup Admin adds a new store to the system. It interfaces with the MailManager to send the credentials to the store PEC address. In the event that the CLup admin request new credentials for stores, this component will generate new ones.
+	\item \textbf{CredentialsGenerator}: handles the credentials generation through the \textbf{AuthCredentialsInterface} when a CLup Admin adds a new store to the system. In the event that the CLup admin request new credentials for stores, this component will generate new ones.
 \end{itemize}
 
 
@@ -166,14 +165,14 @@ The components in \clupautoref{fig:cmp_auth} are:
 	\label{fig:cmp_scan}
 \end{figure}
 
-The components in \clupautoref{fig:cmp_scan} are:
+This component depends from the \textbf{TokenAuthInterface} because it is necessary to check the validity of the auth token. The components in \clupautoref{fig:cmp_scan} are:
 \begin{itemize}
 	\item \textbf{QRCheckManager}: it handles the scanning and validation process of QR codes. The scanned code validity will be checked versus the one stored in the Model via the ModelInterface.
 \end{itemize}
 \clearpage
 
 \section{Deployment view}\label{sec:deployment_view}
-The system presents a three-tier architecture as shown in \clupautoref{fig:depl_diag}. This is a well-established software application architecture that organizes applications into three logical and physical computing tiers. The chief benefit of three-tier architecture is that because each tier runs on its own infrastructure, each tier can be developed simultaneously by separate developers and can be updated or scaled as needed without impacting the other tiers.
+The system presents a \textbf{three-tier architecture} as shown in \clupautoref{fig:depl_diag}. This is a well-established software application architecture that organizes applications into three logical and physical computing tiers. The chief benefit of three-tier architecture is that because each tier runs on its own infrastructure, each tier can be developed simultaneously by separate developers and can be updated or scaled as needed without impacting the other tiers.
 
 \begin{itemize}
 	\item \textbf{Tier 1: presentation tier}. It is the front end layer in the three-tier system and consists of the user interface. It communicates with others layers via API calls on the HTTPS protocol.\newline
@@ -471,4 +470,3 @@ The following diagram explain how the database is structured.
 	\caption{Database structure.}
 	\label{fig:er_diagram}
 \end{figure}
-
