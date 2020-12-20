@@ -235,7 +235,7 @@ Since a booking must be confirmed via a link, an email is sent at the end of the
 \clearpage
 \subsection{Leave At Time}
 The Customer App reminds the user to leave the place where he is in order to ensure that he arrives on time.\newline
-The server fetches all the valid store passes and computes the distance of the customer from the respective store. If the customer should leave the place where he is, a notification is sent to him. For the sake of simplicity the token validation process is omitted.
+The server fetches all the valid store passes of the day and computes the distance of the customer from the respective store. If the customer should leave the place where he is, a notification is sent to him. For the sake of simplicity the token validation process is omitted.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{sequence/seq_leave}
@@ -252,6 +252,8 @@ The following sequence diagram represents the login process to the Web App. CLup
 	\label{fig:seq_login}
 \end{figure}
 
+\clearpage
+
 \subsection{Check store status}
 After logging in, the store managers can see the store status, for instance the visits booked. The following sequence diagram represents this process. 
 \begin{figure}[H]
@@ -262,7 +264,7 @@ After logging in, the store managers can see the store status, for instance the 
 \end{figure}
 
 \subsection{Store App login}
-As the Customer App, Store App also has a token to operate. This time there is a login process before the generation of the token.
+As the Customer App, the Store App also has a token to operate. This time there is a login process before the generation of the token.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.75\linewidth]{sequence/seq_app_login}
@@ -280,7 +282,7 @@ The scan of the QR is the most important part of the Store App. After the token 
 \end{figure}
 
 \subsection{Store registration}
-The store registration is performed by a CLup admin via the Web App after his login. Prompted informations are checked from the system and then, if the store doesn't already exist, the store is saved into the database. After that, the credentials for the store managers and store employees are generated and sent to the store PEC address.
+The store registration is performed by a CLup admin via the Web App after his login. Prompted information are checked from the system and then, if the store doesn't already exist, the store is saved into the database. After that, the credentials for the store managers and store employees are generated and sent to the store PEC address.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.85\linewidth]{sequence/seq_store_registration}
@@ -384,6 +386,7 @@ This section lists all the methods that each component interface provides to the
 		\item getStores(filters)
 		\item getStoreInfo(store)
 		\item getPassesList(customer)
+		\item getPassesList(customer, day)
 		\item getPassInfo(pass)
 		\item deletePass(pass)
 		\item getStoreStatus()
@@ -415,6 +418,7 @@ This section lists all the methods that each component interface provides to the
 		\item getStores(filters)
 		\item getStoreInfo(store)
 		\item getPassesList(customer)
+		\item getPassesList(customer, day)
 		\item getPassInfo(pass)
 		\item deletePass(pass)
 		\item getStoreStatus(store)
@@ -463,7 +467,7 @@ This section lists all the methods that each component interface provides to the
 \section{Other design decisions}
 \subsection{Database Structure}
 As already mentioned all the data will be stored in a database. The chosen DBMS is MySQL since it is an \textbf{open-source relational database management system} (\textbf{RDBMS}).\newline
-The following diagram explain how the database is structured.
+The following diagram explains how the database is structured.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=\linewidth]{er_diagram}
