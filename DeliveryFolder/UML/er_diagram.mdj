@@ -2551,7 +2551,7 @@
 								"$ref": "AAAAAAF2MyC+er0Ci5Y="
 							},
 							"name": "default_pass_code",
-							"type": "VARCHAR",
+							"type": "CHAR",
 							"length": "8"
 						}
 					]
@@ -2582,7 +2582,7 @@
 								"$ref": "AAAAAAF2MyDD7r0O2r0="
 							},
 							"name": "user_code",
-							"type": "VARCHAR",
+							"type": "CHAR",
 							"length": "6"
 						},
 						{
@@ -2973,7 +2973,7 @@
 								"$ref": "AAAAAAF2M8gME8AiqM8="
 							},
 							"name": "pass_code",
-							"type": "VARCHAR",
+							"type": "CHAR",
 							"length": "8"
 						},
 						{
@@ -3105,7 +3105,7 @@
 								"$ref": "AAAAAAF2M8gbgsAvPjY="
 							},
 							"name": "pass_code",
-							"type": "VARCHAR",
+							"type": "CHAR",
 							"length": "8"
 						},
 						{
