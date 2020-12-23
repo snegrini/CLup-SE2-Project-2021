@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login page</title>
+</head>
+<body>
+<h1>Welcome to the Customers Line-up application.</h1>
+
+<form action="CheckLogin" method="POST">
+    <label>
+        Username:
+        <input type="text" name="username" required>
+    </label><br>
+    <label>
+        Password:
+        <input type="password" name="pwd" required>
+    </label><br>
+    <input type="submit" value="login">
+    <p th:text=" ${errorMsg}"></p>
+</form>
+
+</body>
+</html>
