@@ -1,11 +1,5 @@
 package it.polimi.se2.clup.CLupWeb.controllers;
 
-import java.io.*;
-import javax.ejb.EJB;
-import javax.servlet.ServletContext;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
-
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import org.thymeleaf.TemplateEngine;
@@ -13,9 +7,18 @@ import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import javax.ejb.EJB;
+import javax.servlet.ServletContext;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
-@WebServlet(name = "helloServlet", value = "/")
-public class HelloServlet extends HttpServlet {
+
+@WebServlet(name = "printTestPage", value = "/print")
+public class PrintTestPage extends HttpServlet {
 
     private TemplateEngine templateEngine;
 
@@ -34,17 +37,10 @@ public class HelloServlet extends HttpServlet {
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
 
-        int storeId;
-        try {
-            storeId = Integer.parseInt(request.getParameter("storeid"));
-        } catch(NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check store id");
-            return;
-        }
+        List<StoreEntity> stores = null;
 
-        StoreEntity storeEntity = null;
         try {
-            storeEntity = storeService.findStoreById(storeId);
+            stores = storeService.findAllStores();
         } catch (Exception e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find stores");
@@ -53,10 +49,9 @@ public class HelloServlet extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-        String path = "/index.html";
+        String path = "/print.html";
 
-        ctx.setVariable("testMessage", storeEntity.getStoreName());
-        ctx.setVariable("testMessage2", storeEntity.getAddressEntity().getAddress());
+        ctx.setVariable("stores", stores);
         templateEngine.process(path, ctx, response.getWriter());
     }
 
