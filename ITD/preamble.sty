@@ -1,0 +1,90 @@
+\ProvidesPackage{preamble}
+
+\RequirePackage{geometry}
+
+\newgeometry{left=3cm,right=3cm,bottom=3.5cm,top=3.5cm}
+
+\RequirePackage[dvipsnames]{xcolor}
+\RequirePackage{listings}
+
+\RequirePackage[scaled]{helvet}
+\renewcommand*\familydefault{\sfdefault}
+
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+
+\RequirePackage{babel}
+\RequirePackage{csquotes}
+
+\RequirePackage{parskip}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.4\baselineskip}
+
+\RequirePackage{enumitem}
+\RequirePackage{caption}
+\RequirePackage{booktabs}
+
+\RequirePackage[hidelinks]{hyperref}
+\hypersetup {
+	colorlinks = true,
+	linkcolor  = black,
+	citecolor  = black
+}
+
+\RequirePackage{graphicx}
+\graphicspath{{./figures/}{./images/}}
+
+\RequirePackage{float}
+
+\RequirePackage{pifont}
+
+\chapterstyle{bianchi}
+\setlength{\beforechapskip}{0pt}
+
+% Header & Footer
+\newcommand{\footerText}{\emph{CLup}\quad \textbf{I}mplementation and \textbf{T}est \textbf{D}eliverable}
+
+\makeevenhead{headings}{\slshape\rightmark}{}{}
+\makeoddhead{headings}{\slshape\rightmark}{}{}
+
+\makeevenfoot{headings}{\footerText}{}{\thepage}
+\makeoddfoot{headings}{\footerText}{}{\thepage}
+
+\copypagestyle{plainnotice}{plain}
+\makeevenfoot{plainnotice}{\footerText}{}{\thepage}
+\makeoddfoot{plainnotice}{\footerText}{}{\thepage}
+\aliaspagestyle{chapter}{plainnotice}
+
+\makeheadrule{headings}{\textwidth}{\normalrulethickness}
+
+\makefootrule{headings}{\textwidth}{\normalrulethickness}{1ex}
+\makefootrule{plain}{\textwidth}{\normalrulethickness}{1ex}
+
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+
+\renewcommand{\arraystretch}{1.3}
+
+\newcommand{\itemtext}[2] {%
+    \expandafter\gdef\csname item#1\endcsname{#2}%
+    \label{#1}#2
+}
+
+\newcommand{\useitemtext}[2] {\csname item#1\endcsname}
+
+\newcommand{\printitem}[1] {
+	\ref{#1} \useitemtext{#1}\break\par
+}
+
+\definecolor{clupgrapefruit}{RGB}{218, 64, 38}
+\newcommand{\clupautoref}[1] {%
+	\hypersetup{linkcolor=clupgrapefruit}%
+	\autoref{#1}%
+}
+\newcommand{\clupref}[1] {%
+	\hypersetup{linkcolor=clupgrapefruit}%
+	\ref{#1}%
+}
+
+% Checkmark
+\newcommand{\cmark}{\ding{51}}
