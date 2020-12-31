@@ -6,6 +6,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "user", schema = "np_clup")
+@NamedQueries({
+    @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.usercode = ?1 and u.password = ?2"),
+})
 public class UserEntity {
 
     @Id
@@ -14,7 +17,7 @@ public class UserEntity {
     private int userId;
 
     @Column(name = "user_code")
-    private String userCode;
+    private String usercode;
 
     @Column(name = "password")
     private String password;
@@ -34,12 +37,12 @@ public class UserEntity {
         this.userId = userId;
     }
 
-    public String getUserCode() {
-        return userCode;
+    public String getUsercode() {
+        return usercode;
     }
 
-    public void setUserCode(String userCode) {
-        this.userCode = userCode;
+    public void setUsercode(String usercode) {
+        this.usercode = usercode;
     }
 
     public String getPassword() {
