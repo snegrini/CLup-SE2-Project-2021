@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Store List</title>
+</head>
+<body>
+    <h1>Store List</h1>
+
+    <table>
+        <tr>
+            <th>Store Name</th>
+            <th>Store Cap</th>
+            <th>Details</th>
+        </tr>
+        <tr data-th-each="store : ${stores}">
+            <td data-th-text="${store.storeName}">Onions</td>
+            <td data-th-text="${store.storeCap}">2</td>
+            <td><a data-th-href="@{/dashboard/storedetails(id=${store.storeId})}">Go</a></td>
+        </tr>
+    </table>
+</body>
+</html>

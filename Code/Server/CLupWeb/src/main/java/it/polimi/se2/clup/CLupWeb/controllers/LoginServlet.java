@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "Login", value = "/login")
-public class Login extends HttpServlet {
+public class LoginServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/UserService")

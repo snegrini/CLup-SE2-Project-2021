@@ -15,8 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "AdminHomeServlet", value = "/dashboard/admin")
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "AdminStoreAddServlet", value = "/dashboard/storeadd")
+public class StoreAddServlet extends HttpServlet  {
+
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
@@ -37,7 +38,7 @@ public class HomeServlet extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-        String path = "/WEB-INF/admin/index.html";
+        String path = "/WEB-INF/admin/store_add.html";
 
         templateEngine.process(path, ctx, response.getWriter());
     }

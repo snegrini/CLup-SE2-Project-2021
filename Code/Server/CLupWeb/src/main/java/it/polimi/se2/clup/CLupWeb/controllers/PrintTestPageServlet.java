@@ -1,23 +1,24 @@
 package it.polimi.se2.clup.CLupWeb.controllers;
 
-import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
+import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet(name = "Dashboard", value = "/dashboard")
-public class Dashboard extends HttpServlet {
+
+@WebServlet(name = "printTestPage", value = "/dashboard/print")
+public class PrintTestPageServlet extends HttpServlet {
 
     private TemplateEngine templateEngine;
 
@@ -33,27 +34,27 @@ public class Dashboard extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html");
 
-        UserEntity user = (UserEntity) request.getSession().getAttribute("user");
+        List<StoreEntity> stores = null;
 
-        String path = "/dashboard";
-
-        switch (user.getRole()) {
-            case ADMIN:
-                path += "/admin";
-                break;
-            case MANAGER:
-                break;
-            case EMPLOYEE:
-                break;
-            default:
-                // Should not happen, throw exception?
-                break;
+        try {
+            stores = storeService.findAllStores();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find stores");
+            return;
         }
 
-        RequestDispatcher dispatcher = getServletContext()
-                .getRequestDispatcher(path);
-        dispatcher.forward(request, response);
+        ServletContext servletContext = getServletContext();
+        WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+        String path = "/print.html";
+
+        ctx.setVariable("stores", stores);
+        templateEngine.process(path, ctx, response.getWriter());
+    }
+
+    public void destroy() {
     }
 }

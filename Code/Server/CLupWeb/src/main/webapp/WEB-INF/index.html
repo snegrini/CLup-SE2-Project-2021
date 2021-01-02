@@ -2,9 +2,32 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CLup - Dashboard</title>
+    <title>CLup - Login</title>
 </head>
 <body>
-    <div>Welcome in the dashboard</div>
+
+<h1>Welcome to the Customers Line-up application.</h1>
+<div>Please log in</div>
+
+<form action="login" method="post">
+
+    <label>
+        <b>Usercode</b>
+        <input type="text" placeholder="Enter Usercode" name="usercode" required>
+    </label>
+
+    <br>
+
+    <label>
+        <b>Password</b>
+        <input type="password" placeholder="Enter Password" name="password" required>
+    </label>
+
+    <br>
+
+    <button type="submit">Login</button>
+    <div data-th-text="${errorMessage}"></div>
+</form>
+
 </body>
 </html>

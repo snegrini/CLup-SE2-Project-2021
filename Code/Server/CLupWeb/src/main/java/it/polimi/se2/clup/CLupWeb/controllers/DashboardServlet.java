@@ -1,12 +1,13 @@
-package it.polimi.se2.clup.CLupWeb.controllers.admin;
+package it.polimi.se2.clup.CLupWeb.controllers;
 
+import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,8 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "AdminHomeServlet", value = "/dashboard/admin")
-public class HomeServlet extends HttpServlet {
+@WebServlet(name = "Dashboard", value = "/dashboard")
+public class DashboardServlet extends HttpServlet {
+
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
@@ -31,14 +33,26 @@ public class HomeServlet extends HttpServlet {
         templateResolver.setSuffix(".html");
     }
 
-    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
+        UserEntity user = (UserEntity) request.getSession().getAttribute("user");
 
-        ServletContext servletContext = getServletContext();
-        WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-        String path = "/WEB-INF/admin/index.html";
+        String path = "/dashboard";
 
-        templateEngine.process(path, ctx, response.getWriter());
+        switch (user.getRole()) {
+            case ADMIN:
+                path += "/admin";
+                break;
+            case MANAGER:
+                break;
+            case EMPLOYEE:
+                break;
+            default:
+                // Should not happen, throw exception?
+                break;
+        }
+
+        RequestDispatcher dispatcher = getServletContext()
+                .getRequestDispatcher(path);
+        dispatcher.forward(request, response);
     }
 }

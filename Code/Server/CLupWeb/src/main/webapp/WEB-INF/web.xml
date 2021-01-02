@@ -8,16 +8,22 @@
         <filter-name>AuthChecker</filter-name>
         <url-pattern>/dashboard/*</url-pattern>
     </filter-mapping>
+
     <filter-mapping>
         <filter-name>EmployeeChecker</filter-name>
         <url-pattern>/dashboard/*</url-pattern>
     </filter-mapping>
+
     <filter-mapping>
         <filter-name>ManagerChecker</filter-name>
         <url-pattern>/dashboard/*</url-pattern>
     </filter-mapping>
+
     <filter-mapping>
         <filter-name>AdminChecker</filter-name>
-        <url-pattern>/dashboard/*</url-pattern>
+        <servlet-name>AdminHomeServlet</servlet-name>
+        <servlet-name>AdminStoreAddServlet</servlet-name>
+        <servlet-name>AdminStoreDetailServlet</servlet-name>
+        <servlet-name>AdminStoreListServlet</servlet-name>
     </filter-mapping>
 </web-app>
