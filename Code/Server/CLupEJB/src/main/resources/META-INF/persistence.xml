@@ -10,8 +10,8 @@
     <class>it.polimi.se2.clup.CLupEJB.entities.TicketEntity</class>
     <class>it.polimi.se2.clup.CLupEJB.entities.UserEntity</class>
     <properties>
-      <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/np_clup"/>
-      <property name="eclipselink.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/np_clup"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
     </properties>
   </persistence-unit>
 </persistence>
