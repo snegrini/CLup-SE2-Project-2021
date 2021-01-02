@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "login", value = "/login")
+@WebServlet(name = "Login", value = "/login")
 public class Login extends HttpServlet {
     private TemplateEngine templateEngine;
 
@@ -72,23 +72,6 @@ public class Login extends HttpServlet {
             request.getSession().setAttribute("user", user);
 
             path = getServletContext().getContextPath() + "/dashboard";
-            String target = null;
-
-            switch (user.getRole()) {
-                case ADMIN:
-                    target = "/admin";
-                    break;
-                case MANAGER:
-                    target = "/manager";
-                    break;
-                case EMPLOYEE:
-                    target = "/employee";
-                    break;
-                default:
-                    // Should not happen, throw exception?
-                    break;
-            }
-            path += target;
 
             response.sendRedirect(path);
         }
