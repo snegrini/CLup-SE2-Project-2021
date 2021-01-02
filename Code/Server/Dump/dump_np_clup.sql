@@ -1,4 +1,4 @@
-CREATE DATABASE  IF NOT EXISTS `np_clup` /*!40100 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE  IF NOT EXISTS `np_clup` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `np_clup`;
 -- MySQL dump 10.13  Distrib 8.0.22, for Win64 (x86_64)
 --
@@ -33,7 +33,7 @@ CREATE TABLE `address` (
   `postal_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `country` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`address_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,7 +62,7 @@ CREATE TABLE `opening_hour` (
   PRIMARY KEY (`opening_hours_id`),
   KEY `FK_opening_hour_store` (`store_id`),
   CONSTRAINT `FK_opening_hour_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -95,7 +95,7 @@ CREATE TABLE `store` (
   UNIQUE KEY `pec_email` (`pec_email`),
   KEY `FK_store_address` (`address_id`),
   CONSTRAINT `FK_store_address` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,7 +118,7 @@ DROP TABLE IF EXISTS `ticket`;
 CREATE TABLE `ticket` (
   `ticket_id` int NOT NULL AUTO_INCREMENT,
   `pass_code` char(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `pass_status` enum('Valid','Used','Expired') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `pass_status` enum('VALID','USED','EXPIRED') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `queue_number` int NOT NULL,
   `date` date NOT NULL,
   `arrival_time` time NOT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE `ticket` (
   PRIMARY KEY (`ticket_id`),
   KEY `FK_ticket_store` (`store_id`),
   CONSTRAINT `FK_ticket_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,13 +150,13 @@ CREATE TABLE `user` (
   `user_id` int NOT NULL AUTO_INCREMENT,
   `user_code` char(6) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `password` char(60) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `role` enum('Admin','Manager','Employee') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `role` enum('ADMIN','MANAGER','EMPLOYEE') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `store_id` int DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_code` (`user_code`),
   KEY `FK_user_store` (`store_id`),
   CONSTRAINT `FK_user_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,7 +165,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'555001','password','Admin',NULL),(2,'000001','password','Manager',1),(3,'222001','password','Employee',1),(4,'000002','password','Manager',2),(5,'222002','password','Employee',2);
+INSERT INTO `user` VALUES (1,'555001','password','ADMIN',NULL),(2,'000001','password','MANAGER',1),(3,'222001','password','EMPLOYEE',1),(4,'000002','password','MANAGER',2),(5,'222002','password','EMPLOYEE',2);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -178,4 +178,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-12-31 15:31:44
+-- Dump completed on 2021-01-02 11:15:56
