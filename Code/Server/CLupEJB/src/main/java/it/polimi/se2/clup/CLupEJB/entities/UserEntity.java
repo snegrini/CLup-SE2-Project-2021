@@ -23,6 +23,7 @@ public class UserEntity {
     private String password;
 
     @Column(name = "role")
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     @ManyToOne

@@ -20,6 +20,7 @@ public class TicketEntity {
     private String passCode;
 
     @Column(name = "pass_status")
+    @Enumerated(EnumType.STRING)
     private PassStatus passStatus;
 
     @Column(name = "queue_number")
