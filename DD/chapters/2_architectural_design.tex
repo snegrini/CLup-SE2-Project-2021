@@ -200,8 +200,8 @@ This section describes the most important components interactions of the system.
 For the sake of simplicity the sequence diagrams are based on the first level of components. 
 \subsection{Customer App token}
 At the startup, the Customer App will try to request a token to the server via the token manager. Having a token is mandatory in order to take any action with the app.\newline
-This process is really important because the token is the only way to identify a customer since no registration is expected. The app will reiterate the process till a valid token is gotten.\newline
-This is an automatic process and no action is performed by the user during the operation.
+This process is really important because the token is the only way to identify a customer since no registration is expected. The request for the token includes an hash of the device IMEI that will be encapsulated inside the token. This is necessary to assign the \textbf{ownership} of store passes generated in the future.\newline
+The app will reiterate the process till a valid token is gotten. This is an automatic process and no action is performed by the user during the operation.
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{sequence/seq_token}
