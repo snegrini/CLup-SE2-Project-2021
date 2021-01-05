@@ -16,7 +16,9 @@
 
     <filter-mapping>
         <filter-name>ManagerChecker</filter-name>
-        <url-pattern>/dashboard/*</url-pattern>
+        <servlet-name>ManagerHomeServlet</servlet-name>
+        <servlet-name>ManagerTicketListServlet</servlet-name>
+        <servlet-name>ManagerEditInfoServlet</servlet-name>
     </filter-mapping>
 
     <filter-mapping>

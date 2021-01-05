@@ -23,7 +23,7 @@ public class OpeningHourEntity {
 
     @ManyToOne
     @JoinColumn(name = "store_id")
-    private StoreEntity storeEntity;
+    private StoreEntity store;
 
     public int getOpeningHoursId() {
         return openingHoursId;
@@ -57,11 +57,11 @@ public class OpeningHourEntity {
         this.weekDay = weekDay;
     }
 
-    public StoreEntity getStoreEntity() {
-        return storeEntity;
+    public StoreEntity getStore() {
+        return store;
     }
 
-    public void setStoreEntity(StoreEntity storeEntity) {
-        this.storeEntity = storeEntity;
+    public void setStore(StoreEntity store) {
+        this.store = store;
     }
 }

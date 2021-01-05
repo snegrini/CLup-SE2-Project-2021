@@ -28,7 +28,7 @@ public class UserEntity {
 
     @ManyToOne
     @JoinColumn(name = "store_id")
-    private StoreEntity storeEntity;
+    private StoreEntity store;
 
     public int getUserId() {
         return userId;
@@ -62,11 +62,11 @@ public class UserEntity {
         this.role = role;
     }
 
-    public StoreEntity getStoreEntity() {
-        return storeEntity;
+    public StoreEntity getStore() {
+        return store;
     }
 
-    public void setStoreEntity(StoreEntity storeEntity) {
-        this.storeEntity = storeEntity;
+    public void setStore(StoreEntity store) {
+        this.store = store;
     }
 }

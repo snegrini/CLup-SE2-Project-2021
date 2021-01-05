@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manager Ticket List</title>
+</head>
+<body>
+    <h1>Ticket List</h1>
+
+    <table>
+        <tr>
+            <th>Pass code</th>
+            <th>Pass status</th>
+            <th>Queue number</th>
+            <th>Arrival time</th>
+            <th>Date</th>
+            <th>Issued at</th>
+        </tr>
+        <tr data-th-each="ticket : ${tickets}">
+            <td data-th-text="${ticket.passCode}">ZZZZ0001</td>
+            <td data-th-text="${ticket.passStatus}">VALID</td>
+            <td data-th-text="${ticket.queueNumber}">1</td>
+            <td data-th-text="${ticket.date}">2021-01-03</td>
+            <td data-th-text="${ticket.arrivalTime}">15:28:14</td>
+            <td data-th-text="${ticket.issuedAt}">2021-01-01 14:47:22.0</td>
+        </tr>
+    </table>
+</body>
+</html>
