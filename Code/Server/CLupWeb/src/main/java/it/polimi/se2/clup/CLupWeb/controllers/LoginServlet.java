@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "Login", value = "/login")
+@WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
@@ -66,7 +66,7 @@ public class LoginServlet extends HttpServlet {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
             ctx.setVariable("errorMessage", "Incorrect username or password.");
-            path = "/index.html";
+            path = "WEB-INF/index.html";
             templateEngine.process(path, ctx, response.getWriter());
         } else {
             request.getSession().setAttribute("user", user);

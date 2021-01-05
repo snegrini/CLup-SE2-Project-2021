@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 
 
-@WebServlet(name = "printTestPage", value = "/dashboard/print")
+@WebServlet(name = "PrintTestPageServlet", value = "/dashboard/print")
 public class PrintTestPageServlet extends HttpServlet {
 
     private TemplateEngine templateEngine;

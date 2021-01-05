@@ -20,7 +20,7 @@ public class StoreEntity {
 
     @OneToOne
     @JoinColumn(name = "address_id")
-    private AddressEntity addressEntity;
+    private AddressEntity address;
 
     @Column(name = "pec_email")
     private String pecEmail;
@@ -37,14 +37,14 @@ public class StoreEntity {
     @Column(name = "default_pass_code")
     private String defaultPassCode;
 
-    @OneToMany(mappedBy = "storeEntity")
-    private List<OpeningHourEntity> openingHourEntities;
+    @OneToMany(mappedBy = "store")
+    private List<OpeningHourEntity> openingHours;
 
-    @OneToMany(mappedBy = "storeEntity")
-    private List<TicketEntity> ticketEntities;
+    @OneToMany(mappedBy = "store")
+    private List<TicketEntity> tickets;
 
-    @OneToMany(mappedBy = "storeEntity")
-    private List<UserEntity> userEntities;
+    @OneToMany(mappedBy = "store")
+    private List<UserEntity> users;
 
 
     public int getStoreId() {
@@ -63,12 +63,12 @@ public class StoreEntity {
         this.storeName = storeName;
     }
 
-    public AddressEntity getAddressEntity() {
-        return addressEntity;
+    public AddressEntity getAddress() {
+        return address;
     }
 
-    public void setAddressEntity(AddressEntity address) {
-        this.addressEntity = address;
+    public void setAddress(AddressEntity address) {
+        this.address = address;
     }
 
     public String getPecEmail() {
@@ -111,27 +111,27 @@ public class StoreEntity {
         this.defaultPassCode = defaultPassCode;
     }
 
-    public List<OpeningHourEntity> getOpeningHourEntities() {
-        return openingHourEntities;
+    public List<OpeningHourEntity> getOpeningHours() {
+        return openingHours;
     }
 
-    public void setOpeningHourEntities(List<OpeningHourEntity> openingHourEntities) {
-        this.openingHourEntities = openingHourEntities;
+    public void setOpeningHours(List<OpeningHourEntity> openingHours) {
+        this.openingHours = openingHours;
     }
 
-    public List<TicketEntity> getTicketEntities() {
-        return ticketEntities;
+    public List<TicketEntity> getTickets() {
+        return tickets;
     }
 
-    public void setTicketEntities(List<TicketEntity> ticketEntities) {
-        this.ticketEntities = ticketEntities;
+    public void setTickets(List<TicketEntity> tickets) {
+        this.tickets = tickets;
     }
 
-    public List<UserEntity> getUserEntities() {
-        return userEntities;
+    public List<UserEntity> getUsers() {
+        return users;
     }
 
-    public void setUserEntities(List<UserEntity> userEntities) {
-        this.userEntities = userEntities;
+    public void setUsers(List<UserEntity> users) {
+        this.users = users;
     }
 }

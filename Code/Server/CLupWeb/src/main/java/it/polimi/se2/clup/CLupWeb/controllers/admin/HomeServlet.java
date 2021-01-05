@@ -1,12 +1,10 @@
 package it.polimi.se2.clup.CLupWeb.controllers.admin;
 
-import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,9 +16,6 @@ import java.io.IOException;
 @WebServlet(name = "AdminHomeServlet", value = "/dashboard/admin")
 public class HomeServlet extends HttpServlet {
     private TemplateEngine templateEngine;
-
-    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
-    private StoreService storeService;
 
     public void init() {
         ServletContext servletContext = getServletContext();

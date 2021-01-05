@@ -9,13 +9,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "Index", value = "")
+@WebServlet(name = "IndexServlet", value = "")
 public class IndexServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("user") == null) { // No logged-in user found, so redirect to login page.
-            RequestDispatcher view = request.getRequestDispatcher("WEB-INF/index.html");
+            RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/index.html");
             view.forward(request, response);
         } else {
             response.sendRedirect(request.getContextPath() + "/dashboard");

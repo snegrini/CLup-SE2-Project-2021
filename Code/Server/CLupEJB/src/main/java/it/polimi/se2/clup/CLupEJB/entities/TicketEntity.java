@@ -9,6 +9,9 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "ticket", schema = "np_clup")
+@NamedQueries({
+    @NamedQuery(name = "TicketEntity.findByStore", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId"),
+})
 public class TicketEntity {
 
     @Id
@@ -37,7 +40,7 @@ public class TicketEntity {
 
     @ManyToOne
     @JoinColumn(name = "store_id")
-    private StoreEntity storeEntity;
+    private StoreEntity store;
 
 
     public int getTicketId() {
@@ -96,11 +99,11 @@ public class TicketEntity {
         this.issuedAt = issuedAt;
     }
 
-    public StoreEntity getStoreEntity() {
-        return storeEntity;
+    public StoreEntity getStore() {
+        return store;
     }
 
-    public void setStoreEntity(StoreEntity storeEntity) {
-        this.storeEntity = storeEntity;
+    public void setStore(StoreEntity store) {
+        this.store = store;
     }
 }
