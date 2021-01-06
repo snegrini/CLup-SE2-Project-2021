@@ -12,6 +12,16 @@ import java.sql.Timestamp;
 @NamedQueries({
     @NamedQuery(name = "TicketEntity.findByStore", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId"),
 })
+@NamedNativeQueries({
+    @NamedNativeQuery(
+            name = "TicketEntity.getCustomersQueue",
+            query = "SELECT COUNT(*) FROM ticket " +
+                    "WHERE store_id = ? " +
+                    "AND PASS_STATUS = 'VALID' " +
+                    "AND date = DATE(NOW())" +
+                    "AND TIMEDIFF(arrival_time, TIME(NOW())) BETWEEN TIME('-00:15:00') AND TIME('00:15:00')"
+    )
+})
 public class TicketEntity {
 
     @Id

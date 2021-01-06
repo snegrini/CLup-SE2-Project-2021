@@ -23,8 +23,11 @@ import java.io.IOException;
 public class HomeServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
-    //@EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
-    //private StoreService storeService;
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
+    private StoreService storeService;
+
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/TicketService")
+    private TicketService ticketService;
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -38,18 +41,26 @@ public class HomeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        /*UserEntity user = (UserEntity) request.getSession().getAttribute("user");
+        UserEntity user = (UserEntity) request.getSession().getAttribute("user");
         int storeId = user.getStore().getStoreId();
 
         StoreEntity store;
         try {
             store = storeService.findStoreById(storeId);
         } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find tickets");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find store");
             return;
         }
 
-        int customersInside = store.getCustomersInside();*/
+        int customersInside = store.getCustomersInside();
+
+        int customersQueue;
+        try {
+            customersQueue = ticketService.getCustomersQueue(storeId);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find tickets");
+            return;
+        }
 
         response.setContentType("text/html");
 
@@ -57,8 +68,8 @@ public class HomeServlet extends HttpServlet {
         WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
         String path = "/WEB-INF/manager/index.html";
 
-        //ctx.setVariable("customersInside", customersInside);
-        //ctx.setVariable("customersQueue", customersQueue);
+        ctx.setVariable("customersInside", customersInside);
+        ctx.setVariable("customersQueue", customersQueue);
 
         templateEngine.process(path, ctx, response.getWriter());
     }

@@ -55,14 +55,14 @@ DROP TABLE IF EXISTS `opening_hour`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `opening_hour` (
   `opening_hours_id` int NOT NULL AUTO_INCREMENT,
-  `from` time NOT NULL,
-  `to` time NOT NULL,
+  `from_time` time NOT NULL,
+  `to_time` time NOT NULL,
   `week_day` int NOT NULL,
   `store_id` int NOT NULL,
   PRIMARY KEY (`opening_hours_id`),
   KEY `FK_opening_hour_store` (`store_id`),
   CONSTRAINT `FK_opening_hour_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `opening_hour` (
 
 LOCK TABLES `opening_hour` WRITE;
 /*!40000 ALTER TABLE `opening_hour` DISABLE KEYS */;
-INSERT INTO `opening_hour` VALUES (1,'08:00:00','21:00:00',1,1),(2,'08:30:00','20:00:00',2,1),(3,'09:30:00','14:00:00',3,2);
+INSERT INTO `opening_hour` VALUES (1,'08:00:00','12:00:00',1,1),(2,'14:00:00','18:00:00',1,1),(3,'09:30:00','14:00:00',2,1),(4,'08:00:00','20:00:00',1,2);
 /*!40000 ALTER TABLE `opening_hour` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -93,6 +93,7 @@ CREATE TABLE `store` (
   `default_pass_code` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`store_id`),
   UNIQUE KEY `pec_email` (`pec_email`),
+  UNIQUE KEY `store_name` (`store_name`),
   KEY `FK_store_address` (`address_id`),
   CONSTRAINT `FK_store_address` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -137,7 +138,7 @@ CREATE TABLE `ticket` (
 
 LOCK TABLES `ticket` WRITE;
 /*!40000 ALTER TABLE `ticket` DISABLE KEYS */;
-INSERT INTO `ticket` VALUES (1,'9970626666560a32465d4ce10d28f3233365af833e15eed59884d9477862c379','AAAA0001','VALID',1,'2021-01-03','15:18:13','2021-01-03 13:30:24',1),(2,'9970626666560a32465d4ce10d28f3233365af833e15eed59884d9477862c379','BBBBYYY2','EXPIRED',0,'2021-01-02','18:21:08','2021-01-02 16:51:20',1),(3,'6cf398553353d5e99e8a17c60dc7ee07288e2b33aa54490a79b2ed720225ebfe','CCCCZZZ1','VALID',1,'2021-01-03','11:22:01','2021-01-03 09:59:09',2);
+INSERT INTO `ticket` VALUES (1,'9970626666560a32465d4ce10d28f3233365af833e15eed59884d9477862c379','AAAA0001','VALID',1,'2021-01-06','22:09:13','2021-01-03 13:30:24',1),(2,'9970626666560a32465d4ce10d28f3233365af833e15eed59884d9477862c379','BBBBYYY2','EXPIRED',0,'2021-01-06','18:21:08','2021-01-02 16:51:20',1),(3,'6cf398553353d5e99e8a17c60dc7ee07288e2b33aa54490a79b2ed720225ebfe','CCCCZZZ1','VALID',1,'2021-01-03','11:22:01','2021-01-03 09:59:09',2);
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -180,4 +181,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-05 22:53:23
+-- Dump completed on 2021-01-07  0:48:42

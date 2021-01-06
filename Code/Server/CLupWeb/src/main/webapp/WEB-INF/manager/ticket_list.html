@@ -5,25 +5,46 @@
     <title>Manager Ticket List</title>
 </head>
 <body>
-    <h1>Ticket List</h1>
+    <h1>Manager Ticket List</h1>
 
     <table>
-        <tr>
-            <th>Pass code</th>
-            <th>Pass status</th>
-            <th>Queue number</th>
-            <th>Arrival time</th>
-            <th>Date</th>
-            <th>Issued at</th>
-        </tr>
-        <tr data-th-each="ticket : ${tickets}">
-            <td data-th-text="${ticket.passCode}">ZZZZ0001</td>
-            <td data-th-text="${ticket.passStatus}">VALID</td>
-            <td data-th-text="${ticket.queueNumber}">1</td>
-            <td data-th-text="${ticket.date}">2021-01-03</td>
-            <td data-th-text="${ticket.arrivalTime}">15:28:14</td>
-            <td data-th-text="${ticket.issuedAt}">2021-01-01 14:47:22.0</td>
-        </tr>
+        <thead>
+            <tr>
+                <th>Pass code</th>
+                <th>Pass status</th>
+                <th>Queue number</th>
+                <th>Arrival time</th>
+                <th>Date</th>
+                <th>Issued at</th>
+            </tr>
+        </thead>
+        <tbody data-th-remove="all-but-first">
+            <tr data-th-each="ticket : ${tickets}">
+                <td data-th-text="${ticket.passCode}">ZZZZ0001</td>
+                <td data-th-text="${ticket.passStatus}">VALID</td>
+                <td data-th-text="${ticket.queueNumber}">1</td>
+                <td data-th-text="${ticket.date}">2021-01-03</td>
+                <td data-th-text="${ticket.arrivalTime}">15:28:14</td>
+                <td data-th-text="${ticket.issuedAt}">2021-01-01 14:47:22.0</td>
+            </tr>
+            <tr>
+                <td>YYYY0002</td>
+                <td>USED</td>
+                <td>0</td>
+                <td>2021-05-05</td>
+                <td>08:45:41</td>
+                <td>2022-04-11 12:09:36.0</td>
+            </tr>
+            <tr>
+                <td>WWWW0005</td>
+                <td>EXPIRED</td>
+                <td>0</td>
+                <td>2021-07-22</td>
+                <td>13:18:49</td>
+                <td>2021-07-22 19:08:04.0</td>
+            </tr>
+        </tbody>
     </table>
+
 </body>
 </html>

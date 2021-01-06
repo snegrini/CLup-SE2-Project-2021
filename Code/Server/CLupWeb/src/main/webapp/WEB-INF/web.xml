@@ -18,7 +18,7 @@
         <filter-name>ManagerChecker</filter-name>
         <servlet-name>ManagerHomeServlet</servlet-name>
         <servlet-name>ManagerTicketListServlet</servlet-name>
-        <servlet-name>ManagerEditInfoServlet</servlet-name>
+        <servlet-name>ManagerStoreInfoServlet</servlet-name>
     </filter-mapping>
 
     <filter-mapping>

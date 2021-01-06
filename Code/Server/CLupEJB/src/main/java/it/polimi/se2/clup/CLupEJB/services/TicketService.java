@@ -25,4 +25,17 @@ public class TicketService {
         }
         return tickets;
     }
+
+    public int getCustomersQueue(int storeId) {
+        int customersQueue;
+        try {
+            customersQueue = Math.toIntExact(em.createNamedQuery("TicketEntity.getCustomersQueue", Long.class)
+                    .setParameter(1, storeId)
+                    .getSingleResult());
+        } catch (ArithmeticException | PersistenceException e) {
+            System.err.println("Cannot count customers in queue");
+            return 0;
+        }
+        return customersQueue;
+    }
 }
