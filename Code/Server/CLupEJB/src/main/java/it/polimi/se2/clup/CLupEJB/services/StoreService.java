@@ -21,7 +21,22 @@ public class StoreService {
         List<StoreEntity> stores = null;
 
         try {
-            stores = em.createNamedQuery("StoreEntity.findAll", StoreEntity.class).getResultList();
+            stores = em.createNamedQuery("StoreEntity.findAll", StoreEntity.class)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            System.err.println("Cannot load projects");
+        }
+        return stores;
+    }
+
+    public List<StoreEntity> findAllStoresFiltered(String filter) {
+        List<StoreEntity> stores = null;
+        filter += "%";
+
+        try {
+            stores = em.createNamedQuery("StoreEntity.findAllFiltered", StoreEntity.class)
+                    .setParameter("filter", filter)
+                    .getResultList();
         } catch (PersistenceException e) {
             System.err.println("Cannot load projects");
         }

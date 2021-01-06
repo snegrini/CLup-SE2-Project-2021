@@ -6,8 +6,10 @@ import java.util.List;
 @Entity
 @Table(name = "store", schema = "np_clup")
 @NamedQueries({
-    @NamedQuery(name = "StoreEntity.findAll", query = "SELECT s FROM StoreEntity s"),
+        @NamedQuery(name = "StoreEntity.findAll", query = "SELECT s FROM StoreEntity s"),
+        @NamedQuery(name = "StoreEntity.findAllFiltered", query = "SELECT s FROM StoreEntity s WHERE s.storeName LIKE :filter"),
 })
+
 public class StoreEntity {
 
     @Id

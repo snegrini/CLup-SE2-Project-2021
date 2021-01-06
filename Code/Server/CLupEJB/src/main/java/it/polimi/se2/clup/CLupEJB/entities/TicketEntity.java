@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "ticket", schema = "np_clup")
 @NamedQueries({
-    @NamedQuery(name = "TicketEntity.findByStore", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId"),
+        @NamedQuery(name = "TicketEntity.findByStore", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId"),
 })
 public class TicketEntity {
 
