@@ -12,11 +12,11 @@ public class OpeningHourEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int openingHoursId;
 
-    @Column(name = "from")
-    private Time from;
+    @Column(name = "from_time")
+    private Time fromTime;
 
-    @Column(name = "to")
-    private Time to;
+    @Column(name = "to_time")
+    private Time toTime;
 
     @Column(name = "week_day")
     private int weekDay;
@@ -33,20 +33,20 @@ public class OpeningHourEntity {
         this.openingHoursId = openingHoursId;
     }
 
-    public Time getFrom() {
-        return from;
+    public Time getFromTime() {
+        return fromTime;
     }
 
-    public void setFrom(Time from) {
-        this.from = from;
+    public void setFromTime(Time fromTime) {
+        this.fromTime = fromTime;
     }
 
-    public Time getTo() {
-        return to;
+    public Time getToTime() {
+        return toTime;
     }
 
-    public void setTo(Time to) {
-        this.to = to;
+    public void setToTime(Time toTime) {
+        this.toTime = toTime;
     }
 
     public int getWeekDay() {

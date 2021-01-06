@@ -6,14 +6,14 @@
 </head>
 <body>
     <h1>Manager Index</h1>
-    <a data-th-href="@{/dashboard/editinfo}">Edit info</a><br>
-    <a data-th-href="@{/dashboard/ticketlist}">Ticket List</a>
+    <a href="#" data-th-href="@{/dashboard/storeinfo}">Store info</a><br>
+    <a href="#" data-th-href="@{/dashboard/ticketlist}">Ticket List</a>
 
     <h2>People inside the store</h2>
-    <!--<div data-th-text="${customersInside}">123</div>-->
+    <div data-th-text="${customersInside}">123</div>
 
     <h2>People in queue</h2>
-    <!--<div data-th-text="${customersQueue}">456</div>-->
+    <div data-th-text="${customersQueue}">456</div>
 
 </body>
 </html>

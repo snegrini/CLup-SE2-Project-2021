@@ -8,16 +8,30 @@
     <h1>Store List</h1>
 
     <table>
-        <tr>
-            <th>Store Name</th>
-            <th>Store Cap</th>
-            <th>Details</th>
-        </tr>
-        <tr data-th-each="store : ${stores}">
-            <td data-th-text="${store.storeName}">Onions</td>
-            <td data-th-text="${store.storeCap}">2</td>
-            <td><a data-th-href="@{/dashboard/storedetails(id=${store.storeId})}">Go</a></td>
-        </tr>
+        <thead>
+            <tr>
+                <th>Store Name</th>
+                <th>Store Cap</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody data-th-remove="all-but-first">
+            <tr data-th-each="store : ${stores}">
+                <td data-th-text="${store.storeName}">Onions</td>
+                <td data-th-text="${store.storeCap}">2</td>
+                <td><a href="#" data-th-href="@{/dashboard/storedetails(id=${store.storeId})}">Go</a></td>
+            </tr>
+            <tr>
+                <td>Apples</td>
+                <td>40</td>
+                <td><a href="#">Go</a></td>
+            </tr>
+            <tr>
+                <td>Tomatoes</td>
+                <td>7</td>
+                <td><a href="#">Go</a></td>
+            </tr>
+        </tbody>
     </table>
 </body>
 </html>

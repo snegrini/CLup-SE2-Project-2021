@@ -26,12 +26,12 @@ DROP TABLE IF EXISTS `address`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `address` (
   `address_id` int NOT NULL AUTO_INCREMENT,
-  `address` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `street_number` varchar(6) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `city` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `province` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `postal_code` varchar(10) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `country` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `address` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `street_number` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `city` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `province` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `postal_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `country` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`address_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -55,14 +55,14 @@ DROP TABLE IF EXISTS `opening_hour`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `opening_hour` (
   `opening_hours_id` int NOT NULL AUTO_INCREMENT,
-  `from` time NOT NULL,
-  `to` time NOT NULL,
+  `from_time` time NOT NULL,
+  `to_time` time NOT NULL,
   `week_day` int NOT NULL,
   `store_id` int NOT NULL,
   PRIMARY KEY (`opening_hours_id`),
   KEY `FK_opening_hour_store` (`store_id`),
   CONSTRAINT `FK_opening_hour_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `opening_hour` (
 
 LOCK TABLES `opening_hour` WRITE;
 /*!40000 ALTER TABLE `opening_hour` DISABLE KEYS */;
-INSERT INTO `opening_hour` VALUES (1,'08:00:00','21:00:00',1,1),(2,'08:30:00','20:00:00',2,1),(3,'09:30:00','14:00:00',3,2);
+INSERT INTO `opening_hour` VALUES (1,'08:00:00','12:00:00',1,1),(2,'14:00:00','18:00:00',1,1),(3,'09:30:00','14:00:00',2,1),(4,'08:00:00','20:00:00',1,2);
 /*!40000 ALTER TABLE `opening_hour` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,15 +84,16 @@ DROP TABLE IF EXISTS `store`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `store` (
   `store_id` int NOT NULL AUTO_INCREMENT,
-  `store_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `store_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `address_id` int NOT NULL,
-  `pec_email` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `phone` varchar(15) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `pec_email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `phone` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `store_cap` int NOT NULL,
   `customers_inside` int NOT NULL,
-  `default_pass_code` char(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `default_pass_code` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`store_id`),
   UNIQUE KEY `pec_email` (`pec_email`),
+  UNIQUE KEY `store_name` (`store_name`),
   KEY `FK_store_address` (`address_id`),
   CONSTRAINT `FK_store_address` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -117,8 +118,9 @@ DROP TABLE IF EXISTS `ticket`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ticket` (
   `ticket_id` int NOT NULL AUTO_INCREMENT,
-  `pass_code` char(8) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `pass_status` enum('VALID','USED','EXPIRED') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `customer_id` char(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `pass_code` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `pass_status` enum('VALID','USED','EXPIRED') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `queue_number` int NOT NULL,
   `date` date NOT NULL,
   `arrival_time` time NOT NULL,
@@ -127,7 +129,7 @@ CREATE TABLE `ticket` (
   PRIMARY KEY (`ticket_id`),
   KEY `FK_ticket_store` (`store_id`),
   CONSTRAINT `FK_ticket_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,6 +138,7 @@ CREATE TABLE `ticket` (
 
 LOCK TABLES `ticket` WRITE;
 /*!40000 ALTER TABLE `ticket` DISABLE KEYS */;
+INSERT INTO `ticket` VALUES (1,'9970626666560a32465d4ce10d28f3233365af833e15eed59884d9477862c379','AAAA0001','VALID',1,'2021-01-06','22:09:13','2021-01-03 13:30:24',1),(2,'9970626666560a32465d4ce10d28f3233365af833e15eed59884d9477862c379','BBBBYYY2','EXPIRED',0,'2021-01-06','18:21:08','2021-01-02 16:51:20',1),(3,'6cf398553353d5e99e8a17c60dc7ee07288e2b33aa54490a79b2ed720225ebfe','CCCCZZZ1','VALID',1,'2021-01-03','11:22:01','2021-01-03 09:59:09',2);
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,9 +151,9 @@ DROP TABLE IF EXISTS `user`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user` (
   `user_id` int NOT NULL AUTO_INCREMENT,
-  `user_code` char(6) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `password` char(60) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `role` enum('ADMIN','MANAGER','EMPLOYEE') CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `user_code` char(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` char(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `role` enum('ADMIN','MANAGER','EMPLOYEE') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `store_id` int DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_code` (`user_code`),
@@ -178,4 +181,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-02 11:15:56
+-- Dump completed on 2021-01-07  0:48:42

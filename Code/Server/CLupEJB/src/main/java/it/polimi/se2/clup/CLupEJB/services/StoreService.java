@@ -1,6 +1,7 @@
 package it.polimi.se2.clup.CLupEJB.services;
 
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -17,7 +18,7 @@ public class StoreService {
         return em.find(StoreEntity.class, storeId);
     }
 
-    public List<StoreEntity> findAllStores() {
+    public List<StoreEntity> findAllStores() throws BadStoreException {
         List<StoreEntity> stores = null;
 
         try {
@@ -38,7 +39,7 @@ public class StoreService {
                     .setParameter("filter", filter)
                     .getResultList();
         } catch (PersistenceException e) {
-            System.err.println("Cannot load projects");
+            throw new BadStoreException("Could not load stores");
         }
         return stores;
     }

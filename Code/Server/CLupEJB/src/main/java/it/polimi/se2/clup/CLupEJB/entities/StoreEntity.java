@@ -48,7 +48,6 @@ public class StoreEntity {
     @OneToMany(mappedBy = "store")
     private List<UserEntity> users;
 
-
     public int getStoreId() {
         return storeId;
     }
