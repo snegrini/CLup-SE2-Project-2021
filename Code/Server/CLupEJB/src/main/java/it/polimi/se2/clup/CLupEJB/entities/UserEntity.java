@@ -1,5 +1,6 @@
 package it.polimi.se2.clup.CLupEJB.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class UserEntity {
 
     @ManyToOne
     @JoinColumn(name = "store_id")
+    @JsonManagedReference
     private StoreEntity store;
 
     public int getUserId() {

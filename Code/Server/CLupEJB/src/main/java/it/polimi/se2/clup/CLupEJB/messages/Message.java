@@ -10,4 +10,12 @@ public class Message {
         this.status = status;
         this.message = message;
     }
+
+    public MessageStatus getStatus() {
+        return status;
+    }
+
+    public String getMessage() {
+        return message;
+    }
 }

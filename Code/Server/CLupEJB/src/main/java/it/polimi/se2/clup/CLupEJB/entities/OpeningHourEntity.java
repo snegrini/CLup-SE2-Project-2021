@@ -1,5 +1,9 @@
 package it.polimi.se2.clup.CLupEJB.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.sql.Time;
 
@@ -10,6 +14,7 @@ public class OpeningHourEntity {
     @Id
     @Column(name = "opening_hours_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private int openingHoursId;
 
     @Column(name = "from_time")
@@ -23,6 +28,7 @@ public class OpeningHourEntity {
 
     @ManyToOne
     @JoinColumn(name = "store_id")
+    @JsonBackReference
     private StoreEntity store;
 
     public int getOpeningHoursId() {

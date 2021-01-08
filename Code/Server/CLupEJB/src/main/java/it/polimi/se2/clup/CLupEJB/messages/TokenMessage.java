@@ -9,4 +9,8 @@ public class TokenMessage extends Message {
         super(status, message);
         this.token = token;
     }
+
+    public String getToken() {
+        return token;
+    }
 }

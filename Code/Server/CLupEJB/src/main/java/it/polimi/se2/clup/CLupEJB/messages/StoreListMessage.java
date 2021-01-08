@@ -12,4 +12,8 @@ public class StoreListMessage extends Message {
         super(status, message);
         this.stores = stores;
     }
+
+    public List<StoreEntity> getStores() {
+        return stores;
+    }
 }

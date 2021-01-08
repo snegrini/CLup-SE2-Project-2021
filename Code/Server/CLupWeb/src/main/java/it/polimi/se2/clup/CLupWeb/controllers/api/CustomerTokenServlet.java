@@ -6,8 +6,8 @@ import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
 import it.polimi.se2.clup.CLupEJB.messages.Message;
@@ -30,15 +30,15 @@ public class CustomerTokenServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        Gson gson = new GsonBuilder().create();
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
         String customerId = StringEscapeUtils.escapeJava(request.getParameter("customer_id"));
 
         if (customerId == null) {
-            out.print(gson.toJson(new Message(MessageStatus.ERROR, "Missing customer id")));
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing customer id")));
             return;
         } else if (!(customerId.length() == 64 && customerId.matches("[a-fA-F0-9]+"))) {
-            out.print(gson.toJson(new Message(MessageStatus.ERROR, "Invalid customer id format")));
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid customer id format")));
             return;
         }
 
@@ -46,10 +46,10 @@ public class CustomerTokenServlet extends HttpServlet {
         try {
             token = TokenManager.generateCustomerToken(customerId);
         } catch (TokenException e) {
-            out.print(gson.toJson(new Message(MessageStatus.ERROR, e.getMessage())));
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;
         }
 
-        out.print(gson.toJson(new TokenMessage(MessageStatus.OK, "Success", token)));
+        out.print(ow.writeValueAsString(new TokenMessage(MessageStatus.OK, "Success", token)));
     }
 }

@@ -1,5 +1,7 @@
 package it.polimi.se2.clup.CLupEJB.entities;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -31,21 +33,27 @@ public class StoreEntity {
     private String phone;
 
     @Column(name = "store_cap")
+    @JsonIgnore
     private int storeCap;
 
     @Column(name = "customers_inside")
+    @JsonIgnore
     private int customersInside;
 
     @Column(name = "default_pass_code")
+    @JsonIgnore
     private String defaultPassCode;
 
     @OneToMany(mappedBy = "store")
+    @JsonManagedReference
     private List<OpeningHourEntity> openingHours;
 
     @OneToMany(mappedBy = "store")
+    @JsonBackReference
     private List<TicketEntity> tickets;
 
     @OneToMany(mappedBy = "store")
+    @JsonBackReference
     private List<UserEntity> users;
 
     public int getStoreId() {

@@ -38,4 +38,17 @@ public class TicketService {
         }
         return customersQueue;
     }
+
+    public List<TicketEntity> findCustomerTickets(String customerId) {
+        List<TicketEntity> tickets = null;
+
+        try {
+            tickets = em.createNamedQuery("TicketEntity.findByCustomerId", TicketEntity.class)
+                    .setParameter("customerId", customerId)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            System.err.println("Cannot load tickets");
+        }
+        return tickets;
+    }
 }

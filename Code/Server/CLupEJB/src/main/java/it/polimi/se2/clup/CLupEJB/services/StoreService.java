@@ -25,12 +25,12 @@ public class StoreService {
             stores = em.createNamedQuery("StoreEntity.findAll", StoreEntity.class)
                     .getResultList();
         } catch (PersistenceException e) {
-            System.err.println("Cannot load projects");
+            throw new BadStoreException("Could not load stores");
         }
         return stores;
     }
 
-    public List<StoreEntity> findAllStoresFiltered(String filter) {
+    public List<StoreEntity> findAllStoresFiltered(String filter) throws BadStoreException {
         List<StoreEntity> stores = null;
         filter += "%";
 
