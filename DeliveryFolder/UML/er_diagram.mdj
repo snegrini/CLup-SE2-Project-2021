@@ -2780,7 +2780,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2MyDNnL0mUS8="
 							},
-							"name": "from",
+							"name": "from_time",
 							"type": "TIME",
 							"length": 0
 						},
@@ -2790,7 +2790,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF2MyDNnL0mUS8="
 							},
-							"name": "to",
+							"name": "to_time",
 							"type": "TIME",
 							"length": 0
 						},

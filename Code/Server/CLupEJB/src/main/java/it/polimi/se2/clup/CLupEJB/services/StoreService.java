@@ -22,7 +22,22 @@ public class StoreService {
         List<StoreEntity> stores = null;
 
         try {
-            stores = em.createNamedQuery("StoreEntity.findAll", StoreEntity.class).getResultList();
+            stores = em.createNamedQuery("StoreEntity.findAll", StoreEntity.class)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            throw new BadStoreException("Could not load stores");
+        }
+        return stores;
+    }
+
+    public List<StoreEntity> findAllStoresFiltered(String filter) throws BadStoreException {
+        List<StoreEntity> stores = null;
+        filter += "%";
+
+        try {
+            stores = em.createNamedQuery("StoreEntity.findAllFiltered", StoreEntity.class)
+                    .setParameter("filter", filter)
+                    .getResultList();
         } catch (PersistenceException e) {
             throw new BadStoreException("Could not load stores");
         }

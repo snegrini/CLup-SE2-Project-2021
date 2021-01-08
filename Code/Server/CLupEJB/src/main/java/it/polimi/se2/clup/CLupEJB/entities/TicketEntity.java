@@ -1,5 +1,6 @@
 package it.polimi.se2.clup.CLupEJB.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.polimi.se2.clup.CLupEJB.enums.PassStatus;
 
 import javax.persistence.*;
@@ -10,7 +11,8 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "ticket", schema = "np_clup")
 @NamedQueries({
-    @NamedQuery(name = "TicketEntity.findByStore", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId"),
+        @NamedQuery(name = "TicketEntity.findByStore", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId"),
+        @NamedQuery(name = "TicketEntity.findByCustomerId", query = "SELECT t FROM TicketEntity t WHERE t.customerId = :customerId"),
 })
 @NamedNativeQueries({
     @NamedNativeQuery(
@@ -28,6 +30,9 @@ public class TicketEntity {
     @Column(name = "ticket_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int ticketId;
+
+    @Column(name = "customer_id")
+    private String customerId;
 
     @Column(name = "pass_code")
     private String passCode;
@@ -50,8 +55,8 @@ public class TicketEntity {
 
     @ManyToOne
     @JoinColumn(name = "store_id")
+    @JsonManagedReference
     private StoreEntity store;
-
 
     public int getTicketId() {
         return ticketId;
@@ -59,6 +64,14 @@ public class TicketEntity {
 
     public void setTicketId(int ticketId) {
         this.ticketId = ticketId;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
     }
 
     public String getPassCode() {

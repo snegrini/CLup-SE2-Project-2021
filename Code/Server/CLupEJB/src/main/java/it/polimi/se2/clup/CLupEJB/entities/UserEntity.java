@@ -1,5 +1,6 @@
 package it.polimi.se2.clup.CLupEJB.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user", schema = "np_clup")
 @NamedQueries({
-    @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.usercode = ?1 and u.password = ?2"),
+        @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.usercode = ?1 and u.password = ?2"),
 })
 public class UserEntity {
 
@@ -28,6 +29,7 @@ public class UserEntity {
 
     @ManyToOne
     @JoinColumn(name = "store_id")
+    @JsonManagedReference
     private StoreEntity store;
 
     public int getUserId() {
