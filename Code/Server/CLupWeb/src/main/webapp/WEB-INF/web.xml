@@ -19,6 +19,8 @@
         <servlet-name>ManagerHomeServlet</servlet-name>
         <servlet-name>ManagerTicketListServlet</servlet-name>
         <servlet-name>ManagerStoreInfoServlet</servlet-name>
+        <servlet-name>ManagerOpeningEditServlet</servlet-name>
+        <servlet-name>ManagerOpeningDeleteServlet</servlet-name>
     </filter-mapping>
 
     <filter-mapping>

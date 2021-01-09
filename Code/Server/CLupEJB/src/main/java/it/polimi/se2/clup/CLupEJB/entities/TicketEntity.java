@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 @NamedNativeQueries({
     @NamedNativeQuery(
             name = "TicketEntity.getCustomersQueue",
-            query = "SELECT COUNT(*) FROM ticket " +
+            query = "SELECT COUNT(*) FROM np_clup.ticket " +
                     "WHERE store_id = ? " +
                     "AND PASS_STATUS = 'VALID' " +
                     "AND date = DATE(NOW())" +

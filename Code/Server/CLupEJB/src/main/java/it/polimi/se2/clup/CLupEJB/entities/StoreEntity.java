@@ -143,4 +143,24 @@ public class StoreEntity {
     public void setUsers(List<UserEntity> users) {
         this.users = users;
     }
+
+    /**
+     * Adds an opening hour to the store.
+     * Each side of the relationship is updated.
+     *
+     * @param oh The opening hour to be added.
+     */
+    public void addOpeningHour(OpeningHourEntity oh) {
+        getOpeningHours().add(oh);
+    }
+
+    /**
+     * Removes an opening hour to the store.
+     * Each side of the relationship is updated.
+     *
+     * @param oh The opening hour to be removed.
+     */
+    public void removeOpeningHour(OpeningHourEntity oh) {
+        getOpeningHours().remove(oh);
+    }
 }

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Opening Hours edit</title>
+</head>
+<body>
+    <h1>Manager Opening Hours Edit</h1>
+    <a href="#" data-th-href="@{/dashboard/storeinfo}">Back</a><br>
+
+    <h2>Store cap</h2>
+    <div data-th-text="${storeCap}">123</div>
+
+    <h2>Opening hours</h2>
+    <form>
+        <fieldset>
+            <legend>Opening Hours</legend>
+
+            <label>
+                <input type="checkbox" name="mon">
+                Monday:
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="mon-from-1">
+            </label>
+            <label>
+                To:
+                <input type="time" name="mon-to-1">
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="mon-from-2">
+            </label>
+            <label>
+                To:
+                <input type="time" name="mon-to-2">
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" name="tue">
+                Tuesday:
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="tue-from-1">
+            </label>
+            <label>
+                To:
+                <input type="time" name="tue-to-1">
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="tue-from-2">
+            </label>
+            <label>
+                To:
+                <input type="time" name="tue-to-2">
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" name="wed">
+                Wednesday:
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="wed-from-1">
+            </label>
+            <label>
+                To:
+                <input type="time" name="wed-to-1">
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="wed-from-2">
+            </label>
+            <label>
+                To:
+                <input type="time" name="wed-to-2">
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" name="thu">
+                Thursday:
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="thu-from-1">
+            </label>
+            <label>
+                To:
+                <input type="time" name="thu-to-1">
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="thu-from-2">
+            </label>
+            <label>
+                To:
+                <input type="time" name="thu-to-2">
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" name="fri">
+                Friday:
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="fri-from-1">
+            </label>
+            <label>
+                To:
+                <input type="time" name="fri-to-1">
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="fri-from-2">
+            </label>
+            <label>
+                To:
+                <input type="time" name="fri-to-2">
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" name="sat">
+                Saturday:
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="sat-from-1">
+            </label>
+            <label>
+                To:
+                <input type="time" name="sat-to-1">
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="sat-from-2">
+            </label>
+            <label>
+                To:
+                <input type="time" name="sat-to-2">
+            </label>
+
+            <br><br>
+
+            <label>
+                <input type="checkbox" name="sun">
+                Sunday:
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="sun-from-1">
+            </label>
+            <label>
+                To:
+                <input type="time" name="sun-to-1">
+            </label>
+            <br>
+            <label>
+                From:
+                <input type="time" name="sun-from-2">
+            </label>
+            <label>
+                To:
+                <input type="time" name="sun-to-2">
+            </label>
+        </fieldset>
+        <br>
+        <input type="submit" value="Add Store">
+    </form>
+
+</body>
+</html>
