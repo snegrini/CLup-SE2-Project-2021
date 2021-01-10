@@ -6,7 +6,8 @@
 </head>
 <body>
     <h1>Manager Store information</h1>
-    <a href="#" data-th-href="@{/dashboard}">Back</a><br>
+    <span><a href="#" data-th-href="@{/dashboard/ohedit}">Edit opening hours</a></span>
+    <span><a href="#" data-th-href="@{/dashboard}">Back</a><br></span>
 
     <h2>Store cap</h2>
     <div data-th-text="${storeCap}">123</div>
@@ -17,7 +18,6 @@
         <div data-th-each="ohtime : ${ohday.value}">
             From: <span data-th-text="${ohtime.fromTime}">99:99</span>
             To: <span data-th-text="${ohtime.toTime}">99:99</span>
-            <!--<a href="#" data-th-href="@{/dashboard/storeinfo(ohid=${oh.id})}">Edit</a>-->
         </div>
         <br>
     </div>

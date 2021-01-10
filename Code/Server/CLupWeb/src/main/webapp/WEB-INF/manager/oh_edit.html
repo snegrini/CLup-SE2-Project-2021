@@ -12,185 +12,57 @@
     <div data-th-text="${storeCap}">123</div>
 
     <h2>Opening hours</h2>
-    <form>
+    <form action="ohedit" method="post">
         <fieldset>
             <legend>Opening Hours</legend>
 
-            <label>
-                <input type="checkbox" name="mon">
-                Monday:
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="mon-from-1">
-            </label>
-            <label>
-                To:
-                <input type="time" name="mon-to-1">
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="mon-from-2">
-            </label>
-            <label>
-                To:
-                <input type="time" name="mon-to-2">
-            </label>
+            <div data-th-each="ohday : ${openingHourMap}">
+                <label>
+                    <input type="checkbox" name="day[]" data-th-value="${ohday.key}" data-th-checked="${not #lists.isEmpty(ohday.value)}">
+                    <strong data-th-text="${ohday.key}">Day of week</strong>
+                </label>
+                <br>
 
-            <br><br>
+                <div data-th-if="${#lists.isEmpty(ohday.value)}" data-th-each="i : ${#numbers.sequence(1, 2)}">
+                    <label>
+                        From:
+                        <input type="time" name="from" data-th-name="${ohday.key + '-from-' + i}">
+                    </label>
+                    <label>
+                        To:
+                        <input type="time" name="to" data-th-name="${ohday.key + '-to-' + i}">
+                    </label>
+                    <br>
+                </div>
 
-            <label>
-                <input type="checkbox" name="tue">
-                Tuesday:
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="tue-from-1">
-            </label>
-            <label>
-                To:
-                <input type="time" name="tue-to-1">
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="tue-from-2">
-            </label>
-            <label>
-                To:
-                <input type="time" name="tue-to-2">
-            </label>
+                <div data-th-unless="${#lists.isEmpty(ohday.value)}" data-th-each="ohtime, iterStat : ${ohday.value}">
+                    <label>
+                        From:
+                        <input type="time" name="from" data-th-name="${ohday.key + '-from-' + iterStat.count}" data-th-value="${ohtime.fromTime}">
+                    </label>
+                    <label>
+                        To:
+                        <input type="time" name="to" data-th-name="${ohday.key + '-to-' + iterStat.count}" data-th-value="${ohtime.toTime}">
+                    </label>
+                    <br>
+                </div>
 
-            <br><br>
+                <div data-th-if="${#lists.size(ohday.value) == 1}">
+                    <label>
+                        From:
+                        <input type="time" name="from" data-th-name="${ohday.key + '-from-2'}">
+                    </label>
+                    <label>
+                        To:
+                        <input type="time" name="to" data-th-name="${ohday.key + '-to-2'}">
+                    </label>
+                    <br>
+                </div>
+            </div>
 
-            <label>
-                <input type="checkbox" name="wed">
-                Wednesday:
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="wed-from-1">
-            </label>
-            <label>
-                To:
-                <input type="time" name="wed-to-1">
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="wed-from-2">
-            </label>
-            <label>
-                To:
-                <input type="time" name="wed-to-2">
-            </label>
-
-            <br><br>
-
-            <label>
-                <input type="checkbox" name="thu">
-                Thursday:
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="thu-from-1">
-            </label>
-            <label>
-                To:
-                <input type="time" name="thu-to-1">
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="thu-from-2">
-            </label>
-            <label>
-                To:
-                <input type="time" name="thu-to-2">
-            </label>
-
-            <br><br>
-
-            <label>
-                <input type="checkbox" name="fri">
-                Friday:
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="fri-from-1">
-            </label>
-            <label>
-                To:
-                <input type="time" name="fri-to-1">
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="fri-from-2">
-            </label>
-            <label>
-                To:
-                <input type="time" name="fri-to-2">
-            </label>
-
-            <br><br>
-
-            <label>
-                <input type="checkbox" name="sat">
-                Saturday:
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="sat-from-1">
-            </label>
-            <label>
-                To:
-                <input type="time" name="sat-to-1">
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="sat-from-2">
-            </label>
-            <label>
-                To:
-                <input type="time" name="sat-to-2">
-            </label>
-
-            <br><br>
-
-            <label>
-                <input type="checkbox" name="sun">
-                Sunday:
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="sun-from-1">
-            </label>
-            <label>
-                To:
-                <input type="time" name="sun-to-1">
-            </label>
-            <br>
-            <label>
-                From:
-                <input type="time" name="sun-from-2">
-            </label>
-            <label>
-                To:
-                <input type="time" name="sun-to-2">
-            </label>
         </fieldset>
         <br>
-        <input type="submit" value="Add Store">
+        <input type="submit" value="Update">
     </form>
 
 </body>
