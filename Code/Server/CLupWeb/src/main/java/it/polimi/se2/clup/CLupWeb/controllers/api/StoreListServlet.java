@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
 import it.polimi.se2.clup.CLupEJB.messages.Message;
 import it.polimi.se2.clup.CLupEJB.messages.StoreListMessage;
@@ -53,7 +54,7 @@ public class StoreListServlet extends HttpServlet {
         String token = StringEscapeUtils.escapeJava(request.getParameter("token"));
         String filter = StringEscapeUtils.escapeJava(request.getParameter("filter"));
 
-        if (token == null) {
+        if (token == null || token.isEmpty()) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing token")));
             return;
         } else if (!token.matches("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")) {
@@ -82,11 +83,18 @@ public class StoreListServlet extends HttpServlet {
 
         ObjectMapper mapper = new ObjectMapper();
         JsonNode storesJson = mapper.valueToTree(new StoreListMessage(MessageStatus.OK, "Success", stores));
-        addUserInQueueToJson(storesJson);
+
+        try {
+            addUserInQueueToJson(storesJson);
+        } catch (BadTicketException e) {
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
+            return;
+        }
+
         out.print(storesJson.toPrettyString());
     }
 
-    private void addUserInQueueToJson(JsonNode rootNode) {
+    private void addUserInQueueToJson(JsonNode rootNode) throws BadTicketException {
         JsonNode s = rootNode.get("stores");
         Iterator<JsonNode> nodes = s.elements();
 

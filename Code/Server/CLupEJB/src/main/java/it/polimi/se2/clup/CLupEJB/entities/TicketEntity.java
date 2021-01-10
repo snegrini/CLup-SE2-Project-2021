@@ -12,7 +12,9 @@ import java.sql.Timestamp;
 @Table(name = "ticket", schema = "np_clup")
 @NamedQueries({
         @NamedQuery(name = "TicketEntity.findByStore", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId"),
+        @NamedQuery(name = "TicketEntity.findByStoreSorted", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId ORDER BY t.issuedAt DESC"),
         @NamedQuery(name = "TicketEntity.findByCustomerId", query = "SELECT t FROM TicketEntity t WHERE t.customerId = :customerId"),
+        @NamedQuery(name = "TicketEntity.findByPassCode", query = "SELECT t FROM TicketEntity t WHERE t.passCode = :passCode"),
 })
 @NamedNativeQueries({
     @NamedNativeQuery(
@@ -25,7 +27,6 @@ import java.sql.Timestamp;
     )
 })
 public class TicketEntity {
-
     @Id
     @Column(name = "ticket_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

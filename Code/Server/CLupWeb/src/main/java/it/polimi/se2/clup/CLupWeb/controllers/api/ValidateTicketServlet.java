@@ -7,7 +7,7 @@ import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
 import it.polimi.se2.clup.CLupEJB.messages.Message;
-import it.polimi.se2.clup.CLupEJB.messages.TicketListMessage;
+import it.polimi.se2.clup.CLupEJB.messages.TicketMessage;
 import it.polimi.se2.clup.CLupEJB.services.TicketService;
 import it.polimi.se2.clup.CLupEJB.util.TokenManager;
 import org.apache.commons.text.StringEscapeUtils;
@@ -20,10 +20,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
-@WebServlet(name = "TicketListServlet", value = "/api/get_tickets")
-public class TicketListServlet extends HttpServlet {
+@WebServlet(name = "ValidateTicketServlet", value = "/api/validate_ticket")
+public class ValidateTicketServlet extends HttpServlet {
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/TicketService")
     private TicketService ticketService;
 
@@ -43,6 +42,7 @@ public class TicketListServlet extends HttpServlet {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
         String token = StringEscapeUtils.escapeJava(request.getParameter("token"));
+        String passCode = StringEscapeUtils.escapeJava(request.getParameter("passCode"));
 
         if (token == null || token.isEmpty()) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing token")));
@@ -52,23 +52,26 @@ public class TicketListServlet extends HttpServlet {
             return;
         }
 
-        String customerId;
+        if (passCode == null || passCode.isEmpty()) {
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing pass code")));
+            return;
+        }
+
+        int storeId;
         try {
-            customerId = TokenManager.getCustomerId(token);
+            storeId = TokenManager.getEmployeeStoreId(token);
         } catch (TokenException e) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;
         }
 
-        List<TicketEntity> tickets;
-
         try {
-            tickets = ticketService.findCustomerTickets(customerId);
+            ticketService.updateTicketStatus(passCode, storeId);
         } catch (BadTicketException e) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;
         }
 
-        out.print(ow.writeValueAsString(new TicketListMessage(MessageStatus.OK, "Success", tickets)));
+        out.print(ow.writeValueAsString(new Message(MessageStatus.OK, "Success")));
     }
 }

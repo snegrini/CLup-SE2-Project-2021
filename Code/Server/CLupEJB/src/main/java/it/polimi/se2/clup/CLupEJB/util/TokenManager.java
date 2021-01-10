@@ -33,13 +33,46 @@ public final class TokenManager {
                     .build();
             DecodedJWT jwt = verifier.verify(token);
 
+            String type = jwt.getClaim("type").asString();
             String customerId = jwt.getClaim("customerId").asString();
 
-            if (customerId == null) {
+            if (type == null || customerId == null || !type.equals("customer")) {
                 throw new TokenException("Invalid token");
             }
 
             return customerId;
+        } catch (JWTVerificationException exception) {
+            throw new TokenException("Invalid token");
+        }
+    }
+
+    public static String generateEmployeeToken(int storeId) throws TokenException {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(KEY);
+            return JWT.create()
+                    .withClaim("type", "employee")
+                    .withClaim("storeId", storeId)
+                    .sign(algorithm);
+        } catch (JWTCreationException exception) {
+            throw new TokenException("Could not generate token");
+        }
+    }
+
+    public static Integer getEmployeeStoreId(String token) throws TokenException {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(KEY);
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .build();
+            DecodedJWT jwt = verifier.verify(token);
+
+            String type = jwt.getClaim("type").asString();
+            Integer storeId = jwt.getClaim("storeId").asInt();
+
+            if (type == null || storeId == null || !type.equals("employee")) {
+                throw new TokenException("Invalid token");
+            }
+
+            return storeId;
         } catch (JWTVerificationException exception) {
             throw new TokenException("Invalid token");
         }

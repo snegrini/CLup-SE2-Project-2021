@@ -34,7 +34,7 @@ public class CustomerTokenServlet extends HttpServlet {
 
         String customerId = StringEscapeUtils.escapeJava(request.getParameter("customer_id"));
 
-        if (customerId == null) {
+        if (customerId == null || customerId.isEmpty()) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing customer id")));
             return;
         } else if (!(customerId.length() == 64 && customerId.matches("[a-fA-F0-9]+"))) {
