@@ -21,8 +21,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "ValidateTicketServlet", value = "/api/validate_ticket")
-public class ValidateTicketServlet extends HttpServlet {
+@WebServlet(name = "DeleteTicketServlet", value = "/api/delete_ticket")
+public class DeleteTicketServlet extends HttpServlet {
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/TicketService")
     private TicketService ticketService;
 
@@ -32,7 +32,6 @@ public class ValidateTicketServlet extends HttpServlet {
         PrintWriter out = response.getWriter();
         out.println("Forbidden");
     }
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         PrintWriter out = response.getWriter();
@@ -42,7 +41,7 @@ public class ValidateTicketServlet extends HttpServlet {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
         String token = StringEscapeUtils.escapeJava(request.getParameter("token"));
-        String passCode = StringEscapeUtils.escapeJava(request.getParameter("passcode"));
+        String passcode = StringEscapeUtils.escapeJava(request.getParameter("passcode"));
 
         if (token == null || token.isEmpty()) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing token")));
@@ -52,26 +51,25 @@ public class ValidateTicketServlet extends HttpServlet {
             return;
         }
 
-        if (passCode == null || passCode.isEmpty()) {
+        if (passcode == null || passcode.isEmpty()) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing pass code")));
             return;
         }
 
-        int storeId;
+        String customerId;
         try {
-            storeId = TokenManager.getEmployeeStoreId(token);
+            customerId = TokenManager.getCustomerId(token);
         } catch (TokenException e) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;
         }
 
         try {
-            ticketService.updateTicketStatus(passCode, storeId);
+            ticketService.deleteTicket(customerId, passcode);
         } catch (BadTicketException e) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;
         }
-
         out.print(ow.writeValueAsString(new Message(MessageStatus.OK, "Success")));
     }
 }
