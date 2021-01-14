@@ -143,4 +143,23 @@ public class TicketService {
         em.persist(ticket);
         return ticket;
     }
+
+    public void deleteTicket(String customerId, String passCode) throws BadTicketException {
+        TicketEntity ticket = em.createNamedQuery("TicketEntity.findByPassCode", TicketEntity.class)
+                .setParameter("passCode", passCode)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        if (ticket == null) {
+            throw new BadTicketException("Invalid pass code");
+        }
+
+        if (!ticket.getCustomerId().equals(customerId)) {
+            throw new BadTicketException("Unauthorized operation");
+        }
+
+        em.remove(ticket);
+    }
 }

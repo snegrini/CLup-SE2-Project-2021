@@ -12,11 +12,9 @@ import it.polimi.se2.clup.CLupEJB.messages.TokenMessage;
 import it.polimi.se2.clup.CLupEJB.services.UserService;
 import it.polimi.se2.clup.CLupEJB.util.TokenManager;
 import org.apache.commons.text.StringEscapeUtils;
-import org.thymeleaf.context.WebContext;
 
 import javax.ejb.EJB;
 import javax.persistence.NonUniqueResultException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
