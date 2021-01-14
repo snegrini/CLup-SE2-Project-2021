@@ -118,18 +118,4 @@ class _LoginState extends State<LoginPage> {
               ),
             )));
   }
-
-  @override
-  void initState() {
-    super.initState();
-    _storage.read(key: 'jwt').then((String value) {
-      if (value != null) {
-        Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => QrButtonPage()),
-        );
-      }
-    });
-  }
 }
