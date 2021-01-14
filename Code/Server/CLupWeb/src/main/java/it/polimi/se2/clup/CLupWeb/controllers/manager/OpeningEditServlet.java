@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -27,8 +28,14 @@ import java.util.*;
 public class OpeningEditServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/OpeningHourService")
+    private OpeningHourService ohService;
+
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
     private StoreService storeService;
+
+    private final String FROM_STR = "-from-";
+    private final String TO_STR = "-to-";
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -86,25 +93,42 @@ public class OpeningEditServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String[] days = request.getParameterValues("day");
+        String[] days = request.getParameterValues("day[]");
 
         Map<String, String[]> parameterMap = request.getParameterMap();
 
+        Map<Integer, List<Time>> ohFromMap = new HashMap<>();
+        Map<Integer, List<Time>> ohToMap = new HashMap<>();
+
+        UserEntity user = (UserEntity) request.getSession().getAttribute("user");
+        int storeId = user.getStore().getStoreId();
 
         if (days == null) {
             // TODO
             return;
         } else {
-            String fromStr = "-from-";
-            String toStr = "-to-";
+            // Prepare a map of opening hours.
+            for (String day : days) {
 
-            for (String day: days) {
-                for (int i = 0; i < 2; i++) {
-                    // TODO retrieve times and build
-                    // parameterMap.get(day + fromStr + i);
+                List<Time> tempFromOh = new ArrayList<>();
+                List<Time> tempToOh = new ArrayList<>();
+
+                // TODO check input validation for time field: Time.valueOf() can throw an exception.
+                for (int i = 1; i <= 2; i++) {
+                    tempFromOh.add(Time.valueOf(parameterMap.get(day + FROM_STR + i)[0]));
+                    tempToOh.add(Time.valueOf(parameterMap.get(day + TO_STR + i)[0]));
                 }
+                ohFromMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempFromOh);
+                ohToMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempToOh);
+            }
+
+            // Store the opening hours.
+            try {
+                ohService.updateAllOpeningHour(storeId, ohFromMap, ohToMap);
+            } catch (BadOpeningHourException e) {
+                e.printStackTrace();
+                // TODO
             }
         }
-
     }
 }
