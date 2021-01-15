@@ -6,7 +6,6 @@ import 'package:permission_handler/permission_handler.dart';
 class QrButtonPage extends StatelessWidget {
   void _buttonPress(BuildContext context) async {
     if (await Permission.camera.request().isGranted) {
-      Navigator.pop(context);
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ScanPage()),

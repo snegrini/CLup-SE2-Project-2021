@@ -68,7 +68,7 @@ class _LoginState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('CLup Store App'),
+          title: Text('Login'),
           backgroundColor: ClupColors.grapefruit,
         ),
         body: new Container(

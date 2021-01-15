@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:store_app/util/clup_colors.dart';
 import 'package:store_app/views/login_page.dart';
 import 'package:store_app/views/qr_button_page.dart';
 
@@ -29,7 +28,7 @@ class _ClupAppState extends State<ClupApp> {
 
     setState(() {
       _homePage = new Scaffold(
-        backgroundColor: ClupColors.grapefruit,
+        backgroundColor: Colors.white,
       );
     });
 

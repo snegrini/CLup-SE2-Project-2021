@@ -25,7 +25,7 @@ class _ScanState extends State<ScanPage> {
             Navigator.pop(context);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ResultPage(qrdata: result)),
+              MaterialPageRoute(builder: (context) => ResultPage(result)),
             );
           },
         ));
