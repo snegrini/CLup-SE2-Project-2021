@@ -1,12 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:store_app/util/api_manager.dart';
 import 'package:store_app/util/clup_colors.dart';
 import 'package:store_app/views/scan_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class ResultPage extends StatelessWidget {
+class ResultPage extends StatefulWidget {
   final String qrdata;
 
-  ResultPage({Key key, @required this.qrdata}) : super(key: key);
+  const ResultPage(this.qrdata);
+
+  @override
+  _ResultState createState() => _ResultState();
+}
+
+class _ResultState extends State<ResultPage> {
+  bool _loaded = false;
+  bool _gotError = false;
+  String _text = "";
 
   void _buttonPress(BuildContext context) async {
     if (await Permission.camera.request().isGranted) {
@@ -18,17 +29,13 @@ class ResultPage extends StatelessWidget {
     }
   }
 
-  Widget _getMessage() {
-    if (qrdata == 'Minecraft') {
-      return new Text(
-        'Sei un vero Minecraftiano <3',
-        style: new TextStyle(color: Colors.green, fontSize: 25),
-      );
+  Color _getTextColor() {
+    if (!_loaded) {
+      return Colors.black;
+    } else if (_gotError) {
+      return Colors.red;
     } else {
-      return new Text(
-        'Non sei un Minecraftiano... Arghh',
-        style: new TextStyle(color: Colors.red, fontSize: 25),
-      );
+      return Colors.green;
     }
   }
 
@@ -44,18 +51,49 @@ class ResultPage extends StatelessWidget {
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.all(16.0),
-                child: _getMessage(),
-              ),
-              Center(
-                child: new RaisedButton(
-                  child: new Text(
-                    'Scan new QR',
-                    style: new TextStyle(color: Colors.white),
-                  ),
-                  onPressed: () => _buttonPress(context),
-                  color: ClupColors.grapefruit,
+                child: Text(
+                  _text,
+                  style: new TextStyle(color: _getTextColor(), fontSize: 25),
                 ),
               ),
+              if (_loaded)
+                Center(
+                  child: new RaisedButton(
+                    child: new Text(
+                      'Scan new QR',
+                      style: new TextStyle(color: Colors.white),
+                    ),
+                    onPressed: () => _buttonPress(context),
+                    color: ClupColors.grapefruit,
+                  ),
+                ),
             ]));
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    var storage = new FlutterSecureStorage();
+    storage.read(key: 'jwt').then((token) {
+      ApiManager.validateRequest(token, widget.qrdata).then((value) {
+        setState(() {
+          _gotError = false;
+          _text = value;
+          _loaded = true;
+        });
+      }).catchError((e) {
+        setState(() {
+          _gotError = true;
+          _text = e;
+          _loaded = true;
+        });
+      });
+    });
+
+    setState(() {
+      _loaded = false;
+      _text = "Processing...";
+    });
   }
 }
