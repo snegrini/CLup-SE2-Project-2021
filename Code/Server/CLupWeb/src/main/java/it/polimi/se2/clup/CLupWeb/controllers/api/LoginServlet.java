@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "LoginServlet", value = "/api/login")
+@WebServlet(name = "ApiLoginServlet", value = "/api/login")
 public class LoginServlet extends HttpServlet {
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/UserService")
     private UserService userService;

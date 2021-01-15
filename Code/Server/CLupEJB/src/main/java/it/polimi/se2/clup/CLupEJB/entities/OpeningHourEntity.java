@@ -2,13 +2,20 @@ package it.polimi.se2.clup.CLupEJB.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.sql.Time;
+import java.util.Objects;
 
 @Entity
 @Table(name = "opening_hour", schema = "np_clup")
+@NamedQueries({
+        @NamedQuery(name = "OpeningHourEntity.findByStoreId", query = "SELECT oh FROM OpeningHourEntity oh WHERE oh.store.storeId = :storeId"),
+        @NamedQuery(
+                name = "OpeningHourEntity.findByStoreIdAndWeekDay",
+                query = "SELECT oh FROM OpeningHourEntity oh WHERE oh.store.storeId = :storeId AND oh.weekDay = :weekDay"
+        ),
+})
 public class OpeningHourEntity {
 
     @Id
