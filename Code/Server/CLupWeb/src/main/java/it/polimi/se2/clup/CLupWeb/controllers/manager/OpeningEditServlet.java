@@ -20,7 +20,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.*;
 
@@ -104,31 +107,40 @@ public class OpeningEditServlet extends HttpServlet {
         int storeId = user.getStore().getStoreId();
 
         if (days == null) {
-            // TODO
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unable to find opening hour days.");
             return;
-        } else {
-            // Prepare a map of opening hours.
-            for (String day : days) {
+        }
 
-                List<Time> tempFromOh = new ArrayList<>();
-                List<Time> tempToOh = new ArrayList<>();
+        // Prepare a map of opening hours.
+        for (String day : days) {
 
-                // TODO check input validation for time field: Time.valueOf() can throw an exception.
-                for (int i = 1; i <= 2; i++) {
-                    tempFromOh.add(Time.valueOf(parameterMap.get(day + FROM_STR + i)[0]));
-                    tempToOh.add(Time.valueOf(parameterMap.get(day + TO_STR + i)[0]));
+            List<Time> tempFromOh = new ArrayList<>();
+            List<Time> tempToOh = new ArrayList<>();
+
+            for (int i = 1; i <= 2; i++) {
+                String fromTimeStr = parameterMap.get(day + FROM_STR + i)[0];
+                String toTimeStr = parameterMap.get(day + TO_STR + i)[0];
+
+                if (!fromTimeStr.isEmpty() && !toTimeStr.isEmpty()) {
+                    try {
+                        tempFromOh.add(Time.valueOf(fromTimeStr));
+                        tempToOh.add(Time.valueOf(toTimeStr));
+                    } catch (IllegalArgumentException e) {
+                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad input time value.");
+                        return;
+                    }
                 }
-                ohFromMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempFromOh);
-                ohToMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempToOh);
-            }
 
-            // Store the opening hours.
-            try {
-                ohService.updateAllOpeningHour(storeId, ohFromMap, ohToMap);
-            } catch (BadOpeningHourException e) {
-                e.printStackTrace();
-                // TODO
             }
+            ohFromMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempFromOh);
+            ohToMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempToOh);
+        }
+
+        // Store the opening hours.
+        try {
+            ohService.updateAllOpeningHour(storeId, ohFromMap, ohToMap, user.getUserId());
+        } catch (BadOpeningHourException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
         }
     }
 }
