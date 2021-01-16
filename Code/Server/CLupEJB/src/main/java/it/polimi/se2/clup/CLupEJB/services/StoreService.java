@@ -7,7 +7,9 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import java.sql.Time;
 import java.util.List;
+import java.util.Map;
 
 @Stateless
 public class StoreService {
@@ -42,5 +44,8 @@ public class StoreService {
             throw new BadStoreException("Could not load stores");
         }
         return stores;
+    }
+
+    public void addStore(int storeId, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap, int userId) throws BadStoreException{
     }
 }

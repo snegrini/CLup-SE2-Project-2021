@@ -44,15 +44,15 @@ public class StoreEntity {
     @JsonIgnore
     private String defaultPassCode;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<OpeningHourEntity> openingHours;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<TicketEntity> tickets;
 
-    @OneToMany(mappedBy = "store")
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     @JsonBackReference
     private List<UserEntity> users;
 

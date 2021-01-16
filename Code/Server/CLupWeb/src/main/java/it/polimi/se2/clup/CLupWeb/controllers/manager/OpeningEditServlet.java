@@ -27,6 +27,9 @@ import java.time.LocalTime;
 import java.time.format.TextStyle;
 import java.util.*;
 
+import static it.polimi.se2.clup.CLupWeb.controllers.admin.StoreAddServlet.FROM_STR;
+import static it.polimi.se2.clup.CLupWeb.controllers.admin.StoreAddServlet.TO_STR;
+
 @WebServlet(name = "ManagerOpeningEditServlet", value = "/dashboard/ohedit")
 public class OpeningEditServlet extends HttpServlet {
     private TemplateEngine templateEngine;
@@ -36,9 +39,6 @@ public class OpeningEditServlet extends HttpServlet {
 
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
     private StoreService storeService;
-
-    private final String FROM_STR = "-from-";
-    private final String TO_STR = "-to-";
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -141,6 +141,10 @@ public class OpeningEditServlet extends HttpServlet {
             ohService.updateAllOpeningHour(storeId, ohFromMap, ohToMap, user.getUserId());
         } catch (BadOpeningHourException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            return;
         }
+
+        String path = getServletContext().getContextPath() + "/dashboard/storeinfo";
+        response.sendRedirect(path);
     }
 }

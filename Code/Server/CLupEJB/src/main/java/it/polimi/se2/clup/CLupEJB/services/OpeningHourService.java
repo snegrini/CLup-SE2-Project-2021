@@ -30,7 +30,7 @@ public class OpeningHourService {
         return em.find(OpeningHourEntity.class, ohId);
     }
 
-    public OpeningHourEntity addOpeningHour(int weekDay, Time fromTime, Time toTime, int storeId) throws BadOpeningHourException {
+    public void addOpeningHour(int weekDay, Time fromTime, Time toTime, int storeId) throws BadOpeningHourException {
 
         StoreEntity store = em.find(StoreEntity.class, storeId);
 
@@ -53,8 +53,9 @@ public class OpeningHourService {
         oh.setWeekDay(weekDay);
         oh.setStore(store);
 
-        em.persist(oh);
-        return oh;
+        store.addOpeningHour(oh);
+
+        em.persist(store);
     }
 
     public void addAllOpeningHour(List<OpeningHourEntity> ohList) throws BadOpeningHourException {
