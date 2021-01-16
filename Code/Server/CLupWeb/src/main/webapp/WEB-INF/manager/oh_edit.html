@@ -26,11 +26,11 @@
                 <div data-th-if="${#lists.isEmpty(ohday.value)}" data-th-each="i : ${#numbers.sequence(1, 2)}">
                     <label>
                         From:
-                        <input type="time" name="from" data-th-name="${ohday.key + '-from-' + i}">
+                        <input type="time" name="from" step="1" data-th-name="${ohday.key + '-from-' + i}">
                     </label>
                     <label>
                         To:
-                        <input type="time" name="to" data-th-name="${ohday.key + '-to-' + i}">
+                        <input type="time" name="to" step="1" data-th-name="${ohday.key + '-to-' + i}">
                     </label>
                     <br>
                 </div>
@@ -38,11 +38,11 @@
                 <div data-th-unless="${#lists.isEmpty(ohday.value)}" data-th-each="ohtime, iterStat : ${ohday.value}">
                     <label>
                         From:
-                        <input type="time" name="from" data-th-name="${ohday.key + '-from-' + iterStat.count}" data-th-value="${ohtime.fromTime}">
+                        <input type="time" name="from" step="1" data-th-name="${ohday.key + '-from-' + iterStat.count}" data-th-value="${ohtime.fromTime}">
                     </label>
                     <label>
                         To:
-                        <input type="time" name="to" data-th-name="${ohday.key + '-to-' + iterStat.count}" data-th-value="${ohtime.toTime}">
+                        <input type="time" name="to" step="1" data-th-name="${ohday.key + '-to-' + iterStat.count}" data-th-value="${ohtime.toTime}">
                     </label>
                     <br>
                 </div>
@@ -50,11 +50,11 @@
                 <div data-th-if="${#lists.size(ohday.value) == 1}">
                     <label>
                         From:
-                        <input type="time" name="from" data-th-name="${ohday.key + '-from-2'}">
+                        <input type="time" name="from" step="1" data-th-name="${ohday.key + '-from-2'}">
                     </label>
                     <label>
                         To:
-                        <input type="time" name="to" data-th-name="${ohday.key + '-to-2'}">
+                        <input type="time" name="to" step="1" data-th-name="${ohday.key + '-to-2'}">
                     </label>
                     <br>
                 </div>

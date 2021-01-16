@@ -30,10 +30,6 @@ public class OpeningHourService {
         return em.find(OpeningHourEntity.class, ohId);
     }
 
-    /*public List<OpeningHourEntity> findByStoreIdAndWeekDay(int storeId, int weekDay) {
-        return em.find();
-    }*/
-
     public OpeningHourEntity addOpeningHour(int weekDay, Time fromTime, Time toTime, int storeId) throws BadOpeningHourException {
 
         StoreEntity store = em.find(StoreEntity.class, storeId);
@@ -71,6 +67,10 @@ public class OpeningHourService {
         UserEntity user = em.find(UserEntity.class, userId);
         OpeningHourEntity oh = em.find(OpeningHourEntity.class, ohId);
 
+        if (user == null || oh == null) {
+            throw new BadOpeningHourException("User or opening hour not found.");
+        }
+
         // Check if user is trying to delete an opening hour of another store.
         if (oh.getStore().getStoreId() != user.getStore().getStoreId()) {
             throw new BadOpeningHourException("User not authorized to delete this opening hour.");
@@ -81,9 +81,9 @@ public class OpeningHourService {
         em.remove(oh);
     }
 
-    public void deleteAllOpeningHour(List<OpeningHourEntity> ohList) throws BadOpeningHourException {
+    public void deleteAllOpeningHour(List<OpeningHourEntity> ohList, int userId) throws BadOpeningHourException {
         for (OpeningHourEntity oh : ohList) {
-            deleteOpeningHour(oh.getOpeningHoursId(), oh.getStore().getStoreId());
+            deleteOpeningHour(oh.getOpeningHoursId(), userId);
         }
     }
 
@@ -94,16 +94,17 @@ public class OpeningHourService {
      * @param weekDay day of the week for which update the opening hours.
      * @param fromTimeList the list of times to start an opening hour.
      * @param toTimeList the list of times to end an opening hour.
+     * @param userId the user id who is performing the update.
      * @throws BadOpeningHourException when the list is null, empty or if the store id or week day are not the same
      *                                 for all the elements in the list.
      */
-    public void updateOpeningHour(int weekDay, int storeId, List<Time> fromTimeList, List<Time> toTimeList) throws BadOpeningHourException {
+    public void updateOpeningHour(int weekDay, int storeId, List<Time> fromTimeList, List<Time> toTimeList, int userId) throws BadOpeningHourException {
 
         List<OpeningHourEntity> ohList = buildOpeningHourList(weekDay, storeId, fromTimeList, toTimeList);
 
-        if (ohList.size() < MAX_OPENING_HOURS) {
+        /*if (ohList.size() < MAX_OPENING_HOURS) {
             throw new BadOpeningHourException("At least one opening hour is missing.");
-        }
+        }*/
 
         if (hasOverlap(ohList)) {
             throw new BadOpeningHourException("Two opening hours are overlapping.");
@@ -116,12 +117,12 @@ public class OpeningHourService {
 
         // Preparing for update by deleting previous values of opening hours.
         if (!ohStoredList.isEmpty()) {
-            deleteAllOpeningHour(ohList);
+            deleteAllOpeningHour(ohStoredList, userId);
         }
         addAllOpeningHour(ohList);
     }
 
-    public void updateAllOpeningHour(int storeId, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap) throws BadOpeningHourException {
+    public void updateAllOpeningHour(int storeId, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap, int userId) throws BadOpeningHourException {
         List<OpeningHourEntity> fromTimeList;
         List<OpeningHourEntity> toTimeList;
 
@@ -130,22 +131,26 @@ public class OpeningHourService {
                 throw new BadOpeningHourException("Opening hours missing from-to fields.");
             }
 
-            updateOpeningHour(day, storeId, ohFromMap.get(day), ohToMap.get(day));
+            updateOpeningHour(day, storeId, ohFromMap.get(day), ohToMap.get(day), userId);
         }
     }
 
     /**
-     * Checks for any overlapping in the opening hours provided.
+     * Checks for any overlapping in the opening hours provided. Note that comparison is not strict.
      *
      * @param ohList the list of opening hour to be checked.
      * @return {@code true} if overlaps are found, {@code false} otherwise.
      */
     private boolean hasOverlap(List<OpeningHourEntity> ohList) {
-        return ohList.stream()
-                .anyMatch(oh1 -> ohList.stream()
-                        .anyMatch(oh2 -> oh1.getFromTime().before(oh2.getToTime())
-                                        && oh2.getFromTime().before(oh1.getToTime())
-                        ));
+        for (int i = 0; i < ohList.size() - 1; i++) {
+            OpeningHourEntity oh1 = ohList.get(i);
+            OpeningHourEntity oh2 = ohList.get(i + 1);
+
+            if (!oh1.getFromTime().after(oh2.getToTime()) && !oh2.getFromTime().after(oh1.getToTime())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private List<OpeningHourEntity> buildOpeningHourList(int weekDay, int storeId, List<Time> fromTimeList, List<Time> toTimeList)
@@ -164,6 +169,7 @@ public class OpeningHourService {
 
         for (int i = 0; i < fromTimeList.size(); i++) {
             OpeningHourEntity oh = new OpeningHourEntity();
+            oh.setWeekDay(weekDay);
             oh.setFromTime(fromTimeList.get(i));
             oh.setToTime(toTimeList.get(i));
             oh.setStore(store);
