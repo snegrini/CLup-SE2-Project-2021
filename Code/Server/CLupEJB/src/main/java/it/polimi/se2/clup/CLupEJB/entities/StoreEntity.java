@@ -22,7 +22,7 @@ public class StoreEntity {
     @Column(name = "store_name")
     private String storeName;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 

@@ -30,7 +30,7 @@ public class OpeningHourService {
         return em.find(OpeningHourEntity.class, ohId);
     }
 
-    public void addOpeningHour(int weekDay, Time fromTime, Time toTime, int storeId) throws BadOpeningHourException {
+    private void addOpeningHour(int weekDay, Time fromTime, Time toTime, int storeId) throws BadOpeningHourException {
 
         StoreEntity store = em.find(StoreEntity.class, storeId);
 
@@ -58,9 +58,53 @@ public class OpeningHourService {
         em.persist(store);
     }
 
-    public void addAllOpeningHour(List<OpeningHourEntity> ohList) throws BadOpeningHourException {
+    private void addAllOpeningHour(List<OpeningHourEntity> ohList) throws BadOpeningHourException {
         for (OpeningHourEntity oh : ohList) {
             addOpeningHour(oh.getWeekDay(), oh.getFromTime(), oh.getToTime(), oh.getStore().getStoreId());
+        }
+    }
+
+    /**
+     * Adds the opening hours for a specific day.
+     *
+     * @param weekDay day of the week for which update the opening hours.
+     * @param fromTimeList the list of times to start an opening hour.
+     * @param toTimeList the list of times to end an opening hour.
+     * @param store the store entity to be updated.
+     * @throws BadOpeningHourException when the list is null, empty or week day are not the same
+     *                                 for all the elements in the list.
+     */
+    public void addAllOpeningHour(int weekDay, List<Time> fromTimeList, List<Time> toTimeList, StoreEntity store)
+            throws BadOpeningHourException {
+
+        List<OpeningHourEntity> ohList = buildOpeningHourList(weekDay, fromTimeList, toTimeList, store);
+
+        if (hasOverlap(ohList)) {
+            throw new BadOpeningHourException("Two opening hours are overlapping.");
+        }
+
+        addAllOpeningHour(ohList);
+    }
+
+    public void addAllOpeningHour(int storeId, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap, int userId)
+            throws BadOpeningHourException {
+        StoreEntity store = em.find(StoreEntity.class, storeId);
+
+        if (store == null) {
+            throw new BadOpeningHourException("Cannot load store.");
+        }
+
+        for (Integer day : ohFromMap.keySet()) {
+            List<OpeningHourEntity> ohList = buildOpeningHourList(day, ohFromMap.get(day), ohToMap.get(day), store);
+
+            if (hasOverlap(ohList)) {
+                throw new BadOpeningHourException("Two opening hours are overlapping.");
+            }
+
+            if (!ohToMap.containsKey(day)) {
+                throw new BadOpeningHourException("Opening hours missing from-to fields.");
+            }
+            addAllOpeningHour(day, ohFromMap.get(day), ohToMap.get(day), store);
         }
     }
 
@@ -95,13 +139,13 @@ public class OpeningHourService {
      * @param weekDay day of the week for which update the opening hours.
      * @param fromTimeList the list of times to start an opening hour.
      * @param toTimeList the list of times to end an opening hour.
+     * @param store the store entity to be updated.
      * @param userId the user id who is performing the update.
-     * @throws BadOpeningHourException when the list is null, empty or if the store id or week day are not the same
+     * @throws BadOpeningHourException when the list is null, empty or week day are not the same
      *                                 for all the elements in the list.
      */
-    public void updateOpeningHour(int weekDay, int storeId, List<Time> fromTimeList, List<Time> toTimeList, int userId) throws BadOpeningHourException {
-
-        List<OpeningHourEntity> ohList = buildOpeningHourList(weekDay, storeId, fromTimeList, toTimeList);
+    public void updateOpeningHour(int weekDay, List<Time> fromTimeList, List<Time> toTimeList, StoreEntity store, int userId) throws BadOpeningHourException {
+        List<OpeningHourEntity> ohList = buildOpeningHourList(weekDay, fromTimeList, toTimeList, store);
 
         /*if (ohList.size() < MAX_OPENING_HOURS) {
             throw new BadOpeningHourException("At least one opening hour is missing.");
@@ -112,7 +156,7 @@ public class OpeningHourService {
         }
 
         List<OpeningHourEntity> ohStoredList = em.createNamedQuery("OpeningHourEntity.findByStoreIdAndWeekDay", OpeningHourEntity.class)
-                .setParameter("storeId", storeId)
+                .setParameter("storeId", store.getStoreId())
                 .setParameter("weekDay", weekDay)
                 .getResultList();
 
@@ -124,15 +168,17 @@ public class OpeningHourService {
     }
 
     public void updateAllOpeningHour(int storeId, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap, int userId) throws BadOpeningHourException {
-        List<OpeningHourEntity> fromTimeList;
-        List<OpeningHourEntity> toTimeList;
+        StoreEntity store = em.find(StoreEntity.class, storeId);
+
+        if (store == null) {
+            throw new BadOpeningHourException("Cannot load store.");
+        }
 
         for (Integer day : ohFromMap.keySet()) {
             if (!ohToMap.containsKey(day)) {
                 throw new BadOpeningHourException("Opening hours missing from-to fields.");
             }
-
-            updateOpeningHour(day, storeId, ohFromMap.get(day), ohToMap.get(day), userId);
+            updateOpeningHour(day, ohFromMap.get(day), ohToMap.get(day), store, userId);
         }
     }
 
@@ -154,16 +200,10 @@ public class OpeningHourService {
         return false;
     }
 
-    private List<OpeningHourEntity> buildOpeningHourList(int weekDay, int storeId, List<Time> fromTimeList, List<Time> toTimeList)
+    private List<OpeningHourEntity> buildOpeningHourList(int weekDay, List<Time> fromTimeList, List<Time> toTimeList, StoreEntity store)
         throws BadOpeningHourException {
         if (fromTimeList.size() != toTimeList.size()) {
             throw new BadOpeningHourException("Opening hours are not fully specified.");
-        }
-
-        StoreEntity store = em.find(StoreEntity.class, storeId);
-
-        if (store == null) {
-            throw new BadOpeningHourException("Cannot load store.");
         }
 
         List<OpeningHourEntity> ohList = new ArrayList<>();

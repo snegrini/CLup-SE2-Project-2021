@@ -1,9 +1,12 @@
 package it.polimi.se2.clup.CLupWeb.controllers.admin;
 
+import it.polimi.se2.clup.CLupEJB.entities.AddressEntity;
 import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
+import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
+import it.polimi.se2.clup.CLupEJB.services.OpeningHourService;
 import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -31,6 +34,9 @@ public class StoreAddServlet extends HttpServlet  {
 
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
     private StoreService storeService;
+
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/OpeningHourService")
+    private OpeningHourService ohService;
 
     public static final String FROM_STR = "-from-";
     public static final String TO_STR = "-to-";
@@ -72,7 +78,6 @@ public class StoreAddServlet extends HttpServlet  {
         Map<Integer, List<Time>> ohToMap = new HashMap<>();
 
         UserEntity user = (UserEntity) request.getSession().getAttribute("user");
-        int storeId = user.getStore().getStoreId();
 
         // Check parameters are present and correct
         String storeName = StringEscapeUtils.escapeJava(request.getParameter("store-name"));
@@ -122,10 +127,19 @@ public class StoreAddServlet extends HttpServlet  {
             ohToMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempToOh);
         }
 
-        // Store the opening hours.
+        // Add a new store with address and opening hours.
         try {
-            storeService.addStore(storeId, ohFromMap, ohToMap, user.getUserId());
-        } catch (BadStoreException e) {
+            AddressEntity address = new AddressEntity(street, stnumber, city, province, postalcode, country);
+
+            // Create the store.
+            StoreEntity store = storeService.addStore(storeName, pec, address);
+
+            // Add opening hours to the created store.
+            ohService.addAllOpeningHour(user.getUserId(), ohFromMap, ohToMap, store.getStoreId());
+            
+            // TODO generate credentials.
+
+        } catch (BadOpeningHourException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }
