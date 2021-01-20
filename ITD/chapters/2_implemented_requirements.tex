@@ -1,1 +1,46 @@
 \chapter{Implemented Requirements}
+Below are listed the requirements implemented in the prototype. They have been chosen since they are essential for engaging a future user of the system.\newline
+Those marked with a star (*) have not been implemented because they are not requested for a group of two people.
+
+\subsection{Customer}
+\begin{enumerate}[series=requirements, label=\textbf{R.\arabic*}]
+    \item The system shall allow customers to line-up remotely in a store queue.\\[4pt] \textit{Implemented.}
+    \item The system shall generate a new ticket when a customer enters a queue.\\[4pt] \textit{Implemented.}
+    \item The system shall allow customers which do not have a smartphone to get a ticket in place.\\[4pt] \textit{Not implemented. Although it is an important feature, it has not been implemented as we do not have the necessary hardware for printing the tickets.}
+    \item The system shall allow customers to view the number of people lined up in a queue.\\[4pt] \textit{Implemented.}
+    \item The system shall give customers an estimated waiting time.\\[4pt] \textit{Implemented.}
+    \item The system shall fetch the GPS position while the user has retrieved a store pass.\\[4pt] \textit{Not implemented. We do not consider this one as a vital functionality for a prototype of the app.}
+    \item The system shall allow customers to leave a queue.\\[4pt] \textit{Implemented.}
+    \item The system shall allow customers to filter stores by name.\\[4pt] \textit{Implemented.}
+    \item The system shall notify customers when it's time to leave for the store.\\[4pt] \textit{Not implemented. We do not consider this one as a vital functionality for a prototype of the app.}
+    \item The system shall allow customers to book-a-visit to the store and send them the confirmation link and receipt via email.\\[4pt] \textit{Not implemented*.}
+    \item The system shall allow book-a-visit customers to specify the main categories of item they intend to buy.\\[4pt] \textit{Not implemented*.}
+    \item The system shall allow customers to delete a store pass.\\[4pt] \textit{Partially implemented* (only tickets can be deleted).}
+    \item The system shall notify customers when a ticket or booked visit is deleted.\\[4pt] \textit{Not implemented*.}
+    \item The system shall accept bookings based onto the already booked category items.\\[4pt] \textit{Not implemented*.}
+\end{enumerate}
+
+\subsection{Store manager}
+\begin{enumerate}[resume*=requirements]
+    \item The system shall allow a registered store manager to login by using their credentials.\\[4pt] \textit{Implemented.}
+    \item The system shall allow store managers to view the current status of people inside the store.\\[4pt] \textit{Implemented.}
+    \item The system shall allow store managers to view the current status of people in the queue.\\[4pt] \textit{Implemented.}
+    \item The system shall allow store managers to view the booked visits to the store.\\[4pt] \textit{Not implemented*.}
+    \item The system shall allow store managers to set a maximum cap of people inside the store.\\[4pt] \textit{Implemented.}
+    \item The system shall allow store managers to delete tickets and booked visits.\\[4pt] \textit{Partially implemented* (only tickets can be deleted).}
+\end{enumerate}
+
+\subsection{Store employee}
+\begin{enumerate}[resume*=requirements]
+    \item The system shall allow a registered store employee to login by using their credentials.\\[4pt] \textit{Implemented.}
+    \item The system shall allow store employee to view the current status of people inside the store.\\[4pt] \textit{Implemented.}
+    \item The system shall allow store employee to view the current status of people in the queue.\\[4pt] \textit{Implemented.}
+    \item The system shall allow store employee to scan QR codes.\\[4pt] \textit{Implemented.}
+    \item The system shall allow store employee to validate store passes.\\[4pt] \textit{Implemented.}
+\end{enumerate}
+
+\subsection{CLup admin}
+\begin{enumerate}[resume*=requirements]
+    \item The system shall allow CLup admins to register new supermarkets.\\[4pt] \textit{Implemented.}
+    \item The system shall generate new manager and staff credentials for each supermarket registered.\\[4pt] \textit{Implemented.}
+\end{enumerate}
