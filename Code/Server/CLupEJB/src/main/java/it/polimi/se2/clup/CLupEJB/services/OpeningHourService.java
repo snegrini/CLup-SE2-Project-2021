@@ -86,12 +86,11 @@ public class OpeningHourService {
         addAllOpeningHour(ohList);
     }
 
-    public void addAllOpeningHour(int storeId, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap, int userId)
+    public void addAllOpeningHour(StoreEntity store, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap)
             throws BadOpeningHourException {
-        StoreEntity store = em.find(StoreEntity.class, storeId);
 
         if (store == null) {
-            throw new BadOpeningHourException("Cannot load store.");
+            throw new BadOpeningHourException("Bad store parameter.");
         }
 
         for (Integer day : ohFromMap.keySet()) {
@@ -188,12 +187,12 @@ public class OpeningHourService {
      * @param ohList the list of opening hour to be checked.
      * @return {@code true} if overlaps are found, {@code false} otherwise.
      */
-    private boolean hasOverlap(List<OpeningHourEntity> ohList) {
+    public boolean hasOverlap(List<OpeningHourEntity> ohList) {
         for (int i = 0; i < ohList.size() - 1; i++) {
             OpeningHourEntity oh1 = ohList.get(i);
             OpeningHourEntity oh2 = ohList.get(i + 1);
 
-            if (!oh1.getFromTime().after(oh2.getToTime()) && !oh2.getFromTime().after(oh1.getToTime())) {
+            if (oh1.getFromTime().before(oh2.getToTime()) && oh2.getFromTime().before(oh1.getToTime())) {
                 return true;
             }
         }

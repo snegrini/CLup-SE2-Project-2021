@@ -10,7 +10,10 @@ import java.util.Objects;
 @Entity
 @Table(name = "opening_hour", schema = "np_clup")
 @NamedQueries({
-        @NamedQuery(name = "OpeningHourEntity.findByStoreId", query = "SELECT oh FROM OpeningHourEntity oh WHERE oh.store.storeId = :storeId"),
+        @NamedQuery(
+                name = "OpeningHourEntity.findByStoreId",
+                query = "SELECT oh FROM OpeningHourEntity oh WHERE oh.store.storeId = :storeId ORDER BY oh.weekDay"
+        ),
         @NamedQuery(
                 name = "OpeningHourEntity.findByStoreIdAndWeekDay",
                 query = "SELECT oh FROM OpeningHourEntity oh WHERE oh.store.storeId = :storeId AND oh.weekDay = :weekDay"

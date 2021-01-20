@@ -55,6 +55,5 @@ public class OpeningDeleteServlet extends HttpServlet {
         String ctxpath = getServletContext().getContextPath();
         String path = ctxpath + "/dashboard/storeinfo";
         response.sendRedirect(path);
-
     }
 }

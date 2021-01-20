@@ -45,6 +45,7 @@ public class StoreEntity {
     private String defaultPassCode;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
+    @OrderBy("weekDay")
     @JsonManagedReference
     private List<OpeningHourEntity> openingHours;
 

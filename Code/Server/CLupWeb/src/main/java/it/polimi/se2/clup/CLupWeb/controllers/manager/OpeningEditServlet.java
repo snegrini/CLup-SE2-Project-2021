@@ -69,7 +69,7 @@ public class OpeningEditServlet extends HttpServlet {
         // Indeed one day could have more than one opening hour.
         // (e.g.) Monday: 08:00 - 12:00, 14:00 - 18:00.
         List<OpeningHourEntity> openingHourList = store.getOpeningHours();
-        Map<String, List<OpeningHourEntity>> openingHourMap = new HashMap<>();
+        Map<String, List<OpeningHourEntity>> openingHourMap = new LinkedHashMap<>();
 
         // Prepare map with all the week days.
         for (DayOfWeek day : DayOfWeek.values()) {

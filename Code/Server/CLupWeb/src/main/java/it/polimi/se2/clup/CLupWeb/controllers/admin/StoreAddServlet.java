@@ -82,6 +82,7 @@ public class StoreAddServlet extends HttpServlet  {
         // Check parameters are present and correct
         String storeName = StringEscapeUtils.escapeJava(request.getParameter("store-name"));
         String pec = StringEscapeUtils.escapeJava(request.getParameter("pec"));
+        String phone = StringEscapeUtils.escapeJava(request.getParameter("phone"));
         String street = StringEscapeUtils.escapeJava(request.getParameter("address"));
         String stnumber = StringEscapeUtils.escapeJava(request.getParameter("stnumber"));
         String city = StringEscapeUtils.escapeJava(request.getParameter("city"));
@@ -90,6 +91,7 @@ public class StoreAddServlet extends HttpServlet  {
         String country = StringEscapeUtils.escapeJava(request.getParameter("country"));
 
         if (storeName == null || storeName.isEmpty() || pec == null || pec.isEmpty() ||
+                phone == null || phone.isEmpty() ||
                 street == null || street.isEmpty() || stnumber == null || stnumber.isEmpty() ||
                 city == null || city.isEmpty() || province == null || province.isEmpty() ||
                 postalcode == null || postalcode.isEmpty() || country == null || country.isEmpty()) {
@@ -132,10 +134,10 @@ public class StoreAddServlet extends HttpServlet  {
             AddressEntity address = new AddressEntity(street, stnumber, city, province, postalcode, country);
 
             // Create the store.
-            StoreEntity store = storeService.addStore(storeName, pec, address);
+            StoreEntity store = storeService.addStore(storeName, pec, phone, address);
 
             // Add opening hours to the created store.
-            ohService.addAllOpeningHour(user.getUserId(), ohFromMap, ohToMap, store.getStoreId());
+            ohService.addAllOpeningHour(store, ohFromMap, ohToMap);
             
             // TODO generate credentials.
 
