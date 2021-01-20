@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 
@@ -45,9 +46,11 @@ class ApiManager {
 
   static Future<String> customerTokenRequest(String customerId) async {
     var url = _baseUrl + _tokenUrl;
-    var jsonResponse = await _makeRequest(url, {
+    var body = {
       'customer_id': customerId,
-    });
+    };
+
+    var jsonResponse = await _makeRequest(url, body);
 
     return jsonResponse['token'];
   }
@@ -66,5 +69,17 @@ class ApiManager {
     var jsonResponse = await _makeRequest(url, body);
 
     return jsonResponse['stores'];
+  }
+
+  static Future<List<dynamic>> ticketListRequest(String token,
+      [String filter]) async {
+    var url = _baseUrl + _ticketListUrl;
+    var body = {
+      'token': token,
+    };
+
+    var jsonResponse = await _makeRequest(url, body);
+
+    return jsonResponse['tickets'];
   }
 }

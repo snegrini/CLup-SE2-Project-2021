@@ -19,6 +19,7 @@ class Store {
         address = Address.fromJson(json['address']),
         pec = json['pecEmail'],
         phone = json['phone'],
-        openingHours = List<OpeningHour>.unmodifiable(json['openingHours'].map((openingHour) => OpeningHour.fromJson(openingHour)).toList()),
+        openingHours = List<OpeningHour>.unmodifiable(
+            json['openingHours'].map((e) => OpeningHour.fromJson(e)).toList()),
         customerInQueue = json['customersInQueue'];
 }
