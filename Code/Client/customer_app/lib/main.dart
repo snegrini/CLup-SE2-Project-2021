@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:customer_app/util/api_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
+import 'package:customer_app/util/token_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -31,27 +32,38 @@ class _ClupAppState extends State<ClupApp> {
   void initState() {
     super.initState();
     _setLoadingBar();
+    _getCustomerToken();
+  }
 
+  Future<void> _getCustomerToken() async {
     // Checking if a token is stored in the app
     var storage = new FlutterSecureStorage();
-    storage.read(key: 'jwt').then((String value) {
-      if (value == null) {
-        // Token not found, retrieving a new one
-        _getCustomerToken().then((value) {
-          // Storing token and redirecting
-          storage.write(key: 'jwt', value: value);
-          setState(() {
-            _homePage = HomePage();
-          });
-        }).catchError(
-            (e) => _setPlaceholderPage(e)); // Displaying the error message
-      } else {
-        // Token already retrieved => redirect to the homepage
+    String value = await storage.read(key: 'jwt');
+
+    if (value == null) {
+      // Token not found, retrieving a new one
+      try {
+        String token = await _requestCustomerToken();
+
+        // Storing token and redirecting
+        storage.write(key: 'jwt', value: token);
+        TokenManager().token = token;
+
         setState(() {
           _homePage = HomePage();
         });
+      } catch (e) {
+        // Displaying the error message
+        _setErrorPage(e);
       }
-    });
+    } else {
+      // Token already retrieved => redirect to the homepage
+      TokenManager().token = value;
+
+      setState(() {
+        _homePage = HomePage();
+      });
+    }
   }
 
   Future<String> _getHashedDeviceId() async {
@@ -75,7 +87,7 @@ class _ClupAppState extends State<ClupApp> {
     return sha256.convert(bytes).toString();
   }
 
-  Future<String> _getCustomerToken() async {
+  Future<String> _requestCustomerToken() async {
     String token;
     try {
       var deviceId = await _getHashedDeviceId();
@@ -87,7 +99,7 @@ class _ClupAppState extends State<ClupApp> {
     return token;
   }
 
-  void _setPlaceholderPage(String text) {
+  void _setErrorPage(String text) {
     setState(() {
       _homePage = new Scaffold(
         backgroundColor: Colors.white,

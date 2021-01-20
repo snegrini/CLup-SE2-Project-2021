@@ -16,4 +16,9 @@ class Address {
         province = json['province'],
         postalCode = json['postalCode'],
         country = json['country'];
+
+  @override
+  String toString() {
+    return '$address $streetNumber, $city ($province)';
+  }
 }

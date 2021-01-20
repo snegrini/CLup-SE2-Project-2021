@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:customer_app/util/clup_colors.dart';
-import 'package:customer_app/views/list_page.dart';
+import 'package:customer_app/views/stores_page.dart';
 import 'package:customer_app/views/passes_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 class _HomeState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[ListPage(), PassesPage()];
+  static List<Widget> _widgetOptions = <Widget>[StoresPage(), PassesPage()];
 
   void _onItemTapped(int index) {
     setState(() {
