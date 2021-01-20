@@ -3,6 +3,8 @@ import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/views/stores_page.dart';
 import 'package:customer_app/views/passes_page.dart';
 
+/// Home page of the app with a bottom navigation bar to switch from the store list
+/// to the store passes list and vice versa.
 class HomePage extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();

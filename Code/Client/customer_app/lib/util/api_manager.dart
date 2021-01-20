@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 
+/// Class that handles the API requests to the server.
 class ApiManager {
   static final _baseUrl =
       "http://192.168.178.36:8080/CLupWeb_war_exploded/api/";
@@ -14,6 +14,7 @@ class ApiManager {
 
   ApiManager._(); // Private Constructor
 
+  /// Makes a generic request to the server and handles all the errors.
   static Future<Map<String, dynamic>> _makeRequest(url, body) async {
     // Performs an API request
     var response;
@@ -44,6 +45,8 @@ class ApiManager {
     return jsonResponse;
   }
 
+  /// Performs the request to the server of a customer token. A [customerId] is
+  /// sent in the request.
   static Future<String> customerTokenRequest(String customerId) async {
     var url = _baseUrl + _tokenUrl;
     var body = {
@@ -55,6 +58,8 @@ class ApiManager {
     return jsonResponse['token'];
   }
 
+  /// Performs the request to the server of the stores list. The [token] is mandatory
+  /// while the [filter] is optional.
   static Future<List<dynamic>> storeListRequest(String token,
       [String filter]) async {
     var url = _baseUrl + _storeListUrl;
@@ -71,8 +76,9 @@ class ApiManager {
     return jsonResponse['stores'];
   }
 
-  static Future<List<dynamic>> ticketListRequest(String token,
-      [String filter]) async {
+  /// Performs the request to the server of the tickets list of the customer.
+  /// The [token] is mandatory.
+  static Future<List<dynamic>> ticketListRequest(String token) async {
     var url = _baseUrl + _ticketListUrl;
     var body = {
       'token': token,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:store_app/util/token_manager.dart';
 import 'package:store_app/views/login_page.dart';
 import 'package:store_app/views/qr_button_page.dart';
 
@@ -32,6 +33,12 @@ class _ClupAppState extends State<ClupApp> {
       );
     });
 
+    _checkAuthToken();
+  }
+
+  /// Checks if the user is already logged in. If so redirects to the QR page,
+  /// otherwise to the login page
+  void _checkAuthToken() {
     var storage = new FlutterSecureStorage();
     storage.read(key: 'jwt').then((String value) {
       if (value == null) {
@@ -39,6 +46,7 @@ class _ClupAppState extends State<ClupApp> {
           _homePage = LoginPage();
         });
       } else {
+        TokenManager().token = value;
         setState(() {
           _homePage = QrButtonPage();
         });

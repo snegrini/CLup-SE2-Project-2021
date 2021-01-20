@@ -4,6 +4,7 @@ import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/util/token_manager.dart';
 import 'package:flutter/material.dart';
 
+/// Page that displays the list of stores
 class StoresPage extends StatefulWidget {
   @override
   _StoresState createState() => _StoresState();
@@ -15,6 +16,9 @@ class _StoresState extends State<StoresPage> {
   bool _gotError = false;
   String _text;
 
+  /// Displays a progress bar if the page is loading, a text if the fetch got an
+  /// error and the list if everything gone fine. If the list is empty a message
+  /// is shown.
   @override
   Widget build(BuildContext context) {
     if (!_gotError) {
@@ -57,19 +61,17 @@ class _StoresState extends State<StoresPage> {
   @override
   void initState() {
     super.initState();
-
-    setState(() {
-      _loaded = false;
-    });
-
     _fetchStoreList();
   }
 
+  /// Fetches the list of stores from the server. A [filter] can be passed to request
+  /// a filtered list.
   Future<void> _fetchStoreList([String filter]) async {
     try {
       String token = TokenManager().token;
 
       var storeList = await ApiManager.storeListRequest(token, filter);
+
       setState(() {
         _loaded = true;
         _list = storeList.map((e) => Store.fromJson(e)).toList();
