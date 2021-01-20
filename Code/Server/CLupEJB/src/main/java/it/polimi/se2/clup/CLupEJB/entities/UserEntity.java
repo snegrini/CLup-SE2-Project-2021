@@ -8,7 +8,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user", schema = "np_clup")
 @NamedQueries({
-        @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.usercode = ?1 and u.password = ?2"),
+        @NamedQuery(name = "UserEntity.checkCredentials", query = "SELECT u FROM UserEntity u WHERE u.usercode = :usercode and u.password = :password"),
+        @NamedQuery(name = "UserEntity.findByUserCode", query = "SELECT u FROM UserEntity u WHERE u.usercode = :usercode "),
 })
 public class UserEntity {
 

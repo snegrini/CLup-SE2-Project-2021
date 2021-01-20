@@ -140,6 +140,7 @@ public class TicketService {
 
         // TODO Check if already a ticket for that day or if exceed the opening hours
 
+        // FIXME probably shall change persist to Store.
         em.persist(ticket);
         return ticket;
     }

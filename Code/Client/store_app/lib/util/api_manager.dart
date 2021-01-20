@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class ApiManager {
   static final _baseUrl =
-      "http://192.168.178.36:8080/CLupWeb_war_exploded/api/";
+      "http://192.168.1.100:8080/CLupWeb_war_exploded/api/";
   static final _loginUrl = "login";
   static final _validateUrl = "validate_ticket";
 

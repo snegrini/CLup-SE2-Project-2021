@@ -29,6 +29,18 @@ public class AddressEntity {
     @Column(name = "country")
     private String country;
 
+    public AddressEntity() {
+    }
+
+    public AddressEntity(String address, String streetNumber, String city, String province, String postalCode, String country) {
+        this.address = address;
+        this.streetNumber = streetNumber;
+        this.city = city;
+        this.province = province;
+        this.postalCode = postalCode;
+        this.country = country;
+    }
+
     public int getAddressId() {
         return addressId;
     }

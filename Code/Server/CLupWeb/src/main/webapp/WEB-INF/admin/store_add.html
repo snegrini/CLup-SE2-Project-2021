@@ -5,12 +5,12 @@
     <title>Admin Store Add</title>
 </head>
 <body>
-<form>
+<form action="storeadd" method="post">
     <fieldset>
         <legend>General Info</legend>
 
         <label>Store Name:<br>
-        <input type="text" name="name" required></label><br><br>
+        <input type="text" name="store-name" required></label><br><br>
 
         <label>PEC Address:<br>
         <input type="email" name="pec" required></label>
@@ -41,45 +41,21 @@
     <fieldset>
         <legend>Opening Hours</legend>
 
-        <div data-th-each="ohday : ${openingHourMap}">
+        <div data-th-each="day : ${days}">
             <label>
-                <input type="checkbox" name="day[]" data-th-value="${ohday.key}" data-th-checked="${not #lists.isEmpty(ohday.value)}">
-                <strong data-th-text="${ohday.key}">Day of week</strong>
+                <input type="checkbox" name="day[]" data-th-value="${day}">
+                <strong data-th-text="${day}">Day of week</strong>
             </label>
             <br>
 
-            <div data-th-if="${#lists.isEmpty(ohday.value)}" data-th-each="i : ${#numbers.sequence(1, 2)}">
+            <div data-th-each="i : ${#numbers.sequence(1, 2)}">
                 <label>
                     From:
-                    <input type="time" name="from" data-th-name="${ohday.key + '-from-' + i}">
+                    <input type="time" name="from" step="1" data-th-name="${day + '-from-' + i}">
                 </label>
                 <label>
                     To:
-                    <input type="time" name="to" data-th-name="${ohday.key + '-to-' + i}">
-                </label>
-                <br>
-            </div>
-
-            <div data-th-unless="${#lists.isEmpty(ohday.value)}" data-th-each="ohtime, iterStat : ${ohday.value}">
-                <label>
-                    From:
-                    <input type="time" name="from" data-th-name="${ohday.key + '-from-' + iterStat.count}" data-th-value="${ohtime.fromTime}">
-                </label>
-                <label>
-                    To:
-                    <input type="time" name="to" data-th-name="${ohday.key + '-to-' + iterStat.count}" data-th-value="${ohtime.toTime}">
-                </label>
-                <br>
-            </div>
-
-            <div data-th-if="${#lists.size(ohday.value) == 1}">
-                <label>
-                    From:
-                    <input type="time" name="from" data-th-name="${ohday.key + '-from-2'}">
-                </label>
-                <label>
-                    To:
-                    <input type="time" name="to" data-th-name="${ohday.key + '-to-2'}">
+                    <input type="time" name="to" step="1" data-th-name="${day + '-to-' + i}">
                 </label>
                 <br>
             </div>
