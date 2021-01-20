@@ -11,10 +11,7 @@ class HomePage extends StatefulWidget {
 class _HomeState extends State<HomePage> {
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
-    ListPage(),
-    PassesPage()
-  ];
+  static List<Widget> _widgetOptions = <Widget>[ListPage(), PassesPage()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -26,7 +23,8 @@ class _HomeState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(Icons.list),
+        title: Text('CLup'),
+        backgroundColor: ClupColors.grapefruit,
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
