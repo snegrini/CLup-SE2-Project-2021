@@ -3,6 +3,7 @@ import 'package:store_app/util/clup_colors.dart';
 import 'package:store_app/views/scan_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+/// Page with a button to start the scan page
 class QrButtonPage extends StatelessWidget {
   void _buttonPress(BuildContext context) async {
     if (await Permission.camera.request().isGranted) {

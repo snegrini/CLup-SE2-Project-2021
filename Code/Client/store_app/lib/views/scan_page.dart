@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:store_app/views/result_page.dart';
 import 'package:scan_preview/scan_preview_widget.dart';
 
+/// Camera page to scan QRs
 class ScanPage extends StatefulWidget {
   @override
   _ScanState createState() => _ScanState();

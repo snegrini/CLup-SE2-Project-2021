@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:store_app/util/api_manager.dart';
 import 'package:store_app/util/clup_colors.dart';
+import 'package:store_app/util/token_manager.dart';
 import 'package:store_app/views/scan_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+/// Page that prompts the result of a validation request
 class ResultPage extends StatefulWidget {
   final String qrdata;
 
@@ -74,26 +75,30 @@ class _ResultState extends State<ResultPage> {
   void initState() {
     super.initState();
 
-    var storage = new FlutterSecureStorage();
-    storage.read(key: 'jwt').then((token) {
-      ApiManager.validateRequest(token, widget.qrdata).then((value) {
-        setState(() {
-          _gotError = false;
-          _text = value;
-          _loaded = true;
-        });
-      }).catchError((e) {
-        setState(() {
-          _gotError = true;
-          _text = e;
-          _loaded = true;
-        });
-      });
-    });
-
     setState(() {
       _loaded = false;
       _text = "Processing...";
     });
+
+    _validationRequest();
+  }
+
+  /// Performs a validation request with the QR read from the previous page
+  Future<void> _validationRequest() async {
+    try {
+      String message =
+          await ApiManager.validateRequest(TokenManager().token, widget.qrdata);
+      setState(() {
+        _gotError = false;
+        _text = message;
+        _loaded = true;
+      });
+    } catch (e) {
+      setState(() {
+        _gotError = true;
+        _text = e;
+        _loaded = true;
+      });
+    }
   }
 }

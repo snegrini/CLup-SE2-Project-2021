@@ -28,15 +28,18 @@ class _ClupAppState extends State<ClupApp> {
     );
   }
 
+  /// Initializes the page with a loading bar and initializes the customer token.
   @override
   void initState() {
     super.initState();
     _setLoadingBar();
-    _getCustomerToken();
+    _initCustomerToken();
   }
 
-  Future<void> _getCustomerToken() async {
-    // Checking if a token is stored in the app
+  /// Initializes the token getting it from the secure storage or, if not present,
+  /// requesting it to the server.
+  Future<void> _initCustomerToken() async {
+    // Checks if a token is stored in the app
     var storage = new FlutterSecureStorage();
     String value = await storage.read(key: 'jwt');
 
@@ -66,6 +69,7 @@ class _ClupAppState extends State<ClupApp> {
     }
   }
 
+  /// Gets the device ID and returns his SHA256 hash.
   Future<String> _getHashedDeviceId() async {
     // Gets the device ID to identify a user
     String identifier;
@@ -87,6 +91,7 @@ class _ClupAppState extends State<ClupApp> {
     return sha256.convert(bytes).toString();
   }
 
+  /// Performs the requests of a customer token to the server.
   Future<String> _requestCustomerToken() async {
     String token;
     try {
@@ -99,6 +104,7 @@ class _ClupAppState extends State<ClupApp> {
     return token;
   }
 
+  /// Sets a page for displaying an error.
   void _setErrorPage(String text) {
     setState(() {
       _homePage = new Scaffold(
@@ -108,6 +114,7 @@ class _ClupAppState extends State<ClupApp> {
     });
   }
 
+  /// Sets a page for displaying a loading bar.
   void _setLoadingBar() {
     setState(() {
       _homePage = new Scaffold(

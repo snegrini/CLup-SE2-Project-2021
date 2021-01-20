@@ -5,6 +5,7 @@ import 'package:customer_app/util/token_manager.dart';
 import 'package:customer_app/views/ticket_detail_page.dart';
 import 'package:flutter/material.dart';
 
+/// Page that displays the list of store passes bound with the customer.
 class PassesPage extends StatefulWidget {
   @override
   _PassesState createState() => _PassesState();
@@ -16,6 +17,9 @@ class _PassesState extends State<PassesPage> {
   bool _gotError = false;
   String _text;
 
+  /// Displays a progress bar if the page is loading, a text if the fetch got an
+  /// error and the list if everything gone fine. If the list is empty a message
+  /// is shown.
   @override
   Widget build(BuildContext context) {
     if (!_gotError) {
@@ -52,15 +56,11 @@ class _PassesState extends State<PassesPage> {
   @override
   void initState() {
     super.initState();
-
-    setState(() {
-      _loaded = false;
-    });
-
-    _fetchStoreList();
+    _fetchTicketsList();
   }
 
-  Future<void> _fetchStoreList() async {
+  /// Fetches the list of tickets from the server.
+  Future<void> _fetchTicketsList() async {
     try {
       String token = TokenManager().token;
 
@@ -79,6 +79,7 @@ class _PassesState extends State<PassesPage> {
     }
   }
 
+  /// Handles the tap on a ticket from the list. The [ticket] is the one tapped.
   void _openTicket(Ticket ticket) {
     Navigator.push(
       context,

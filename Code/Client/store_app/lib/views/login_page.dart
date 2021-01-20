@@ -3,9 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:store_app/util/clup_colors.dart';
+import 'package:store_app/util/token_manager.dart';
 import 'package:store_app/views/qr_button_page.dart';
 import 'package:store_app/util/api_manager.dart';
 
+/// Login page for the employee of the store
 class LoginPage extends StatefulWidget {
   _LoginState createState() => _LoginState();
 }
@@ -37,7 +39,10 @@ class _LoginState extends State<LoginPage> {
     return null;
   }
 
+  /// Submits the login request to the server. If all goes well sets the auth token
+  /// in the secure storage, otherwise displays an error
   Future<void> _submit() async {
+    // Form input validation
     if (this._formKey.currentState.validate()) {
       _formKey.currentState.save();
 
@@ -49,6 +54,8 @@ class _LoginState extends State<LoginPage> {
               _userCodeController.text, _passwordController.text)
           .then((value) {
         _storage.write(key: 'jwt', value: value);
+        TokenManager().token = value;
+
         Navigator.pop(context);
         Navigator.push(
           context,
