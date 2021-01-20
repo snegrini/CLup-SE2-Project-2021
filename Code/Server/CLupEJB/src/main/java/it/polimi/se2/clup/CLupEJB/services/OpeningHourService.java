@@ -2,22 +2,16 @@ package it.polimi.se2.clup.CLupEJB.services;
 
 import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
-import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
-import it.polimi.se2.clup.CLupEJB.enums.PassStatus;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
-import org.eclipse.persistence.mappings.foundation.MapKeyMapping;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import java.sql.Date;
 import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Stateless
 public class OpeningHourService {
@@ -187,7 +181,7 @@ public class OpeningHourService {
      * @param ohList the list of opening hour to be checked.
      * @return {@code true} if overlaps are found, {@code false} otherwise.
      */
-    public boolean hasOverlap(List<OpeningHourEntity> ohList) {
+    private boolean hasOverlap(List<OpeningHourEntity> ohList) {
         for (int i = 0; i < ohList.size() - 1; i++) {
             OpeningHourEntity oh1 = ohList.get(i);
             OpeningHourEntity oh2 = ohList.get(i + 1);
