@@ -1,9 +1,12 @@
 package it.polimi.se2.clup.CLupEJB.services;
 
+import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
+import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.PassStatus;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
+import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -19,6 +22,10 @@ import java.util.UUID;
 public class TicketService {
     @PersistenceContext(unitName = "CLupEJB")
     private EntityManager em;
+
+    public TicketEntity findTicketById(int ticketId) {
+        return em.find(TicketEntity.class, ticketId);
+    }
 
     public List<TicketEntity> findStoreTickets(int storeId) throws BadTicketException {
         List<TicketEntity> tickets = null;
@@ -145,6 +152,38 @@ public class TicketService {
         return ticket;
     }
 
+    /**
+     * Delete a ticket from the manager side.
+     *
+     * @param ticketId the id of the ticket to be deleted.
+     * @param userId the id of the user who is performing the operation.
+     * @throws BadTicketException if no ticket could be found.
+     * @throws UnauthorizedException if the user has no permission to delete the specified ticket.
+     */
+    public void deleteTicket(int ticketId, int userId) throws BadTicketException, UnauthorizedException {
+        TicketEntity ticket = em.find(TicketEntity.class, ticketId);
+
+        UserEntity user = em.find(UserEntity.class, userId);
+        StoreEntity store = user.getStore();
+
+        if (ticket == null) {
+            throw new BadTicketException("Unable to find ticket.");
+        }
+
+        if (ticket.getStore().getStoreId() != store.getStoreId()) {
+            throw new UnauthorizedException("Unauthorized operation.");
+        }
+
+        em.remove(ticket);
+    }
+
+    /**
+     * Delete a ticket from the customer side.
+     *
+     * @param customerId the unique id of the customer who is performing the delete.
+     * @param passCode the passCode of the ticket to be deleted.
+     * @throws BadTicketException when the passCode is invalid.
+     */
     public void deleteTicket(String customerId, String passCode) throws BadTicketException {
         TicketEntity ticket = em.createNamedQuery("TicketEntity.findByPassCode", TicketEntity.class)
                 .setParameter("passCode", passCode)
