@@ -23,6 +23,13 @@ public class TicketService {
     @PersistenceContext(unitName = "CLupEJB")
     private EntityManager em;
 
+    public TicketService() {
+    }
+
+    public TicketService(EntityManager em) {
+        this.em = em;
+    }
+
     public TicketEntity findTicketById(int ticketId) {
         return em.find(TicketEntity.class, ticketId);
     }
