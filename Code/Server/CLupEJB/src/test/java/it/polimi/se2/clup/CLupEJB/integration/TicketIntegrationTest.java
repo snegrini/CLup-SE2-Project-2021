@@ -5,17 +5,10 @@ import it.polimi.se2.clup.CLupEJB.services.TicketService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 
-import javax.naming.Context;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceUnit;
-
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -30,11 +23,7 @@ public class TicketIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        Properties properties = new Properties();
-        properties.put(Context.INITIAL_CONTEXT_FACTORY, "org.apache.openejb.client.RemoteInitialContextFactory");
-        properties.put(Context.PROVIDER_URL, "http://127.0.0.1:8081/tomee/ejb");
-
-        emf = Persistence.createEntityManagerFactory("CLupEJB-testing", properties);
+        emf = Persistence.createEntityManagerFactory("CLupEJB-testing");
         em = emf.createEntityManager();
         createTestData();
     }
@@ -72,7 +61,7 @@ public class TicketIntegrationTest {
     @Test
     public void testValidGeneratedValueTicket_ValidPassCode() {
         TicketService ticketService = new TicketService(em);
-        TicketEntity ticket = ticketService.findTicketById(1);
+        TicketEntity ticket = ticketService.findTicketById(TICKET_ID);
         assertNotNull(ticket);
         assertEquals(PASS_CODE, ticket.getPassCode());
     }

@@ -21,6 +21,13 @@ public class UserService {
     @PersistenceContext(unitName = "CLupEJB")
     private EntityManager em;
 
+    public UserService() {
+    }
+
+    public UserService(EntityManager em) {
+        this.em = em;
+    }
+
     public UserEntity checkCredentials(String usercode, String password) throws CredentialsException, NonUniqueResultException {
         List<UserEntity> uList = null;
         try {
