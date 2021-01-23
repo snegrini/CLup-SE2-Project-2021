@@ -1,1 +1,261 @@
 \chapter{Testing}
+\section{Unit Testing}
+\subsection{TicketService}
+\subsubsection{Add Ticket}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & SuccessfulAdd\_InputValid \\
+		\midrule
+		\textbf{Description} & Insertion of a new ticket from a customer. \\
+		\midrule
+		\textbf{Input} & Valid store and a customer ID.\\
+		\midrule
+		\textbf{Expected Output} & Successful insertion of a ticket.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & FailAdd\_InvalidStore \\
+		\midrule
+		\textbf{Description} & Attempt to insert a new ticket from a customer to a not existing store. \\
+		\midrule
+		\textbf{Input} & Invalid store and a customer ID.\\
+		\midrule
+		\textbf{Expected Output} & Failed insertion of a ticket terminated by an exception throw.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\subsubsection{Delete Ticket}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & CustomerSuccessfulDelete\_TicketValid \\
+		\midrule
+		\textbf{Description} & Deletion of a ticket performed by the customer who own the ticket. \\
+		\midrule
+		\textbf{Input} & Valid ticket and authorized customer.\\
+		\midrule
+		\textbf{Expected Output} & Successful deletion of the ticket.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & CustomerFailDelete\_TicketNull \\
+		\midrule
+		\textbf{Description} & Attempt to delete an invalid ticket performed by the customer who own the ticket. \\
+		\midrule
+		\textbf{Input} & Invalid ticket and authorized customer.\\
+		\midrule
+		\textbf{Expected Output} & Failed delete of the ticket terminated by an exception throw.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & CustomerFailDelete\_Unauthorized \\
+		\midrule
+		\textbf{Description} & Attempt to delete a valid ticket performed by a customer who doesn't own the ticket. \\
+		\midrule
+		\textbf{Input} & Valid ticket and unauthorized customer.\\
+		\midrule
+		\textbf{Expected Output} & Failed delete of the ticket terminated by an exception throw.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & ManagerSuccessfulDelete\_TicketValid \\
+		\midrule
+		\textbf{Description} & Deletion of a ticket performed by an authorized manager. \\
+		\midrule
+		\textbf{Input} & Valid ticket and authorized manager.\\
+		\midrule
+		\textbf{Expected Output} & Successful deletion of the ticket.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & ManagerFailDelete\_UserNull \\
+		\midrule
+		\textbf{Description} & Attempt to delete a valid ticket performed by a null user. \\
+		\midrule
+		\textbf{Input} & Invalid ticket and null user.\\
+		\midrule
+		\textbf{Expected Output} & Failed delete of the ticket terminated by an exception throw.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & ManagerFailDelete\_TicketNull \\
+		\midrule
+		\textbf{Description} & Attempt to delete an invalid ticket performed by an authorized manager. \\
+		\midrule
+		\textbf{Input} & Invalid ticket and authorized manager.\\
+		\midrule
+		\textbf{Expected Output} & Failed delete of the ticket terminated by an exception throw.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & ManagerFailDelete\_UnauthorizedRole \\
+		\midrule
+		\textbf{Description} & Attempt to delete a valid ticket performed by a non manager user. \\
+		\midrule
+		\textbf{Input} & Valid ticket and unauthorized user.\\
+		\midrule
+		\textbf{Expected Output} & Failed delete of the ticket terminated by an exception throw.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & ManagerFailDelete\_UnauthorizedStore \\
+		\midrule
+		\textbf{Description} & Attempt to delete a valid ticket performed by a manager of another store. \\
+		\midrule
+		\textbf{Input} & Valid ticket and unauthorized manager.\\
+		\midrule
+		\textbf{Expected Output} & Failed delete of the ticket terminated by an exception throw.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+
+\subsubsection{Update Ticket Status}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & SuccessfulUpdate\_TicketValid \\
+		\midrule
+		\textbf{Description} & Status update of a VALID ticket performed by an authorized employee. \\
+		\midrule
+		\textbf{Input} & Ticket in the VALID status and employee store ID.\newline The ticket store ID and the employee store ID are the same.\\
+		\midrule
+		\textbf{Expected Output} & Successful update of the ticket status.\newline The new ticket status should be USED. \\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & SuccessfulUpdate\_TicketUsed \\
+		\midrule
+		\textbf{Description} & Status update of an USED ticket performed by an authorized employee. \\
+		\midrule
+		\textbf{Input} & Ticket in the USED status and employee store ID.\newline The ticket store ID and the employee store ID are the same.\\
+		\midrule
+		\textbf{Expected Output} & Successful update of the ticket status.\newline The new ticket status should be EXPIRED. \\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & FailedUpdate\_TicketExpired \\
+		\midrule
+		\textbf{Description} & Attempt to update the status of an EXPIRED ticket performed by an authorized employee. \\
+		\midrule
+		\textbf{Input} & Ticket in the EXPIRED status and employee store ID.\newline The ticket store ID and the employee store ID are the same.\\
+		\midrule
+		\textbf{Expected Output} & Failed update of the ticket status terminated by an exception throw.\newline The ticket status should remain unchanged. \\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & FailedUpdate\_TicketNull \\
+		\midrule
+		\textbf{Description} & Attempt to update a not existing ticket performed by an authorized employee. \\
+		\midrule
+		\textbf{Input} & No ticket provided and employee store ID.\\
+		\midrule
+		\textbf{Expected Output} & Failed update of the ticket status terminated by an exception throw.\newline The ticket status should remain unchanged. \\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & FailedUpdate\_Unauthorized \\
+		\midrule
+		\textbf{Description} & Status update of a VALID ticket performed by an not authorized employee. \\
+		\midrule
+		\textbf{Input} & Ticket in the VALID status and employee store ID.\newline The ticket store ID and the employee store ID are not the same.\\
+		\midrule
+		\textbf{Expected Output} & Failed update of the ticket status terminated by an exception throw.\newline The ticket status should remain unchanged. \\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
