@@ -4,12 +4,17 @@ import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.sql.Time;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -173,6 +178,39 @@ public class OpeningHourService {
             }
             updateOpeningHour(day, ohFromMap.get(day), ohToMap.get(day), store, userId);
         }
+    }
+
+    /**
+     * Checks if a timestamp hits an opening hour of the same week day.
+     *
+     * @param storeId the store id to look for the opening hours.
+     * @param timestamp a long representing a timestamp.
+     * @return {@code true} if an opening hours has been found, {@code false} otherwise.
+     * @throws BadOpeningHourException if no store could be found.
+     */
+    public boolean isInOpeningHour(int storeId, long timestamp) throws BadOpeningHourException {
+        StoreEntity store = em.find(StoreEntity.class, storeId);
+
+        if (store == null) {
+            throw new BadOpeningHourException("Cannot load store.");
+        }
+
+        Time time = new Time(timestamp);
+
+        DayOfWeek dayOfWeek = DayOfWeek.valueOf(new SimpleDateFormat("EEEE").format(new Date()).toUpperCase());
+        int weekDay = dayOfWeek.getValue();
+
+        List<OpeningHourEntity> ohStoredList = em.createNamedQuery("OpeningHourEntity.findByStoreIdAndWeekDay", OpeningHourEntity.class)
+                .setParameter("storeId", store.getStoreId())
+                .setParameter("weekDay", weekDay)
+                .getResultList();
+
+        for (OpeningHourEntity oh : ohStoredList) {
+            if (time.after(oh.getFromTime()) && time.before(oh.getToTime())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

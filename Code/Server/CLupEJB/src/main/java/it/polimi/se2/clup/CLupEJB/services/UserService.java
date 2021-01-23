@@ -1,20 +1,17 @@
 package it.polimi.se2.clup.CLupEJB.services;
 
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
-import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.CredentialsException;
+import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import java.util.List;
-import java.util.UUID;
+import javax.persistence.*;
+import java.util.*;
 
 @Stateless
 public class UserService {
@@ -46,17 +43,20 @@ public class UserService {
     }
 
     /**
-     * Adds a user to the specified store with the specified role.
+     * Builds a user linked to the specified store with the specified role.
      *
-     * @param storeId the store id whose credentials shall be generated.
+     * @param store the store whose credentials shall be generated.
      * @param userRole the role the user shall be added.
      * @return the created user.
      * @throws  CredentialsException if the user role is of type forbidden.
      */
-    public UserEntity addUser(int storeId, UserRole userRole) throws CredentialsException {
+    private UserEntity buildUser(StoreEntity store, UserRole userRole) throws CredentialsException, BadStoreException {
 
         if (userRole.equals(UserRole.ADMIN)) {
             throw new CredentialsException("Cannot create credentials of this type!");
+        }
+        if (store == null) {
+            throw new BadStoreException("Invalid store!");
         }
 
         UserEntity user = new UserEntity();
@@ -67,6 +67,7 @@ public class UserService {
         user.setUsercode(usercode);
         user.setPassword(password);
         user.setRole(userRole);
+        user.setStore(store);
 
         return user;
     }
@@ -92,7 +93,6 @@ public class UserService {
     }
 
     private String generatePassword() {
-        // TODO add bcrypt hashing after sending in clear via email the password.
         return UUID.randomUUID().toString().substring(0, 16);
     }
 
@@ -104,17 +104,47 @@ public class UserService {
      * @return a list of user entity which contains the new created users.
      * @throws BadStoreException if store is not found.
      */
-    public List<UserEntity> generateCredentials(int storeId, int userId) throws BadStoreException {
-        List<UserEntity> users = null;
+    public List<Map.Entry<String, String>> generateCredentials(int storeId, int userId) throws BadStoreException, UnauthorizedException {
 
+        UserEntity user = em.find(UserEntity.class, userId);
         StoreEntity store = em.find(StoreEntity.class, storeId);
 
         if (store == null) {
             throw new BadStoreException("Cannot load store.");
         }
 
-        // TODO call addUser().
+        // Check user permissions.
+        if (user.getRole() != UserRole.ADMIN) {
+            throw new UnauthorizedException("Unauthorized operation.");
+        }
 
+        // Create users.
+        UserEntity manager;
+        UserEntity employee;
+        try {
+            manager = buildUser(store, UserRole.MANAGER);
+            employee = buildUser(store, UserRole.EMPLOYEE);
+        } catch (CredentialsException e) {
+            throw new BadStoreException("Could not generate credentials.");
+        }
+
+        String managerPassword = manager.getPassword();
+        String employeePassword = employee.getPassword();
+
+        // After sending the email, hash the password to be stored in the DB.
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        manager.setPassword(managerPassword);
+        employee.setPassword(employeePassword);
+
+        // Add users to the store
+        store.addUser(manager);
+        store.addUser(employee);
+
+        em.persist(store);
+
+        List<Map.Entry<String, String>> users = new ArrayList<>();
+        users.add(new AbstractMap.SimpleEntry<>(manager.getUsercode(), managerPassword));
+        users.add(new AbstractMap.SimpleEntry<>(employee.getUsercode(), employeePassword));
         return users;
     }
 

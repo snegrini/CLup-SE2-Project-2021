@@ -44,6 +44,9 @@ public class StoreEntity {
     @JsonIgnore
     private String defaultPassCode;
 
+    @Column(name = "image_path")
+    private String imagePath;
+
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     @OrderBy("weekDay")
     @JsonManagedReference
@@ -121,6 +124,14 @@ public class StoreEntity {
         this.defaultPassCode = defaultPassCode;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
     public List<OpeningHourEntity> getOpeningHours() {
         return openingHours;
     }
@@ -163,5 +174,25 @@ public class StoreEntity {
      */
     public void removeOpeningHour(OpeningHourEntity oh) {
         getOpeningHours().remove(oh);
+    }
+
+    /**
+     * Adds a user to the store.
+     * Each side of the relationship is updated.
+     *
+     * @param user The user to be added.
+     */
+    public void addUser(UserEntity user) {
+        getUsers().add(user);
+    }
+
+    /**
+     * Removes a user to the store.
+     * Each side of the relationship is updated.
+     *
+     * @param user The user to be added.
+     */
+    public void removeUser(UserEntity user) {
+        getUsers().remove(user);
     }
 }

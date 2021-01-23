@@ -5,7 +5,7 @@
     <title>Admin Store Add</title>
 </head>
 <body>
-<form action="storeadd" method="post">
+<form action="storeadd" method="post" enctype="multipart/form-data">
     <fieldset>
         <legend>General Info</legend>
 
@@ -17,6 +17,9 @@
 
         <label>Phone:<br>
         <input type="text" name="phone" required></label>
+
+        <label>Image:
+        <input type="file" name="image" accept="image/*"></label>
     </fieldset>
     <br>
     <fieldset>

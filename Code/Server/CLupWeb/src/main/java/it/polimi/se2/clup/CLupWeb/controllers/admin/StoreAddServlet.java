@@ -6,8 +6,10 @@ import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
+import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.services.OpeningHourService;
 import it.polimi.se2.clup.CLupEJB.services.StoreService;
+import it.polimi.se2.clup.CLupEJB.services.UserService;
 import org.apache.commons.text.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -17,17 +19,25 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.*;
 
 @WebServlet(name = "AdminStoreAddServlet", value = "/dashboard/storeadd")
+@MultipartConfig
 public class StoreAddServlet extends HttpServlet  {
 
     private TemplateEngine templateEngine;
@@ -37,6 +47,9 @@ public class StoreAddServlet extends HttpServlet  {
 
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/OpeningHourService")
     private OpeningHourService ohService;
+
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/UserService")
+    private UserService userService;
 
     public static final String FROM_STR = "-from-";
     public static final String TO_STR = "-to-";
@@ -73,6 +86,18 @@ public class StoreAddServlet extends HttpServlet  {
         String[] days = request.getParameterValues("day[]");
 
         Map<String, String[]> parameterMap = request.getParameterMap();
+
+        // Save uploaded image
+        Part filePart = request.getPart("image"); // Retrieves <input type="file" name="image">
+        //String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+
+        File uploads = new File(getServletContext().getInitParameter("upload.location"));
+        File file = File.createTempFile("image-", ".png", uploads);
+
+        try (InputStream fileContent = filePart.getInputStream()) {
+            Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        }
+
 
         Map<Integer, List<Time>> ohFromMap = new HashMap<>();
         Map<Integer, List<Time>> ohToMap = new HashMap<>();
@@ -129,24 +154,27 @@ public class StoreAddServlet extends HttpServlet  {
             ohToMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempToOh);
         }
 
-        // Add a new store with address and opening hours.
+        // Add a new store with address, opening hours and credentials.
         try {
             AddressEntity address = new AddressEntity(street, stnumber, city, province, postalcode, country);
 
             // Create the store.
-            StoreEntity store = storeService.addStore(storeName, pec, phone, address);
+            StoreEntity store = storeService.addStore(storeName, pec, phone, file.getName(), address);
 
             // Add opening hours to the created store.
             ohService.addAllOpeningHour(store, ohFromMap, ohToMap);
-            
-            // TODO generate credentials.
 
-        } catch (BadOpeningHourException e) {
+            // Generate manager and employee credentials.
+            List<Map.Entry<String, String>> genUsers = userService.generateCredentials(store.getStoreId(), user.getUserId());
+            // TODO display generated credentials
+        } catch (BadOpeningHourException | BadStoreException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
+        } catch (UnauthorizedException e) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+            return;
         }
-
-        String path = getServletContext().getContextPath() + "/dashboard/storeinfo";
+        String path = getServletContext().getContextPath() + "/dashboard/storelist";
         response.sendRedirect(path);
     }
 }

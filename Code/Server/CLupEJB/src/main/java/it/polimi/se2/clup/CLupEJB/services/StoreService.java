@@ -58,13 +58,14 @@ public class StoreService {
      * @param addressEntity the address entity of the store.
      * @return the created store entity.
      */
-    public StoreEntity addStore(String storeName, String pec, String phone, AddressEntity addressEntity) {
+    public StoreEntity addStore(String storeName, String pec, String phone, String imagePath, AddressEntity addressEntity) {
         StoreEntity store = new StoreEntity();
         String passCode = UUID.randomUUID().toString().substring(0, 8);
 
         store.setStoreName(storeName);
         store.setPecEmail(pec);
         store.setPhone(phone);
+        store.setImagePath(imagePath);
         store.setAddress(addressEntity);
         store.setDefaultPassCode(passCode);
 

@@ -33,7 +33,7 @@ CREATE TABLE `address` (
   `postal_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `country` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`address_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -91,6 +91,7 @@ CREATE TABLE `store` (
   `store_cap` int NOT NULL,
   `customers_inside` int NOT NULL,
   `default_pass_code` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `image_path` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'default.png',
   PRIMARY KEY (`store_id`),
   UNIQUE KEY `pec_email` (`pec_email`),
   UNIQUE KEY `store_name` (`store_name`),
@@ -105,7 +106,7 @@ CREATE TABLE `store` (
 
 LOCK TABLES `store` WRITE;
 /*!40000 ALTER TABLE `store` DISABLE KEYS */;
-INSERT INTO `store` VALUES (1,'Essecorta',1,'essecorta@example.org','5556645211',10,0,'12345678'),(2,'Superal',2,'superal@example.org','5552256633',20,0,'12345678');
+INSERT INTO `store` VALUES (1,'Essecorta',1,'essecorta@example.org','5556645211',10,0,'12345678',''),(2,'Superal',2,'superal@example.org','5552256633',20,0,'12345678','');
 /*!40000 ALTER TABLE `store` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,4 +182,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-07  0:48:42
+-- Dump completed on 2021-01-23 19:08:02
