@@ -4,6 +4,7 @@ import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.PassStatus;
+import it.polimi.se2.clup.CLupEJB.enums.UserRole;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 
@@ -29,9 +30,9 @@ public class TicketService {
     /**
      * Finds all the tickets of a specific store and returns them.
      *
-     * @param storeId ID of the store
-     * @return a list of tickets
-     * @throws BadTicketException when occurs an issue with the persistence
+     * @param storeId ID of the store.
+     * @return a list of tickets.
+     * @throws BadTicketException when occurs an issue with the persistence.
      */
     public List<TicketEntity> findStoreTickets(int storeId) throws BadTicketException {
         List<TicketEntity> tickets = null;
@@ -49,9 +50,9 @@ public class TicketService {
     /**
      * Computes the number of customers in queue at a specific store and returns it.
      *
-     * @param storeId ID of the store
-     * @return the number of customers in queue
-     * @throws BadTicketException when occurs an issue with the persistence
+     * @param storeId ID of the store.
+     * @return the number of customers in queue.
+     * @throws BadTicketException when occurs an issue with the persistence.
      */
     public int getCustomersQueue(int storeId) throws BadTicketException {
         int customersQueue;
@@ -67,9 +68,9 @@ public class TicketService {
 
     /**
      * Finds all tickets of a specific customer and returns them.
-     * @param customerId ID of the customer
-     * @return a list of tickets
-     * @throws BadTicketException when occurs an issue with the persistence
+     * @param customerId ID of the customer.
+     * @return a list of tickets.
+     * @throws BadTicketException when occurs an issue with the persistence.
      */
     public List<TicketEntity> findCustomerTickets(String customerId) throws BadTicketException {
         List<TicketEntity> tickets = null;
@@ -85,12 +86,13 @@ public class TicketService {
     }
 
     /**
-     * Updates the status of a ticket after checking the consistency with the store id
-     * @param passCode code of the ticket
-     * @param storeId ID of the store to be checked
-     * @throws BadTicketException when occurs an issue with the persistence or is performed an invalid operation
+     * Updates the status of a ticket after checking the consistency with the store id.
+     * @param passCode code of the ticket.
+     * @param storeId ID of the store to be checked.
+     * @throws BadTicketException when occurs an issue with the persistence or is performed an invalid operation.
+     * @throws UnauthorizedException if the user has no permission to update the specified ticket.
      */
-    public void updateTicketStatus(String passCode, int storeId) throws BadTicketException {
+    public void updateTicketStatus(String passCode, int storeId) throws BadTicketException, UnauthorizedException {
         TicketEntity ticket = em.createNamedQuery("TicketEntity.findByPassCode", TicketEntity.class)
                 .setParameter("passCode", passCode)
                 .setMaxResults(1)
@@ -99,14 +101,16 @@ public class TicketService {
                 .orElse(null);
 
         // TODO Check store default code before throwing exception
+        // TODO Update number of customer in store
         if (ticket == null) {
             throw new BadTicketException("Invalid pass code");
         }
 
         if (ticket.getStore().getStoreId() != storeId) {
-            throw new BadTicketException("Unauthorized operation");
+            throw new UnauthorizedException("Unauthorized operation");
         }
 
+        // TODO Update number of customer in store
         switch (ticket.getPassStatus()) {
             case VALID:
                 ticket.setPassStatus(PassStatus.USED);
@@ -121,6 +125,14 @@ public class TicketService {
         em.merge(ticket);
     }
 
+    /**
+     * Creates a ticket for a customer for the current day of a specific store and returns it.
+     *
+     * @param customerId ID of the customer.
+     * @param storeId ID of the store.
+     * @return the ticket just created
+     * @throws BadTicketException when occurs an issue with the persistence or is performed an invalid operation.
+     */
     public TicketEntity addTicket(String customerId, int storeId) throws BadTicketException {
         TicketEntity ticket = new TicketEntity();
         StoreEntity store = em.find(StoreEntity.class, storeId);
@@ -152,6 +164,8 @@ public class TicketService {
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
+
+            // FIXME If there aren't ticket, the exception is triggered
             if (lastTicket == null) {
                 throw new BadTicketException("Cannot load tickets");
             }
@@ -187,15 +201,19 @@ public class TicketService {
      */
     public void deleteTicket(int ticketId, int userId) throws BadTicketException, UnauthorizedException {
         TicketEntity ticket = em.find(TicketEntity.class, ticketId);
-
         UserEntity user = em.find(UserEntity.class, userId);
+
+        if (user == null) {
+            throw new UnauthorizedException("Unauthorized operation.");
+        }
+
         StoreEntity store = user.getStore();
 
         if (ticket == null) {
             throw new BadTicketException("Unable to find ticket.");
         }
 
-        if (ticket.getStore().getStoreId() != store.getStoreId()) {
+        if (user.getRole() != UserRole.MANAGER || ticket.getStore().getStoreId() != store.getStoreId()) {
             throw new UnauthorizedException("Unauthorized operation.");
         }
 
@@ -208,8 +226,9 @@ public class TicketService {
      * @param customerId the unique id of the customer who is performing the delete.
      * @param passCode the passCode of the ticket to be deleted.
      * @throws BadTicketException when the passCode is invalid.
+     * @throws UnauthorizedException if the user has no permission to delete the specified ticket.
      */
-    public void deleteTicket(String customerId, String passCode) throws BadTicketException {
+    public void deleteTicket(String customerId, String passCode) throws BadTicketException, UnauthorizedException {
         TicketEntity ticket = em.createNamedQuery("TicketEntity.findByPassCode", TicketEntity.class)
                 .setParameter("passCode", passCode)
                 .setMaxResults(1)
@@ -222,7 +241,7 @@ public class TicketService {
         }
 
         if (!ticket.getCustomerId().equals(customerId)) {
-            throw new BadTicketException("Unauthorized operation");
+            throw new UnauthorizedException("Unauthorized operation");
         }
 
         em.remove(ticket);

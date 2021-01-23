@@ -6,6 +6,7 @@ import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
+import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.messages.Message;
 import it.polimi.se2.clup.CLupEJB.messages.TicketMessage;
 import it.polimi.se2.clup.CLupEJB.services.TicketService;
@@ -66,7 +67,7 @@ public class DeleteTicketServlet extends HttpServlet {
 
         try {
             ticketService.deleteTicket(customerId, passcode);
-        } catch (BadTicketException e) {
+        } catch (BadTicketException | UnauthorizedException e) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;
         }
