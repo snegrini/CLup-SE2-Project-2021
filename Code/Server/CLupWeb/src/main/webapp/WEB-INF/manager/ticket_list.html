@@ -7,7 +7,11 @@
 <body>
     <h1>Manager Ticket List</h1>
 
-    <table>
+    <span><a href="#" data-th-href="@{/dashboard}">Back</a></span><br><br>
+
+    <div data-th-if="${#lists.isEmpty(tickets)}">Wow, such empty</div>
+
+    <table data-th-unless="${#lists.isEmpty(tickets)}">
         <thead>
             <tr>
                 <th>Pass code</th>
@@ -16,6 +20,7 @@
                 <th>Arrival time</th>
                 <th>Date</th>
                 <th>Issued at</th>
+                <th>Manage</th>
             </tr>
         </thead>
         <tbody data-th-remove="all-but-first">
@@ -26,6 +31,12 @@
                 <td data-th-text="${ticket.date}">2021-01-03</td>
                 <td data-th-text="${ticket.arrivalTime}">15:28:14</td>
                 <td data-th-text="${ticket.issuedAt}">2021-01-01 14:47:22.0</td>
+                <td>
+                    <form data-th-action="@{/dashboard/ticketdelete}" method="post">
+                        <input type="hidden" name="ticketId" data-th-value="${ticket.ticketId}">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
             </tr>
             <tr>
                 <td>YYYY0002</td>

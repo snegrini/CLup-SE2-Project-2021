@@ -1,25 +1,32 @@
 package it.polimi.se2.clup.CLupWeb.controllers.manager;
 
 import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
+import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
-import it.polimi.se2.clup.CLupEJB.services.OpeningHourService;
-import it.polimi.se2.clup.CLupEJB.services.StoreService;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
+import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
+import it.polimi.se2.clup.CLupEJB.services.TicketService;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
-@WebServlet(name = "ManagerOpeningDeleteServlet", value = "/dashboard/ohdelete")
-public class OpeningDeleteServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+@WebServlet(name = "ManagerTicketDeleteServlet", value = "/dashboard/ticketdelete")
+public class TicketDeleteServlet extends HttpServlet {
 
-    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/OpeningHourService")
-    private OpeningHourService ohService;
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/TicketService")
+    private TicketService ticketService;
 
     public void init() {
     }
@@ -27,9 +34,9 @@ public class OpeningDeleteServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Retrieve request parameters.
-        Integer ohId = null;
+        int ticketId;
         try {
-            ohId = Integer.parseInt(request.getParameter("ohId"));
+            ticketId = Integer.parseInt(request.getParameter("ticketId"));
         } catch (NumberFormatException | NullPointerException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values.");
             return;
@@ -37,23 +44,23 @@ public class OpeningDeleteServlet extends HttpServlet {
 
         UserEntity user = (UserEntity) request.getSession().getAttribute("user");
 
-        // Delete opening hour.
+        // Delete ticket.
         try {
-            OpeningHourEntity oh = ohService.findOpeningHourById(ohId);
+            TicketEntity ticket = ticketService.findTicketById(ticketId);
 
-            if (oh == null) {
-                response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Opening hour not found.");
+            if (ticket == null) {
+                response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Ticket not found.");
                 return;
             }
 
-            ohService.deleteOpeningHour(ohId, user.getUserId());
-        } catch (BadOpeningHourException e) {
+            ticketService.deleteTicket(ticketId, user.getUserId());
+        } catch (BadTicketException | UnauthorizedException e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to delete opening hour.");
             return;
         }
 
         String ctxpath = getServletContext().getContextPath();
-        String path = ctxpath + "/dashboard/storeinfo";
+        String path = ctxpath + "/dashboard/ticketlist";
         response.sendRedirect(path);
     }
 }
