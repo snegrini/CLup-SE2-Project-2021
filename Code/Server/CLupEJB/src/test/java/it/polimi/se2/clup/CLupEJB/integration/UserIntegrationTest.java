@@ -1,12 +1,9 @@
 package it.polimi.se2.clup.CLupEJB.integration;
 
-import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.exceptions.CredentialsException;
-import it.polimi.se2.clup.CLupEJB.services.TicketService;
 import it.polimi.se2.clup.CLupEJB.services.UserService;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -73,14 +70,14 @@ public class UserIntegrationTest {
         em.getTransaction().commit();
     }
 
-    /*@Test
+    @Test
     public void checkCredentials_ValidUser_CorrectPassword() throws CredentialsException {
         UserService userService = new UserService(em);
         UserEntity user = userService.checkCredentials(USER_CODE, PASSWORD);
         assertNotNull(user);
         assertEquals(USER_CODE, user.getUsercode());
         assertEquals(PASSWORD, user.getPassword());
-    }*/
+    }
 
     @Test
     public void checkCredentials_ValidUser_WrongPassword() throws CredentialsException {
@@ -100,7 +97,6 @@ public class UserIntegrationTest {
     public void checkCredentials_TwoUserSameCode_FailLogin() {
         // Create a second user with same credentials.
         UserEntity user = new UserEntity();
-        user.setUserId(2);
         user.setPassword(PASSWORD);
         user.setUsercode(USER_CODE);
 
@@ -114,10 +110,7 @@ public class UserIntegrationTest {
 
         // Clean up
         em.getTransaction().begin();
-        user = em.find(UserEntity.class, 2);
-        if (user != null) {
-            em.remove(user);
-        }
+        em.remove(user);
         em.getTransaction().commit();
     }
 
