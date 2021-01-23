@@ -1,5 +1,5 @@
 # Persistence file
-persistence.xml
+CLupEJB/src/main/resources/META-INF/persistence.xml
 
 # IntelliJ files
 .idea/
