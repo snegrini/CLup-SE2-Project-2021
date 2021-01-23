@@ -1,1 +1,88 @@
 \chapter{Testing}
+\section{Unit Testing}
+\subsection{TicketService}
+\subsubsection{Update Ticket Status}
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & SuccessfulUpdate\_TicketValid \\
+		\midrule
+		\textbf{Description} & Status update of a VALID ticket performed by an authorized employee. \\
+		\midrule
+		\textbf{Input} & Ticket in the VALID status and employee store ID.\newline The ticket store ID and the employee store ID are the same.\\
+		\midrule
+		\textbf{Expected Output} & Successful update of the ticket status.\newline The new ticket status should be USED. \\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & SuccessfulUpdate\_TicketUsed \\
+		\midrule
+		\textbf{Description} & Status update of an USED ticket performed by an authorized employee. \\
+		\midrule
+		\textbf{Input} & Ticket in the USED status and employee store ID.\newline The ticket store ID and the employee store ID are the same.\\
+		\midrule
+		\textbf{Expected Output} & Successful update of the ticket status.\newline The new ticket status should be EXPIRED. \\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & FailedUpdate\_TicketExpired \\
+		\midrule
+		\textbf{Description} & Attempt to update the status of an EXPIRED ticket performed by an authorized employee. \\
+		\midrule
+		\textbf{Input} & Ticket in the EXPIRED status and employee store ID.\newline The ticket store ID and the employee store ID are the same.\\
+		\midrule
+		\textbf{Expected Output} & Failed update of the ticket status terminated by an exception throwing.\newline The ticket status should remain unchanged. \\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & FailedUpdate\_TicketNull \\
+		\midrule
+		\textbf{Description} & Attempt to update a not existing ticket performed by an authorized employee. \\
+		\midrule
+		\textbf{Input} & No ticket provided and employee store ID.\\
+		\midrule
+		\textbf{Expected Output} & Failed update of the ticket status terminated by an exception throwing.\newline The ticket status should remain unchanged. \\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & FailedUpdate\_Unauthorized \\
+		\midrule
+		\textbf{Description} & Status update of a VALID ticket performed by an not authorized employee. \\
+		\midrule
+		\textbf{Input} & Ticket in the VALID status and employee store ID.\newline The ticket store ID and the employee store ID are not the same.\\
+		\midrule
+		\textbf{Expected Output} & Failed update of the ticket status terminated by an exception throwing.\newline The ticket status should remain unchanged. \\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}

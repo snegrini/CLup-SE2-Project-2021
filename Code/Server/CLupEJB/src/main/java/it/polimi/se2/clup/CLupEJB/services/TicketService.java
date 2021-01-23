@@ -20,6 +20,13 @@ public class TicketService {
     @PersistenceContext(unitName = "CLupEJB")
     private EntityManager em;
 
+    /**
+     * Finds all the tickets of a specific store and returns them.
+     *
+     * @param storeId ID of the store
+     * @return a list of tickets
+     * @throws BadTicketException when occurs an issue with the persistence
+     */
     public List<TicketEntity> findStoreTickets(int storeId) throws BadTicketException {
         List<TicketEntity> tickets = null;
 
@@ -33,6 +40,13 @@ public class TicketService {
         return tickets;
     }
 
+    /**
+     * Computes the number of customers in queue at a specific store and returns it.
+     *
+     * @param storeId ID of the store
+     * @return the number of customers in queue
+     * @throws BadTicketException when occurs an issue with the persistence
+     */
     public int getCustomersQueue(int storeId) throws BadTicketException {
         int customersQueue;
         try {
@@ -45,6 +59,12 @@ public class TicketService {
         return customersQueue;
     }
 
+    /**
+     * Finds all tickets of a specific customer and returns them.
+     * @param customerId ID of the customer
+     * @return a list of tickets
+     * @throws BadTicketException when occurs an issue with the persistence
+     */
     public List<TicketEntity> findCustomerTickets(String customerId) throws BadTicketException {
         List<TicketEntity> tickets = null;
 
@@ -58,6 +78,12 @@ public class TicketService {
         return tickets;
     }
 
+    /**
+     * Updates the status of a ticket after checking the consistency with the store id
+     * @param passCode code of the ticket
+     * @param storeId ID of the store to be checked
+     * @throws BadTicketException when occurs an issue with the persistence or is performed an invalid operation
+     */
     public void updateTicketStatus(String passCode, int storeId) throws BadTicketException {
         TicketEntity ticket = em.createNamedQuery("TicketEntity.findByPassCode", TicketEntity.class)
                 .setParameter("passCode", passCode)

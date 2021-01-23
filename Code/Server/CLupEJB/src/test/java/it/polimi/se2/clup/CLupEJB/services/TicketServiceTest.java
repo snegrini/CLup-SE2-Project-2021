@@ -15,11 +15,8 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -57,25 +54,6 @@ class TicketServiceTest {
         store2.setStoreId(2);
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
-    @Test
-    void findStoreTickets_ReturnTickets() throws BadTicketException {
-        TicketEntity t1 = new TicketEntity();
-        t1.setStore(store1);
-
-        TicketEntity t2 = new TicketEntity();
-        t2.setStore(store1);
-
-        when(query.getResultList()).thenReturn(List.of(t1, t2));
-
-        List<TicketEntity> resultList = ticketService.findStoreTickets(1);
-        assertNotNull(resultList);
-        assertEquals(List.of(t1, t2), resultList);
-    }
-
     @Test
     void getCustomersQueue() {
     }
@@ -85,7 +63,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void updateTicketStatus_UpdateSuccessfull_TicketValid() {
+    void updateTicketStatus_SuccessfulUpdate_TicketValid() {
         String passCode = "AAA000";
 
         TicketEntity t1 = new TicketEntity();
@@ -96,10 +74,11 @@ class TicketServiceTest {
         when(query.getResultStream()).thenReturn(Stream.of(t1));
 
         assertDoesNotThrow(() -> ticketService.updateTicketStatus(passCode, store1.getStoreId()));
+        assertEquals(PassStatus.USED, t1.getPassStatus());
     }
 
     @Test
-    void updateTicketStatus_UpdateSuccessfull_TicketUsed() {
+    void updateTicketStatus_SuccessfulUpdate_TicketUsed() {
         String passCode = "AAA000";
 
         TicketEntity t1 = new TicketEntity();
@@ -110,10 +89,11 @@ class TicketServiceTest {
         when(query.getResultStream()).thenReturn(Stream.of(t1));
 
         assertDoesNotThrow(() -> ticketService.updateTicketStatus(passCode, store1.getStoreId()));
+        assertEquals(PassStatus.EXPIRED, t1.getPassStatus());
     }
 
     @Test
-    void updateTicketStatus_UpdateSuccessfull_TicketExpired() {
+    void updateTicketStatus_FailedUpdate_TicketExpired() {
         String passCode = "AAA000";
 
         TicketEntity t1 = new TicketEntity();
@@ -124,10 +104,11 @@ class TicketServiceTest {
         when(query.getResultStream()).thenReturn(Stream.of(t1));
 
         assertThrows(BadTicketException.class, () -> ticketService.updateTicketStatus(passCode, store1.getStoreId()));
+        assertEquals(PassStatus.EXPIRED, t1.getPassStatus());
     }
 
     @Test
-    void updateTicketStatus_UpdateFailed_TicketNull() {
+    void updateTicketStatus_FailedUpdate_TicketNull() {
         String passCode = "AAA000";
 
         when(query.getResultStream()).thenReturn(Stream.empty());
@@ -136,7 +117,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void updateTicketStatus_UpdateFailed_Unauthorized() {
+    void updateTicketStatus_FailedUpdate_Unauthorized() {
         String passCode = "AAA000";
 
         TicketEntity t1 = new TicketEntity();
@@ -147,6 +128,7 @@ class TicketServiceTest {
         when(query.getResultStream()).thenReturn(Stream.of(t1));
 
         assertThrows(BadTicketException.class, () -> ticketService.updateTicketStatus(passCode, store2.getStoreId()));
+        assertEquals(PassStatus.VALID, t1.getPassStatus());
     }
 
 
