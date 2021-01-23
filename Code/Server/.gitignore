@@ -1,3 +1,6 @@
+# Persistence file
+persistence.xml
+
 # IntelliJ files
 .idea/
 target/
