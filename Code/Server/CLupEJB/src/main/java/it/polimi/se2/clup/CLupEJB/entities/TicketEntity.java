@@ -15,6 +15,7 @@ import java.sql.Timestamp;
         @NamedQuery(name = "TicketEntity.findByStoreSorted", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId ORDER BY t.issuedAt DESC"),
         @NamedQuery(name = "TicketEntity.findByCustomerId", query = "SELECT t FROM TicketEntity t WHERE t.customerId = :customerId"),
         @NamedQuery(name = "TicketEntity.findByPassCode", query = "SELECT t FROM TicketEntity t WHERE t.passCode = :passCode"),
+        @NamedQuery(name = "TicketEntity.findByCustomerIdOnDay", query = "SELECT t FROM TicketEntity t WHERE t.customerId = :customerId AND t.date = :date"),
 })
 @NamedNativeQueries({
     @NamedNativeQuery(
