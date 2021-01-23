@@ -5,6 +5,7 @@ import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.PassStatus;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 
@@ -75,12 +76,13 @@ public class TicketService {
 
     /**
      * Finds all tickets of a specific customer and returns them.
+     *
      * @param customerId ID of the customer.
      * @return a list of tickets.
      * @throws BadTicketException when occurs an issue with the persistence.
      */
     public List<TicketEntity> findCustomerTickets(String customerId) throws BadTicketException {
-        List<TicketEntity> tickets = null;
+        List<TicketEntity> tickets;
 
         try {
             tickets = em.createNamedQuery("TicketEntity.findByCustomerId", TicketEntity.class)
@@ -94,12 +96,14 @@ public class TicketService {
 
     /**
      * Updates the status of a ticket after checking the consistency with the store id.
+     *
      * @param passCode code of the ticket.
-     * @param storeId ID of the store to be checked.
-     * @throws BadTicketException when occurs an issue with the persistence or is performed an invalid operation.
+     * @param storeId  ID of the store to be checked.
+     * @throws BadTicketException    when occurs an issue with the persistence or is performed an invalid operation.
      * @throws UnauthorizedException if the user has no permission to update the specified ticket.
+     * @throws BadStoreException when the store is not found
      */
-    public void updateTicketStatus(String passCode, int storeId) throws BadTicketException, UnauthorizedException {
+    public void updateTicketStatus(String passCode, int storeId) throws BadTicketException, UnauthorizedException, BadStoreException {
         TicketEntity ticket = em.createNamedQuery("TicketEntity.findByPassCode", TicketEntity.class)
                 .setParameter("passCode", passCode)
                 .setMaxResults(1)
@@ -107,28 +111,42 @@ public class TicketService {
                 .findFirst()
                 .orElse(null);
 
-        // TODO Check store default code before throwing exception
-        // TODO Update number of customer in store
         if (ticket == null) {
-            throw new BadTicketException("Invalid pass code");
+            StoreEntity store = em.find(StoreEntity.class, storeId);
+
+            if (store == null) {
+                throw new BadStoreException("Invalid store ID");
+            }
+
+            if (store.getDefaultPassCode().equals(passCode)) {
+                store.setCustomersInside(store.getCustomersInside() - 1);
+                em.merge(store);
+
+                return;
+            } else {
+                throw new BadTicketException("Invalid pass code");
+            }
         }
 
-        if (ticket.getStore().getStoreId() != storeId) {
+        StoreEntity store = ticket.getStore();
+        if (store.getStoreId() != storeId) {
             throw new UnauthorizedException("Unauthorized operation");
         }
 
-        // TODO Update number of customer in store
         switch (ticket.getPassStatus()) {
             case VALID:
                 ticket.setPassStatus(PassStatus.USED);
+                store.setCustomersInside(store.getCustomersInside() + 1);
                 break;
             case USED:
                 ticket.setPassStatus(PassStatus.EXPIRED);
+                store.setCustomersInside(store.getCustomersInside() - 1);
                 break;
             case EXPIRED:
                 throw new BadTicketException("Ticket already expired");
         }
 
+        em.merge(store);
         em.merge(ticket);
     }
 
@@ -136,17 +154,32 @@ public class TicketService {
      * Creates a ticket for a customer for the current day of a specific store and returns it.
      *
      * @param customerId ID of the customer.
-     * @param storeId ID of the store.
+     * @param storeId    ID of the store.
      * @return the ticket just created
      * @throws BadTicketException when occurs an issue with the persistence or is performed an invalid operation.
+     * @throws BadStoreException when the store is not found
      */
-    public TicketEntity addTicket(String customerId, int storeId) throws BadTicketException {
+    public TicketEntity addTicket(String customerId, int storeId) throws BadTicketException, BadStoreException {
         TicketEntity ticket = new TicketEntity();
         StoreEntity store = em.find(StoreEntity.class, storeId);
 
         if (store == null) {
-            throw new BadTicketException("Cannot load store");
+            throw new BadStoreException("Cannot load store");
         }
+
+        TicketEntity alreadyRetrievedTicket = em.createNamedQuery("TicketEntity.findByCustomerIdOnDay", TicketEntity.class)
+                .setParameter("customerId", customerId)
+                .setParameter("date", new Date(new java.util.Date().getTime()))
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        if (alreadyRetrievedTicket != null) {
+            throw new BadTicketException("Already retrieved a ticket for today");
+        }
+
+        // TODO Check if already a ticket for that day or if exceed the opening hours
 
         String passCode;
         TicketEntity collisionTicket;
@@ -163,38 +196,48 @@ public class TicketService {
         } while (collisionTicket != null);
 
         // Fetching last emitted ticket
-        TicketEntity lastTicket;
+        Time ticketTime;
+        int queueNumber;
+
         try {
-            lastTicket = em.createNamedQuery("TicketEntity.findByStoreSorted", TicketEntity.class)
+            TicketEntity lastTicket = em.createNamedQuery("TicketEntity.findByStoreSorted", TicketEntity.class)
                     .setParameter("storeId", storeId)
                     .setMaxResults(1)
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
 
-            // FIXME If there aren't ticket, the exception is triggered
-            if (lastTicket == null) {
-                throw new BadTicketException("Cannot load tickets");
+            if (store.getCustomersInside() < store.getStoreCap()) {
+                ticketTime = new Time(new java.util.Date().getTime());
+
+                if (lastTicket == null) {
+                    queueNumber = 1;
+                } else {
+                    queueNumber = lastTicket.getQueueNumber() + 1;
+                }
+            } else {
+                if (lastTicket == null) {
+                    throw new BadStoreException("Invalid store cap");
+                } else {
+                    ticketTime = new Time(lastTicket.getArrivalTime().getTime() + 900000); // Last ticket time + 15 min
+                    queueNumber = lastTicket.getQueueNumber() + 1;
+                }
             }
         } catch (PersistenceException e) {
             throw new BadTicketException("Cannot load tickets");
         }
 
-        Time ticketTime = new Time(lastTicket.getArrivalTime().getTime() + 900000); // Last ticket time + 15 min
-
         ticket.setCustomerId(customerId);
         ticket.setPassCode(passCode);
         ticket.setPassStatus(PassStatus.VALID);
-        ticket.setQueueNumber(lastTicket.getQueueNumber() + 1);
+        ticket.setQueueNumber(queueNumber);
         ticket.setArrivalTime(ticketTime);
         ticket.setStore(store);
         ticket.setDate(new Date(System.currentTimeMillis()));
         ticket.setIssuedAt(new Timestamp(System.currentTimeMillis()));
 
-        // TODO Check if already a ticket for that day or if exceed the opening hours
-
-        // FIXME probably shall change persist to Store.
-        em.persist(ticket);
+        store.addTicket(ticket);
+        em.persist(store);
         return ticket;
     }
 
@@ -202,8 +245,8 @@ public class TicketService {
      * Delete a ticket from the manager side.
      *
      * @param ticketId the id of the ticket to be deleted.
-     * @param userId the id of the user who is performing the operation.
-     * @throws BadTicketException if no ticket could be found.
+     * @param userId   the id of the user who is performing the operation.
+     * @throws BadTicketException    if no ticket could be found.
      * @throws UnauthorizedException if the user has no permission to delete the specified ticket.
      */
     public void deleteTicket(int ticketId, int userId) throws BadTicketException, UnauthorizedException {
@@ -224,6 +267,7 @@ public class TicketService {
             throw new UnauthorizedException("Unauthorized operation.");
         }
 
+        store.removeTicket(ticket);
         em.remove(ticket);
     }
 
@@ -231,8 +275,8 @@ public class TicketService {
      * Delete a ticket from the customer side.
      *
      * @param customerId the unique id of the customer who is performing the delete.
-     * @param passCode the passCode of the ticket to be deleted.
-     * @throws BadTicketException when the passCode is invalid.
+     * @param passCode   the passCode of the ticket to be deleted.
+     * @throws BadTicketException    when the passCode is invalid.
      * @throws UnauthorizedException if the user has no permission to delete the specified ticket.
      */
     public void deleteTicket(String customerId, String passCode) throws BadTicketException, UnauthorizedException {
@@ -251,6 +295,7 @@ public class TicketService {
             throw new UnauthorizedException("Unauthorized operation");
         }
 
+        ticket.getStore().removeTicket(ticket);
         em.remove(ticket);
     }
 }

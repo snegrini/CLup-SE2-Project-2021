@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
@@ -68,7 +69,7 @@ public class ValidateTicketServlet extends HttpServlet {
 
         try {
             ticketService.updateTicketStatus(passCode, storeId);
-        } catch (BadTicketException | UnauthorizedException e) {
+        } catch (BadTicketException | UnauthorizedException | BadStoreException e) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;
         }

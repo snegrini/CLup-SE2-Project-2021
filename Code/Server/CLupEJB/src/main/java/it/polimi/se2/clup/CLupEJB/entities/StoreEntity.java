@@ -195,4 +195,24 @@ public class StoreEntity {
     public void removeUser(UserEntity user) {
         getUsers().remove(user);
     }
+
+    /**
+     * Adds a ticket to the store.
+     * Each side of the relationship is updated.
+     *
+     * @param t The ticket to be added.
+     */
+    public void addTicket(TicketEntity t) {
+        getTickets().add(t);
+    }
+
+    /**
+     * Removes a ticket to the store.
+     * Each side of the relationship is updated.
+     *
+     * @param t The ticket to be removed.
+     */
+    public void removeTicket(TicketEntity t) {
+        getTickets().remove(t);
+    }
 }
