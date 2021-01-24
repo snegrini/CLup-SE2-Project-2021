@@ -9,7 +9,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = "ticket", schema = "np_clup")
+@Table(name = "ticket")
 @NamedQueries({
         @NamedQuery(name = "TicketEntity.findByStore", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId"),
         @NamedQuery(name = "TicketEntity.findByStoreSorted", query = "SELECT t FROM TicketEntity t WHERE t.store.storeId = :storeId ORDER BY t.issuedAt DESC"),
