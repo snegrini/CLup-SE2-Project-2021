@@ -90,6 +90,8 @@ public class TicketService {
 
     private void checkExpiredTickets(List<TicketEntity> ticketList) throws BadStoreException, UnauthorizedException, BadTicketException {
         long timestamp = new java.util.Date().getTime();
+
+        Date today = Date.valueOf(new Date(timestamp).toString());
         Time now = Time.valueOf(new Time(timestamp).toString());
 
         List<TicketEntity> expiredTickets = new ArrayList<>();
@@ -97,7 +99,7 @@ public class TicketService {
         for (TicketEntity t : ticketList) {
             Time lastTime = new Time(t.getArrivalTime().getTime() + 900000); // Last ticket time + 15 min
 
-            if (now.after(lastTime)) {
+            if (today.after(t.getDate()) || now.after(lastTime)) {
                 t.setPassStatus(PassStatus.EXPIRED);
                 em.merge(t);
                 expiredTickets.add(t);
