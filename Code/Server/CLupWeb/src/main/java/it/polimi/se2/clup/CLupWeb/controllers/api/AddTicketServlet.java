@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
@@ -77,7 +78,7 @@ public class AddTicketServlet extends HttpServlet {
         TicketEntity ticket = null;
         try {
             ticket = ticketService.addTicket(customerId, storeId);
-        } catch (BadTicketException | BadStoreException e) {
+        } catch (BadTicketException | BadStoreException | BadOpeningHourException e) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;
         }

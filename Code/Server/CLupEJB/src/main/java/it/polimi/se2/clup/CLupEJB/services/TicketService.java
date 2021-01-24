@@ -5,10 +5,12 @@ import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.PassStatus;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,6 +25,9 @@ import java.util.UUID;
 public class TicketService {
     @PersistenceContext(unitName = "CLupEJB")
     private EntityManager em;
+
+    @EJB
+    private OpeningHourService ohs;
 
     public TicketService() {
     }
@@ -101,7 +106,7 @@ public class TicketService {
      * @param storeId  ID of the store to be checked.
      * @throws BadTicketException    when occurs an issue with the persistence or is performed an invalid operation.
      * @throws UnauthorizedException if the user has no permission to update the specified ticket.
-     * @throws BadStoreException when the store is not found
+     * @throws BadStoreException     when the store is not found
      */
     public void updateTicketStatus(String passCode, int storeId) throws BadTicketException, UnauthorizedException, BadStoreException {
         TicketEntity ticket = em.createNamedQuery("TicketEntity.findByPassCode", TicketEntity.class)
@@ -157,9 +162,9 @@ public class TicketService {
      * @param storeId    ID of the store.
      * @return the ticket just created
      * @throws BadTicketException when occurs an issue with the persistence or is performed an invalid operation.
-     * @throws BadStoreException when the store is not found
+     * @throws BadStoreException  when the store is not found
      */
-    public TicketEntity addTicket(String customerId, int storeId) throws BadTicketException, BadStoreException {
+    public TicketEntity addTicket(String customerId, int storeId) throws BadTicketException, BadStoreException, BadOpeningHourException {
         TicketEntity ticket = new TicketEntity();
         StoreEntity store = em.find(StoreEntity.class, storeId);
 
@@ -178,8 +183,6 @@ public class TicketService {
         if (alreadyRetrievedTicket != null) {
             throw new BadTicketException("Already retrieved a ticket for today");
         }
-
-        // TODO Check if already a ticket for that day or if exceed the opening hours
 
         String passCode;
         TicketEntity collisionTicket;
@@ -222,6 +225,10 @@ public class TicketService {
                     ticketTime = new Time(lastTicket.getArrivalTime().getTime() + 900000); // Last ticket time + 15 min
                     queueNumber = lastTicket.getQueueNumber() + 1;
                 }
+            }
+
+            if (!ohs.isInOpeningHour(storeId, ticketTime.getTime())) {
+                throw new BadOpeningHourException("The store is closed");
             }
         } catch (PersistenceException e) {
             throw new BadTicketException("Cannot load tickets");

@@ -5,6 +5,7 @@ import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.PassStatus;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
@@ -39,6 +40,9 @@ class TicketServiceTest {
     private EntityManager em;
 
     @Mock
+    private OpeningHourService ohs;
+
+    @Mock
     private TypedQuery<Object> query1;
 
     @Mock
@@ -71,7 +75,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void addTicket_SuccessfulAdd_InputValid() throws BadTicketException, BadStoreException {
+    void addTicket_SuccessfulAdd_InputValid() throws BadTicketException, BadStoreException, BadOpeningHourException {
         String customerId = "aaaa";
 
         TicketEntity t1 = new TicketEntity();
@@ -89,6 +93,8 @@ class TicketServiceTest {
         when(query1.getResultStream()).thenReturn(Stream.empty());
         when(query2.getResultStream()).thenReturn(Stream.of(t1));
         when(query3.getResultStream()).thenReturn(Stream.empty());
+
+        when(ohs.isInOpeningHour(anyInt(), anyLong())).thenReturn(true);
 
         TicketEntity t2 = ticketService.addTicket(customerId, store1.getStoreId());
         assertEquals(store1, t2.getStore());
