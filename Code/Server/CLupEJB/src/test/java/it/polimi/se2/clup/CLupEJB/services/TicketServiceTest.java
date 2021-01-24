@@ -94,7 +94,7 @@ class TicketServiceTest {
         when(query2.getResultStream()).thenReturn(Stream.of(t1));
         when(query3.getResultStream()).thenReturn(Stream.empty());
 
-        when(ohs.isInOpeningHour(anyInt(), anyLong())).thenReturn(true);
+        when(ohs.isInOpeningHour(anyInt(), any())).thenReturn(true);
 
         TicketEntity t2 = ticketService.addTicket(customerId, store1.getStoreId());
         assertEquals(store1, t2.getStore());

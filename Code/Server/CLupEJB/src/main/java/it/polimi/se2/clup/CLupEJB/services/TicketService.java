@@ -172,9 +172,12 @@ public class TicketService {
             throw new BadStoreException("Cannot load store");
         }
 
+        long timestamp = new java.util.Date().getTime();
+        Date date = new Date(timestamp);
+
         TicketEntity alreadyRetrievedTicket = em.createNamedQuery("TicketEntity.findByCustomerIdOnDay", TicketEntity.class)
                 .setParameter("customerId", customerId)
-                .setParameter("date", new Date(new java.util.Date().getTime()))
+                .setParameter("date", date)
                 .setMaxResults(1)
                 .getResultStream()
                 .findFirst()
@@ -205,13 +208,14 @@ public class TicketService {
         try {
             TicketEntity lastTicket = em.createNamedQuery("TicketEntity.findByStoreSorted", TicketEntity.class)
                     .setParameter("storeId", storeId)
+                    .setParameter("date", date)
                     .setMaxResults(1)
                     .getResultStream()
                     .findFirst()
                     .orElse(null);
 
             if (store.getCustomersInside() < store.getStoreCap()) {
-                ticketTime = new Time(new java.util.Date().getTime());
+                ticketTime = Time.valueOf(new Time(timestamp).toString());
 
                 if (lastTicket == null) {
                     queueNumber = 1;
@@ -227,7 +231,7 @@ public class TicketService {
                 }
             }
 
-            if (!ohs.isInOpeningHour(storeId, ticketTime.getTime())) {
+            if (!ohs.isInOpeningHour(storeId, ticketTime)) {
                 throw new BadOpeningHourException("The store is closed");
             }
         } catch (PersistenceException e) {
