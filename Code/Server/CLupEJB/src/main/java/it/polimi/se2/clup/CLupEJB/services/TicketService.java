@@ -18,7 +18,10 @@ import javax.persistence.PersistenceException;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 @Stateless
@@ -58,6 +61,49 @@ public class TicketService {
             throw new BadTicketException("Cannot load tickets");
         }
         return tickets;
+    }
+
+    /**
+     * Finds all the tickets of a specific store and returns them.
+     *
+     * @param storeId ID of the store.
+     * @return a list of tickets.
+     * @throws BadTicketException when occurs an issue with the persistence.
+     */
+    public List<TicketEntity> findValidStoreTickets(int storeId) throws BadTicketException, UnauthorizedException, BadStoreException {
+        List<TicketEntity> tickets = null;
+
+        try {
+            tickets = em.createNamedQuery("TicketEntity.findByStoreAndPassStatusSorted", TicketEntity.class)
+                    .setParameter("storeId", storeId)
+                    .setParameter("passStatus", PassStatus.VALID)
+                    .getResultList();
+        } catch (PersistenceException e) {
+            throw new BadTicketException("Cannot load tickets");
+        }
+
+        // Verify and update tickets status.
+        checkExpiredTickets(tickets);
+
+        return tickets;
+    }
+
+    private void checkExpiredTickets(List<TicketEntity> ticketList) throws BadStoreException, UnauthorizedException, BadTicketException {
+        long timestamp = new java.util.Date().getTime();
+        Time now = Time.valueOf(new Time(timestamp).toString());
+
+        List<TicketEntity> expiredTickets = new ArrayList<>();
+
+        for (TicketEntity t : ticketList) {
+            Time lastTime = new Time(t.getArrivalTime().getTime() + 900000); // Last ticket time + 15 min
+
+            if (now.after(lastTime)) {
+                t.setPassStatus(PassStatus.EXPIRED);
+                em.merge(t);
+                expiredTickets.add(t);
+            }
+        }
+        ticketList.removeAll(expiredTickets);
     }
 
     /**

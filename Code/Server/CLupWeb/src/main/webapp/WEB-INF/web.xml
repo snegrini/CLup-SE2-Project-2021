@@ -15,7 +15,7 @@
 
     <filter-mapping>
         <filter-name>EmployeeChecker</filter-name>
-        <url-pattern>/dashboard/*</url-pattern>
+        <servlet-name>EmployeeHomeServlet</servlet-name>
     </filter-mapping>
 
     <filter-mapping>

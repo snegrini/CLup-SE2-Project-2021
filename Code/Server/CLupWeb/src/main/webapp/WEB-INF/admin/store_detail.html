@@ -6,6 +6,35 @@
 </head>
 <body>
     <h1>Store Detail</h1>
-    <p data-th-text="${store.storeName}">StoreName</p>
+    <span><a href="#" data-th-href="@{/dashboard}">Back</a></span><br>
+
+    <img src="test.jpg" alt="" width="300" height="200"><br>
+
+    <strong>Store name: </strong>
+    <span data-th-text="${store.storeName}">StoreName</span><br>
+
+    <strong>Pec: </strong>
+    <span data-th-text="${store.pecEmail}">Pec</span><br>
+
+    <strong>Phone: </strong>
+    <span data-th-text="${store.phone}">Phone</span><br>
+
+    <strong>Address: </strong>
+    <span data-th-text="${store.address.address}">Address</span><br>
+
+    <strong>Street number: </strong>
+    <span data-th-text="${store.address.streetNumber}">Street number</span><br>
+
+    <strong>City: </strong>
+    <span data-th-text="${store.address.city}">City</span><br>
+
+    <strong>Province: </strong>
+    <span data-th-text="${store.address.province}">Province</span><br>
+
+    <strong>Postal code: </strong>
+    <span data-th-text="${store.address.postalCode}">Postal code</span><br>
+
+    <strong>Country: </strong>
+    <span data-th-text="${store.address.country}">Country</span><br>
 </body>
 </html>
