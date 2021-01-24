@@ -36,5 +36,17 @@
 
     <strong>Country: </strong>
     <span data-th-text="${store.address.country}">Country</span><br>
+
+    <div data-th-unless="${#lists.isEmpty(genUsers)}">
+        <h3>Credentials</h3>
+        <strong>Manager</strong>
+        Username: <span data-th-text="${genUsers[0].key}"></span><br>
+        Password: <span data-th-text="${genUsers[0].value}"></span><br><br>
+
+        <strong>Employee</strong>
+        Username: <span data-th-text="${genUsers[1].key}"></span><br>
+        Password: <span data-th-text="${genUsers[1].value}"></span><br>
+    </div>
+
 </body>
 </html>

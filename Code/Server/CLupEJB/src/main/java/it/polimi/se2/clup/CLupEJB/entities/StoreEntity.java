@@ -10,6 +10,8 @@ import java.util.List;
 @NamedQueries({
         @NamedQuery(name = "StoreEntity.findAll", query = "SELECT s FROM StoreEntity s"),
         @NamedQuery(name = "StoreEntity.findAllFiltered", query = "SELECT s FROM StoreEntity s WHERE s.storeName LIKE :filter"),
+        @NamedQuery(name = "StoreEntity.findByName", query = "SELECT s FROM StoreEntity s WHERE s.storeName = :storeName"),
+        @NamedQuery(name = "StoreEntity.findByPec", query = "SELECT s FROM StoreEntity s WHERE s.pecEmail = :pecEmail"),
 })
 
 public class StoreEntity {

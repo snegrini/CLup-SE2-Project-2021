@@ -3,10 +3,13 @@ package it.polimi.se2.clup.CLupEJB.services;
 import it.polimi.se2.clup.CLupEJB.entities.AddressEntity;
 import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
+import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 
+import javax.ejb.DuplicateKeyException;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.sql.Time;
@@ -21,6 +24,24 @@ public class StoreService {
 
     public StoreEntity findStoreById(int storeId) {
         return em.find(StoreEntity.class, storeId);
+    }
+
+    public StoreEntity findStoreByName(String name) {
+        return em.createNamedQuery("StoreEntity.findByName", StoreEntity.class)
+                .setParameter("storeName", name)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+    }
+
+    public StoreEntity findStoreByPec(String pec) {
+        return em.createNamedQuery("StoreEntity.findByPec", StoreEntity.class)
+                .setParameter("pecEmail", pec)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
     }
 
     public List<StoreEntity> findAllStores() throws BadStoreException {
@@ -58,9 +79,16 @@ public class StoreService {
      * @param addressEntity the address entity of the store.
      * @return the created store entity.
      */
-    public StoreEntity addStore(String storeName, String pec, String phone, String imagePath, AddressEntity addressEntity) {
+    public StoreEntity addStore(String storeName, String pec, String phone, String imagePath, AddressEntity addressEntity) throws BadStoreException {
         StoreEntity store = new StoreEntity();
         String passCode = UUID.randomUUID().toString().substring(0, 8);
+
+        if (findStoreByName(storeName) != null) {
+            throw new BadStoreException("A store have already registered with same name.");
+        }
+        if (findStoreByPec(pec) != null) {
+            throw new BadStoreException("A store have already registered with same pec address.");
+        }
 
         store.setStoreName(storeName);
         store.setPecEmail(pec);

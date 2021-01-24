@@ -155,18 +155,20 @@ public class StoreAddServlet extends HttpServlet  {
         }
 
         // Add a new store with address, opening hours and credentials.
+        StoreEntity store;
+        List<Map.Entry<String, String>> genUsers;
         try {
             AddressEntity address = new AddressEntity(street, stnumber, city, province, postalcode, country);
 
             // Create the store.
-            StoreEntity store = storeService.addStore(storeName, pec, phone, file.getName(), address);
+            store = storeService.addStore(storeName, pec, phone, file.getName(), address);
 
             // Add opening hours to the created store.
             ohService.addAllOpeningHour(store, ohFromMap, ohToMap);
 
             // Generate manager and employee credentials.
-            List<Map.Entry<String, String>> genUsers = userService.generateCredentials(store.getStoreId(), user.getUserId());
-            // TODO display generated credentials
+            genUsers = userService.generateCredentials(store.getStoreId(), user.getUserId());
+
         } catch (BadOpeningHourException | BadStoreException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
@@ -174,7 +176,16 @@ public class StoreAddServlet extends HttpServlet  {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
             return;
         }
-        String path = getServletContext().getContextPath() + "/dashboard/storelist";
-        response.sendRedirect(path);
+
+        response.setContentType("text/html");
+
+        ServletContext servletContext = getServletContext();
+        WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
+        String path = "/WEB-INF/admin/store_detail.html";
+
+        ctx.setVariable("store", store);
+        ctx.setVariable("genUsers", genUsers);
+
+        templateEngine.process(path, ctx, response.getWriter());
     }
 }
