@@ -3,7 +3,7 @@ package it.polimi.se2.clup.CLupEJB.entities;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "address", schema = "np_clup")
+@Table(name = "address")
 public class AddressEntity {
 
     @Id

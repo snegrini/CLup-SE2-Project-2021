@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "store", schema = "np_clup")
+@Table(name = "store")
 @NamedQueries({
         @NamedQuery(name = "StoreEntity.findAll", query = "SELECT s FROM StoreEntity s"),
         @NamedQuery(name = "StoreEntity.findAllFiltered", query = "SELECT s FROM StoreEntity s WHERE s.storeName LIKE :filter"),

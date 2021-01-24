@@ -8,7 +8,7 @@ import java.sql.Time;
 import java.util.Objects;
 
 @Entity
-@Table(name = "opening_hour", schema = "np_clup")
+@Table(name = "opening_hour")
 @NamedQueries({
         @NamedQuery(
                 name = "OpeningHourEntity.findByStoreId",
