@@ -5,11 +5,19 @@
     <title>Dashboard - Opening Hours edit</title>
 </head>
 <body>
-    <h1>Manager Opening Hours Edit</h1>
-    <a href="#" data-th-href="@{/dashboard/storeinfo}">Back</a><br>
+    <h1>Manager Store Info Edit</h1>
+    <a href="#" data-th-href="@{/dashboard/storeinfo}">Back</a><br><br>
 
     <h2>Store cap</h2>
-    <div data-th-text="${storeCap}">123</div>
+    <form action="storeinfoedit" method="post">
+        <fieldset>
+            <label>Store cap
+                <input type="number" name="storeCap" value="123" data-th-value="${storeCap}" required></label><br>
+            <input type="submit" value="Update">
+        </fieldset>
+    </form>
+
+    <br>
 
     <h2>Opening hours</h2>
     <form action="ohedit" method="post">
@@ -60,9 +68,10 @@
                 </div>
             </div>
 
+            <br>
+            <input type="submit" value="Update">
+
         </fieldset>
-        <br>
-        <input type="submit" value="Update">
     </form>
 
 </body>

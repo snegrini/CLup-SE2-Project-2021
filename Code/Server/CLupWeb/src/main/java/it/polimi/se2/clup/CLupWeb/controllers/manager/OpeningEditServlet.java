@@ -32,7 +32,6 @@ import static it.polimi.se2.clup.CLupWeb.controllers.admin.StoreAddServlet.TO_ST
 
 @WebServlet(name = "ManagerOpeningEditServlet", value = "/dashboard/ohedit")
 public class OpeningEditServlet extends HttpServlet {
-    private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/OpeningHourService")
     private OpeningHourService ohService;
@@ -41,57 +40,6 @@ public class OpeningEditServlet extends HttpServlet {
     private StoreService storeService;
 
     public void init() {
-        ServletContext servletContext = getServletContext();
-        ServletContextTemplateResolver templateResolver = new ServletContextTemplateResolver(servletContext);
-        templateResolver.setTemplateMode(TemplateMode.HTML);
-        this.templateEngine = new TemplateEngine();
-        this.templateEngine.setTemplateResolver(templateResolver);
-        templateResolver.setSuffix(".html");
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserEntity user = (UserEntity) request.getSession().getAttribute("user");
-        int storeId = user.getStore().getStoreId();
-
-        StoreEntity store;
-        try {
-            store = storeService.findStoreById(storeId);
-        } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find store");
-            return;
-        }
-
-        int storeCap = store.getStoreCap();
-
-        // Build a custom map of opening hours for thymeleaf templating.
-        // The map is composed of the name of the day (e.g. Monday) with all its opening hours.
-        // Indeed one day could have more than one opening hour.
-        // (e.g.) Monday: 08:00 - 12:00, 14:00 - 18:00.
-        List<OpeningHourEntity> openingHourList = store.getOpeningHours();
-        Map<String, List<OpeningHourEntity>> openingHourMap = new LinkedHashMap<>();
-
-        // Prepare map with all the week days.
-        for (DayOfWeek day : DayOfWeek.values()) {
-            String dayName = day.getDisplayName(TextStyle.FULL, Locale.getDefault());
-            openingHourMap.put(dayName, new ArrayList<>());
-        }
-
-        // Fill in the map with the actual data.
-        for (OpeningHourEntity oh : openingHourList) {
-            String dayName = DayOfWeek.of(oh.getWeekDay()).getDisplayName(TextStyle.FULL, Locale.getDefault());
-            openingHourMap.get(dayName).add(oh);
-        }
-
-        response.setContentType("text/html");
-
-        ServletContext servletContext = getServletContext();
-        WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-        String path = "/WEB-INF/manager/oh_edit.html";
-
-        ctx.setVariable("openingHourMap", openingHourMap);
-
-        templateEngine.process(path, ctx, response.getWriter());
     }
 
     @Override
