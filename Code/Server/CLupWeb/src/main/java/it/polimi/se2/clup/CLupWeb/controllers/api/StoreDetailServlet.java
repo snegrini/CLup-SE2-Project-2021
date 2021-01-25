@@ -2,15 +2,12 @@ package it.polimi.se2.clup.CLupWeb.controllers.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
+import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
 import it.polimi.se2.clup.CLupEJB.messages.Message;
-import it.polimi.se2.clup.CLupEJB.messages.TicketMessage;
-import it.polimi.se2.clup.CLupEJB.services.TicketService;
+import it.polimi.se2.clup.CLupEJB.messages.StoreMessage;
+import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import it.polimi.se2.clup.CLupEJB.util.TokenManager;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -23,10 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "AddTicketServlet", value = "/api/add_ticket")
-public class AddTicketServlet extends HttpServlet {
-    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/TicketService")
-    private TicketService ticketService;
+@WebServlet(name = "StoreDetailServlet", value = "/api/detail_store")
+public class StoreDetailServlet extends HttpServlet {
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
+    private StoreService storeService;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,19 +40,11 @@ public class AddTicketServlet extends HttpServlet {
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
-        String requestId = StringEscapeUtils.escapeJava(request.getParameter("store_id"));
         String token = StringEscapeUtils.escapeJava(request.getParameter("token"));
-
-        if (token == null || token.isEmpty()) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing token")));
-            return;
-        } else if (!token.matches("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid token format")));
-            return;
-        }
+        String requestId = StringEscapeUtils.escapeJava(request.getParameter("store_id"));
 
         if (requestId == null || requestId.isEmpty()) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing store id")));
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing store ID")));
             return;
         }
 
@@ -63,25 +52,25 @@ public class AddTicketServlet extends HttpServlet {
         try {
             storeId = Integer.parseInt(requestId);
         } catch (Exception e) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid store id")));
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid store ID")));
             return;
         }
 
-        String customerId;
         try {
-            customerId = TokenManager.getCustomerId(token);
+            TokenManager.getCustomerId(token);
         } catch (TokenException e) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;
         }
 
-        TicketEntity ticket;
-        try {
-            ticket = ticketService.addTicket(customerId, storeId);
-        } catch (BadTicketException | BadStoreException | BadOpeningHourException e) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
+        StoreEntity storeEntity = storeService.findStoreById(storeId);
+        if (storeEntity == null) {
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid store ID")));
             return;
         }
-        out.print(ow.writeValueAsString(new TicketMessage(MessageStatus.OK, "Success", ticket)));
+
+        // TODO Add image, store queue and estimated time
+
+        out.print(ow.writeValueAsString(new StoreMessage(MessageStatus.OK, "Success", storeEntity)));
     }
 }

@@ -2,13 +2,12 @@ package it.polimi.se2.clup.CLupWeb.controllers.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
 import it.polimi.se2.clup.CLupEJB.messages.Message;
+import it.polimi.se2.clup.CLupEJB.messages.StoreMessage;
 import it.polimi.se2.clup.CLupEJB.messages.TicketMessage;
 import it.polimi.se2.clup.CLupEJB.services.TicketService;
 import it.polimi.se2.clup.CLupEJB.util.TokenManager;
@@ -23,8 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "AddTicketServlet", value = "/api/add_ticket")
-public class AddTicketServlet extends HttpServlet {
+@WebServlet(name = "TicketDetailServlet", value = "/api/detail_ticket")
+public class TicketDetailServlet extends HttpServlet {
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/TicketService")
     private TicketService ticketService;
 
@@ -43,27 +42,19 @@ public class AddTicketServlet extends HttpServlet {
 
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
-        String requestId = StringEscapeUtils.escapeJava(request.getParameter("store_id"));
         String token = StringEscapeUtils.escapeJava(request.getParameter("token"));
-
-        if (token == null || token.isEmpty()) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing token")));
-            return;
-        } else if (!token.matches("^[A-Za-z0-9-_=]+\\.[A-Za-z0-9-_=]+\\.?[A-Za-z0-9-_.+/=]*$")) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid token format")));
-            return;
-        }
+        String requestId = StringEscapeUtils.escapeJava(request.getParameter("ticket_id"));
 
         if (requestId == null || requestId.isEmpty()) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing store id")));
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing ticket ID")));
             return;
         }
 
-        int storeId;
+        int ticketId;
         try {
-            storeId = Integer.parseInt(requestId);
+            ticketId = Integer.parseInt(requestId);
         } catch (Exception e) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid store id")));
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid ticket ID")));
             return;
         }
 
@@ -75,13 +66,18 @@ public class AddTicketServlet extends HttpServlet {
             return;
         }
 
-        TicketEntity ticket;
-        try {
-            ticket = ticketService.addTicket(customerId, storeId);
-        } catch (BadTicketException | BadStoreException | BadOpeningHourException e) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
+        TicketEntity ticketEntity = ticketService.findTicketById(ticketId);
+        if (ticketEntity == null) {
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid ticket ID")));
             return;
         }
-        out.print(ow.writeValueAsString(new TicketMessage(MessageStatus.OK, "Success", ticket)));
+
+        if (!ticketEntity.getCustomerId().equals(customerId)) {
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Unauthorized operation")));
+            return;
+        }
+
+        out.print(ow.writeValueAsString(new TicketMessage(MessageStatus.OK, "Success", ticketEntity)));
     }
+
 }
