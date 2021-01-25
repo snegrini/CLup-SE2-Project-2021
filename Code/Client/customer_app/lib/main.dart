@@ -1,14 +1,10 @@
-import 'dart:io';
-import 'dart:convert';
-import 'package:crypto/crypto.dart';
-import 'package:customer_app/util/api_manager.dart';
+import 'package:customer_app/util/auth_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
-import 'package:customer_app/util/token_manager.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:customer_app/util/data_manager.dart';
 import 'package:customer_app/views/home_page.dart';
-import 'package:device_info/device_info.dart';
+import 'package:customer_app/views/server_address_page.dart';
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(ClupApp());
 
@@ -28,90 +24,53 @@ class _ClupAppState extends State<ClupApp> {
     );
   }
 
-  /// Initializes the page with a loading bar and initializes the customer token.
   @override
   void initState() {
     super.initState();
     _setLoadingBar();
-    _initCustomerToken();
+    _initProperties();
   }
 
-  /// Initializes the token getting it from the secure storage or, if not present,
-  /// requesting it to the server.
-  Future<void> _initCustomerToken() async {
-    // Checks if a token is stored in the app
-    var storage = new FlutterSecureStorage();
-    String value = await storage.read(key: 'jwt');
+  /// Initializes the auth token and server address
+  Future<void> _initProperties() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    AuthManager authManager = AuthManager();
 
-    if (value == null) {
-      // Token not found, retrieving a new one
-      try {
-        String token = await _requestCustomerToken();
+    // Checks the key presence in the shared preferences, if not set redirect to the server set page.
+    if (prefs.containsKey('serverAddress')) {
+      DataManager().serverAddress = (prefs.getString('serverAddress'));
 
-        // Storing token and redirecting
-        storage.write(key: 'jwt', value: token);
-        TokenManager().token = token;
+      // If token is set in the secure storage redirects to the homepage. Otherwise a customer request to server is performed.
+      if (await authManager.isAuthTokenSet()) {
+        DataManager().token = await authManager.getAuthToken();
 
         setState(() {
           _homePage = HomePage();
         });
-      } catch (e) {
-        // Displaying the error message
-        _setErrorPage(e);
+      } else {
+        _requestCustomerToken(authManager);
       }
     } else {
-      // Token already retrieved => redirect to the homepage
-      TokenManager().token = value;
-
       setState(() {
-        _homePage = HomePage();
+        _homePage = ServerAddressPage();
       });
     }
   }
 
-  /// Gets the device ID and returns his SHA256 hash.
-  Future<String> _getHashedDeviceId() async {
-    // Gets the device ID to identify a user
-    String identifier;
-    final DeviceInfoPlugin deviceInfoPlugin = new DeviceInfoPlugin();
-    try {
-      if (Platform.isAndroid) {
-        var build = await deviceInfoPlugin.androidInfo;
-        identifier = build.androidId;
-      } else if (Platform.isIOS) {
-        var data = await deviceInfoPlugin.iosInfo;
-        identifier = data.identifierForVendor;
-      }
-    } on PlatformException {
-      return Future.error('Failed to get platform version');
-    }
-
-    // Hashing the ID for privacy and data consistency
-    var bytes = utf8.encode(identifier);
-    return sha256.convert(bytes).toString();
-  }
-
-  /// Performs the requests of a customer token to the server.
-  Future<String> _requestCustomerToken() async {
+  /// Requests a customer token to the server
+  void _requestCustomerToken(AuthManager authManager) async {
     String token;
     try {
-      var deviceId = await _getHashedDeviceId();
-      token = await ApiManager.customerTokenRequest(deviceId);
+      token = await authManager.requestCustomerToken();
+      authManager.writeAuthToken(token);
+      DataManager().token = token;
+
+      setState(() {
+        _homePage = HomePage();
+      });
     } catch (err) {
-      return Future.error(err);
+      _setErrorPage(err);
     }
-
-    return token;
-  }
-
-  /// Sets a page for displaying an error.
-  void _setErrorPage(String text) {
-    setState(() {
-      _homePage = new Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(child: Text(text)),
-      );
-    });
   }
 
   /// Sets a page for displaying a loading bar.
@@ -123,6 +82,16 @@ class _ClupAppState extends State<ClupApp> {
               child: CircularProgressIndicator(
                   valueColor: new AlwaysStoppedAnimation<Color>(
                       ClupColors.grapefruit))));
+    });
+  }
+
+  /// Sets a page for displaying an error.
+  void _setErrorPage(String text) {
+    setState(() {
+      _homePage = new Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(child: Text(text)),
+      );
     });
   }
 }

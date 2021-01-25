@@ -1,7 +1,7 @@
 import 'package:customer_app/model/store.dart';
 import 'package:customer_app/util/api_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
-import 'package:customer_app/util/token_manager.dart';
+import 'package:customer_app/util/data_manager.dart';
 import 'package:flutter/material.dart';
 
 /// Page that displays the list of stores
@@ -68,7 +68,7 @@ class _StoresState extends State<StoresPage> {
   /// a filtered list.
   Future<void> _fetchStoreList([String filter]) async {
     try {
-      String token = TokenManager().token;
+      String token = DataManager().token;
 
       var storeList = await ApiManager.storeListRequest(token, filter);
 

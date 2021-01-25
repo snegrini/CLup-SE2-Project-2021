@@ -1,7 +1,7 @@
 import 'package:customer_app/model/ticket.dart';
 import 'package:customer_app/util/api_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
-import 'package:customer_app/util/token_manager.dart';
+import 'package:customer_app/util/data_manager.dart';
 import 'package:customer_app/views/ticket_detail_page.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +62,7 @@ class _PassesState extends State<PassesPage> {
   /// Fetches the list of tickets from the server.
   Future<void> _fetchTicketsList() async {
     try {
-      String token = TokenManager().token;
+      String token = DataManager().token;
 
       var storeList = await ApiManager.ticketListRequest(token);
 

@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
+import 'package:customer_app/util/data_manager.dart';
 
 /// Class that handles the API requests to the server.
 class ApiManager {
-  static final _baseUrl =
-      "http://192.168.178.36:8080/CLupWeb_war_exploded/api/";
   static final _tokenUrl = "customer_token";
   static final _storeListUrl = "get_stores";
   static final _ticketListUrl = "get_tickets";
@@ -48,12 +46,17 @@ class ApiManager {
   /// Performs the request to the server of a customer token. A [customerId] is
   /// sent in the request.
   static Future<String> customerTokenRequest(String customerId) async {
-    var url = _baseUrl + _tokenUrl;
+    var url = DataManager().serverAddress + _tokenUrl;
     var body = {
       'customer_id': customerId,
     };
 
-    var jsonResponse = await _makeRequest(url, body);
+    var jsonResponse;
+    try {
+      jsonResponse = await _makeRequest(url, body);
+    } catch (e) {
+      return Future.error(e);
+    }
 
     return jsonResponse['token'];
   }
@@ -62,7 +65,7 @@ class ApiManager {
   /// while the [filter] is optional.
   static Future<List<dynamic>> storeListRequest(String token,
       [String filter]) async {
-    var url = _baseUrl + _storeListUrl;
+    var url = DataManager().serverAddress + _storeListUrl;
     var body = {
       'token': token,
     };
@@ -71,7 +74,12 @@ class ApiManager {
       body['filter'] = filter;
     }
 
-    var jsonResponse = await _makeRequest(url, body);
+    var jsonResponse;
+    try {
+      jsonResponse = await _makeRequest(url, body);
+    } catch (e) {
+      return Future.error(e);
+    }
 
     return jsonResponse['stores'];
   }
@@ -79,12 +87,17 @@ class ApiManager {
   /// Performs the request to the server of the tickets list of the customer.
   /// The [token] is mandatory.
   static Future<List<dynamic>> ticketListRequest(String token) async {
-    var url = _baseUrl + _ticketListUrl;
+    var url = DataManager().serverAddress + _ticketListUrl;
     var body = {
       'token': token,
     };
 
-    var jsonResponse = await _makeRequest(url, body);
+    var jsonResponse;
+    try {
+      jsonResponse = await _makeRequest(url, body);
+    } catch (e) {
+      return Future.error(e);
+    }
 
     return jsonResponse['tickets'];
   }
