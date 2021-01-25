@@ -1,11 +1,13 @@
-package it.polimi.se2.clup.CLupWeb.controllers.manager;
+package it.polimi.se2.clup.CLupWeb.controllers.employee;
 
-import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
+import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.services.StoreService;
+import it.polimi.se2.clup.CLupEJB.services.TicketService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -19,18 +21,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.Time;
-import java.time.DayOfWeek;
-import java.time.format.TextStyle;
-import java.util.*;
+import java.util.List;
 
-@WebServlet(name = "ManagerStoreInfoServlet", value = "/dashboard/storeinfo")
-public class StoreInfoServlet extends HttpServlet {
-
+@WebServlet(name = "EmployeeHomeServlet", value = "/dashboard/employee")
+public class HomeServlet extends HttpServlet {
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
     private StoreService storeService;
+
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/TicketService")
+    private TicketService ticketService;
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -43,6 +44,7 @@ public class StoreInfoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         UserEntity user = (UserEntity) request.getSession().getAttribute("user");
         int storeId = user.getStore().getStoreId();
 
@@ -54,32 +56,31 @@ public class StoreInfoServlet extends HttpServlet {
             return;
         }
 
-        int storeCap = store.getStoreCap();
+        int customersInside = store.getCustomersInside();
 
-        // Build a custom map of opening hours for thymeleaf templating.
-        // The map is composed of the name of the day (e.g. Monday) with all its opening hours.
-        // Indeed one day could have more than one opening hour.
-        // (e.g.) Monday: 08:00 - 12:00, 14:00 - 18:00.
-        List<OpeningHourEntity> openingHourList = store.getOpeningHours();
-        Map<String, List<OpeningHourEntity>> openingHourMap = new HashMap<>();
-
-        for (OpeningHourEntity oh : openingHourList) {
-            String dayName = DayOfWeek.of(oh.getWeekDay()).getDisplayName(TextStyle.FULL, Locale.getDefault());
-
-            if (!openingHourMap.containsKey(dayName)) {
-                openingHourMap.put(dayName, new ArrayList<>());
-            }
-            openingHourMap.get(dayName).add(oh);
+        int customersQueue;
+        try {
+            customersQueue = ticketService.getCustomersQueue(storeId);
+        } catch (Exception e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find queue number.");
+            return;
         }
 
+        List<TicketEntity> validTickets = null;
+        try {
+            validTickets = ticketService.findValidStoreTickets(storeId);
+        } catch (BadTicketException | UnauthorizedException | BadStoreException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find valid tickets.");
+        }
         response.setContentType("text/html");
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-        String path = "/WEB-INF/manager/store_info.html";
+        String path = "/WEB-INF/employee/index.html";
 
-        ctx.setVariable("storeCap", storeCap);
-        ctx.setVariable("openingHourMap", openingHourMap);
+        ctx.setVariable("customersInside", customersInside);
+        ctx.setVariable("customersQueue", customersQueue);
+        ctx.setVariable("validTickets", validTickets);
 
         templateEngine.process(path, ctx, response.getWriter());
     }

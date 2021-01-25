@@ -26,19 +26,28 @@ public class UserService {
     }
 
     public UserEntity checkCredentials(String usercode, String password) throws CredentialsException, NonUniqueResultException {
-        List<UserEntity> uList = null;
+        List<UserEntity> uList;
+
         try {
-            uList = em.createNamedQuery("UserEntity.checkCredentials", UserEntity.class)
+            uList = em.createNamedQuery("UserEntity.findByUserCode", UserEntity.class)
                     .setParameter("usercode", usercode)
-                    .setParameter("password", password)
                     .getResultList();
         } catch (PersistenceException e) {
             throw new CredentialsException("Could not verify credentals.");
         }
-        if (uList.isEmpty())
+
+        if (uList.isEmpty()) {
             return null;
-        else if (uList.size() == 1)
-            return uList.get(0);
+        } else if (uList.size() == 1) {
+            UserEntity user = uList.get(0);
+            PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+            if (encoder.matches(password, user.getPassword())) {
+                return user;
+            }
+            return null;
+        }
+
         throw new NonUniqueResultException("More than one user registered with same credentials.");
     }
 
@@ -133,8 +142,8 @@ public class UserService {
 
         // After sending the email, hash the password to be stored in the DB.
         PasswordEncoder encoder = new BCryptPasswordEncoder();
-        manager.setPassword(managerPassword);
-        employee.setPassword(employeePassword);
+        manager.setPassword(encoder.encode(managerPassword));
+        employee.setPassword(encoder.encode(employeePassword));
 
         // Add users to the store
         store.addUser(manager);

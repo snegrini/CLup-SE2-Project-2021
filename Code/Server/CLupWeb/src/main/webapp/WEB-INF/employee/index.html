@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Index</title>
+</head>
+<body>
+    <h1>Employee Index</h1>
+
+    <h2>People inside the store</h2>
+    <div data-th-text="${customersInside}">123</div>
+
+    <h2>People in queue</h2>
+    <div data-th-text="${customersQueue}">456</div>
+
+    <h2>Valid tickets list</h2>
+    <div data-th-if="${#lists.isEmpty(validTickets)}">Wow, such empty</div>
+
+    <table data-th-unless="${#lists.isEmpty(validTickets)}">
+        <thead>
+        <tr>
+            <th>Pass code</th>
+            <th>Pass status</th>
+            <th>Queue number</th>
+            <th>Date</th>
+            <th>Arrival time</th>
+            <th>Issued at</th>
+        </tr>
+        </thead>
+        <tbody data-th-remove="all-but-first">
+        <tr data-th-each="ticket : ${validTickets}">
+            <td data-th-text="${ticket.passCode}">ZZZZ0001</td>
+            <td data-th-text="${ticket.passStatus}">VALID</td>
+            <td data-th-text="${ticket.queueNumber}">1</td>
+            <td data-th-text="${ticket.date}">2021-01-03</td>
+            <td data-th-text="${ticket.arrivalTime}">15:28:14</td>
+            <td data-th-text="${ticket.issuedAt}">2021-01-01 14:47:22.0</td>
+        </tr>
+        <tr>
+            <td>YYYY0002</td>
+            <td>USED</td>
+            <td>0</td>
+            <td>2021-05-05</td>
+            <td>08:45:41</td>
+            <td>2022-04-11 12:09:36.0</td>
+        </tr>
+        <tr>
+            <td>WWWW0005</td>
+            <td>EXPIRED</td>
+            <td>0</td>
+            <td>2021-07-22</td>
+            <td>13:18:49</td>
+            <td>2021-07-22 19:08:04.0</td>
+        </tr>
+        </tbody>
+    </table>
+</body>
+</html>
