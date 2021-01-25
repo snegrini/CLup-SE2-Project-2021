@@ -22,6 +22,14 @@ public class OpeningHourService {
 
     private final static int MAX_OPENING_HOURS = 2;
 
+    public OpeningHourService() {
+
+    }
+
+    public OpeningHourService(EntityManager em) {
+        this.em = em;
+    }
+
     public OpeningHourEntity findOpeningHourById(int ohId) {
         return em.find(OpeningHourEntity.class, ohId);
     }
