@@ -4,9 +4,11 @@ import 'package:customer_app/util/data_manager.dart';
 
 /// Class that handles the API requests to the server.
 class ApiManager {
+  static final _apiPath = "api/";
   static final _tokenUrl = "customer_token";
   static final _storeListUrl = "get_stores";
   static final _ticketListUrl = "get_tickets";
+  static final _storeDetail = "detail_store";
   static final _addTicketUrl = "add_ticket";
   static final _deleteTicketUrl = "delete_ticket";
 
@@ -16,6 +18,8 @@ class ApiManager {
   static Future<Map<String, dynamic>> _makeRequest(url, body) async {
     // Performs an API request
     var response;
+    url = DataManager().serverAddress + _apiPath + url;
+
     try {
       response = await http.post(url, body: body).timeout(Duration(seconds: 2),
           onTimeout: () {
@@ -46,14 +50,13 @@ class ApiManager {
   /// Performs the request to the server of a customer token. A [customerId] is
   /// sent in the request.
   static Future<String> customerTokenRequest(String customerId) async {
-    var url = DataManager().serverAddress + _tokenUrl;
     var body = {
       'customer_id': customerId,
     };
 
     var jsonResponse;
     try {
-      jsonResponse = await _makeRequest(url, body);
+      jsonResponse = await _makeRequest(_tokenUrl, body);
     } catch (e) {
       return Future.error(e);
     }
@@ -65,7 +68,6 @@ class ApiManager {
   /// while the [filter] is optional.
   static Future<List<dynamic>> storeListRequest(String token,
       [String filter]) async {
-    var url = DataManager().serverAddress + _storeListUrl;
     var body = {
       'token': token,
     };
@@ -76,7 +78,7 @@ class ApiManager {
 
     var jsonResponse;
     try {
-      jsonResponse = await _makeRequest(url, body);
+      jsonResponse = await _makeRequest(_storeListUrl, body);
     } catch (e) {
       return Future.error(e);
     }
@@ -87,18 +89,33 @@ class ApiManager {
   /// Performs the request to the server of the tickets list of the customer.
   /// The [token] is mandatory.
   static Future<List<dynamic>> ticketListRequest(String token) async {
-    var url = DataManager().serverAddress + _ticketListUrl;
     var body = {
       'token': token,
     };
 
     var jsonResponse;
     try {
-      jsonResponse = await _makeRequest(url, body);
+      jsonResponse = await _makeRequest(_ticketListUrl, body);
     } catch (e) {
       return Future.error(e);
     }
 
     return jsonResponse['tickets'];
+  }
+
+  static Future<dynamic> storeDetailRequest(String token, int storeId) async {
+    var body = {
+      'token': token,
+      'store_id': storeId.toString(),
+    };
+
+    var jsonResponse;
+    try {
+      jsonResponse = await _makeRequest(_storeDetail, body);
+    } catch (e) {
+      return Future.error(e);
+    }
+
+    return jsonResponse['ticket'];
   }
 }
