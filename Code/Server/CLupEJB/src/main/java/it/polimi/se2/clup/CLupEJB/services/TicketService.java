@@ -29,7 +29,7 @@ public class TicketService {
     @PersistenceContext(unitName = "CLupEJB")
     private EntityManager em;
 
-    @EJB
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/OpeningHourService")
     private OpeningHourService ohs;
 
     public TicketService() {

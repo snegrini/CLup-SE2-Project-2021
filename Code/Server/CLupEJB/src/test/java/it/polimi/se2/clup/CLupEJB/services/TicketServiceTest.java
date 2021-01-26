@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -27,14 +29,12 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 class TicketServiceTest {
-
-    @InjectMocks
-    private TicketService ticketService;
 
     @Mock
     private EntityManager em;
@@ -51,11 +51,19 @@ class TicketServiceTest {
     @Mock
     private TypedQuery<Object> query3;
 
+    @Mock
+    private TypedQuery<Object> query4;
+
+    @InjectMocks
+    private TicketService ticketService;
+
     private StoreEntity store1;
     private StoreEntity store2;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+
         when(query1.setParameter(anyString(), any())).thenReturn(query1);
         when(query1.setMaxResults(anyInt())).thenReturn(query1);
 
@@ -64,6 +72,8 @@ class TicketServiceTest {
 
         when(query3.setParameter(anyString(), any())).thenReturn(query3);
         when(query3.setMaxResults(anyInt())).thenReturn(query3);
+
+        when(query4.setParameter(anyString(), any())).thenReturn(query4);
 
         when(em.merge(any())).thenReturn(null);
 
@@ -94,6 +104,8 @@ class TicketServiceTest {
         when(query2.getResultStream()).thenReturn(Stream.of(t1));
         when(query3.getResultStream()).thenReturn(Stream.empty());
 
+        when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query4);
+        when(query4.getResultList()).thenReturn(List.of());
         when(ohs.isInOpeningHour(anyInt(), any())).thenReturn(true);
 
         TicketEntity t2 = ticketService.addTicket(customerId, store1.getStoreId());
