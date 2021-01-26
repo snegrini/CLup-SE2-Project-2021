@@ -21,11 +21,11 @@ import java.sql.Timestamp;
 @NamedNativeQueries({
     @NamedNativeQuery(
             name = "TicketEntity.getCustomersQueue",
-            query = "SELECT COUNT(*) FROM np_clup.ticket " +
+            query = "SELECT COUNT(*) FROM ticket " +
                     "WHERE store_id = ? " +
                     "AND PASS_STATUS = 'VALID' " +
-                    "AND date = DATE(NOW())" +
-                    "AND TIMEDIFF(arrival_time, TIME(NOW())) BETWEEN TIME('-00:15:00') AND TIME('00:15:00')"
+                    "AND date = DATE(NOW()) " +
+                    "AND TIMEDIFF(arrival_time, TIME(NOW())) >= -TIME('00:15:00')"
     )
 })
 public class TicketEntity {
