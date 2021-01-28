@@ -122,6 +122,31 @@ class TicketServiceTest {
         assertThrows(BadStoreException.class, () -> ticketService.addTicket(customerId, store1.getStoreId()));
     }
 
+    @Test
+    void addTicket_FailAdd_StoreClosed() throws BadOpeningHourException {
+        String customerId = "aaaa";
+
+        TicketEntity t1 = new TicketEntity();
+        t1.setQueueNumber(1);
+        t1.setArrivalTime(new Time(1610000000000L)); // Jan 07 2021 06:13:20
+
+        store1.setTickets(new ArrayList<>( ));
+
+        when(em.find(eq(StoreEntity.class), any())).thenReturn(store1);
+
+        when(em.createNamedQuery(eq("TicketEntity.findByPassCode"), any())).thenReturn(query1);
+        when(em.createNamedQuery(eq("TicketEntity.findByStoreSorted"), any())).thenReturn(query2);
+        when(em.createNamedQuery(eq("TicketEntity.findByCustomerIdOnDay"), any())).thenReturn(query3);
+
+        when(query1.getResultStream()).thenReturn(Stream.empty());
+        when(query2.getResultStream()).thenReturn(Stream.of(t1));
+        when(query3.getResultStream()).thenReturn(Stream.empty());
+
+        when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query4);
+        when(query4.getResultList()).thenReturn(List.of());
+        when(ohs.isInOpeningHour(anyInt(), any())).thenReturn(false);
+        assertThrows(BadOpeningHourException.class, () -> ticketService.addTicket(customerId, store1.getStoreId()));
+    }
 
     @Test
     void deleteTicket_CustomerSuccessfulDelete_TicketValid() throws UnauthorizedException, BadTicketException {
@@ -333,5 +358,22 @@ class TicketServiceTest {
 
         assertThrows(UnauthorizedException.class, () -> ticketService.updateTicketStatus(passCode, store2.getStoreId()));
         assertEquals(PassStatus.VALID, t1.getPassStatus());
+    }
+
+    @Test
+    void findValidStoreTickets_TicketFound() throws BadTicketException {
+        String passCode = "AAA000";
+
+        TicketEntity t1 = new TicketEntity();
+        t1.setPassCode(passCode);
+        //t1.setArrivalTime(new Time(08:00:00));
+        t1.setStore(store1);
+        t1.setPassStatus(PassStatus.VALID);
+
+        when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
+        when(query1.getResultList()).thenReturn(List.of(t1));
+
+        List<TicketEntity> resultTickets = ticketService.findValidStoreTickets(store1.getStoreId());
+        assertEquals(List.of(t1), resultTickets);
     }
 }
