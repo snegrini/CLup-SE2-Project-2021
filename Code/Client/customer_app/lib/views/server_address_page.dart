@@ -105,9 +105,9 @@ class _ServerAddressState extends State<ServerAddressPage> {
       return 'Please enter some text';
     }
 
-    RegExp urlRegex = RegExp(r'^(http:\/\/|https:\/\/).+');
+    RegExp urlRegex = RegExp(r'^(http:\/\/|https:\/\/).+\/$');
     if (!urlRegex.hasMatch(value)) {
-      return 'Please include http(s)://';
+      return 'Please include http(s):// and the final /';
     }
 
     return null;

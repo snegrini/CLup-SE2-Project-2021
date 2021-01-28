@@ -11,7 +11,7 @@ public class StoreMessage extends Message {
         this.store = store;
     }
 
-    public StoreEntity getTicket() {
+    public StoreEntity getStore() {
         return store;
     }
 }

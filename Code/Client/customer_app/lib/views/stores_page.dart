@@ -2,6 +2,7 @@ import 'package:customer_app/model/store.dart';
 import 'package:customer_app/util/api_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/util/data_manager.dart';
+import 'package:customer_app/views/store_detail_page.dart';
 import 'package:flutter/material.dart';
 
 /// Page that displays the list of stores
@@ -49,11 +50,10 @@ class _StoresState extends State<StoresPage> {
       title: new Text(store.name),
       subtitle: Text(store.address.toString()),
       onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-                  content: Text(store.name),
-                ));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => StoreDetailPage(store.id)),
+        );
       },
     );
   }

@@ -1,40 +1,79 @@
 import 'package:customer_app/model/ticket.dart';
+import 'package:customer_app/util/api_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
+import 'package:customer_app/util/data_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 /// Page that displays the details of ticket
-class TicketDetailPage extends StatelessWidget {
-  final Ticket ticket;
+class TicketDetailPage extends StatefulWidget {
+  int ticketId = -1;
+  Ticket ticket;
 
-  TicketDetailPage({Key key, @required this.ticket}) : super(key: key);
+  TicketDetailPage(this.ticketId);
+  TicketDetailPage.fromTicket(this.ticket);
+
+  _TicketDetailState createState() => _TicketDetailState();
+}
+
+class _TicketDetailState extends State<TicketDetailPage> {
+  Widget _body;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Ticket'),
-          backgroundColor: ClupColors.grapefruit,
-        ),
-        body: Center(
-          child: new Column(
-            children: [
-              Text(ticket.store.name),
-              Text(ticket.store.address.toString()),
-              QrImage(
-                data: ticket.passCode,
-                version: QrVersions.auto,
-                size: 225.0,
-              ),
-              Text(ticket.queueNumber.toString()),
-              Text(ticket.date.toString()),
-              Text(ticket.arrivalTime.toString())
-            ],
-          ),
-        ));
+      appBar: AppBar(
+        title: Text('Ticket'),
+        backgroundColor: ClupColors.grapefruit,
+      ),
+      body: _body,
+    );
   }
 
-  void _deleteTicket() {
+  @override
+  void initState() {
+    super.initState();
+    _setLoadingBar();
 
+    if (widget.ticket != null) {
+      _buildTicketDetails();
+    } else {
+      _ticketDetailRequest();
+    }
+  }
+
+  Future<void> _ticketDetailRequest() async {
+    try {
+      var ticketJson = await ApiManager.ticketDetailRequest(
+          DataManager().token, widget.ticketId);
+
+      widget.ticket = Ticket.fromJson(ticketJson);
+      _buildTicketDetails();
+    } catch (e) {
+      setState(() {
+        _setErrorPage(e);
+      });
+    }
+  }
+
+  void _buildTicketDetails() {
+    setState(() {
+      _body = Center(child: Text(widget.ticket.passCode));
+    });
+  }
+
+  /// Sets a page for displaying a loading bar.
+  void _setLoadingBar() {
+    setState(() {
+      _body = Center(
+          child: CircularProgressIndicator(
+              valueColor:
+              new AlwaysStoppedAnimation<Color>(ClupColors.grapefruit)));
+    });
+  }
+
+  void _setErrorPage(String error) {
+    setState(() {
+      _body = Center(child: Text(error));
+    });
   }
 }
