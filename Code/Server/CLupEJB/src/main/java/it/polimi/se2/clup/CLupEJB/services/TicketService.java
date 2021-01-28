@@ -70,7 +70,7 @@ public class TicketService {
      * @return a list of tickets.
      * @throws BadTicketException when occurs an issue with the persistence.
      */
-    public List<TicketEntity> findValidStoreTickets(int storeId) throws BadTicketException, UnauthorizedException, BadStoreException {
+    public List<TicketEntity> findValidStoreTickets(int storeId) throws BadTicketException {
         List<TicketEntity> tickets = null;
 
         try {
@@ -88,7 +88,7 @@ public class TicketService {
         return tickets;
     }
 
-    private void checkExpiredTickets(List<TicketEntity> ticketList) throws BadStoreException, UnauthorizedException, BadTicketException {
+    private void checkExpiredTickets(List<TicketEntity> ticketList) {
         long timestamp = new java.util.Date().getTime();
 
         Date today = Date.valueOf(new Date(timestamp).toString());
