@@ -4,6 +4,8 @@ import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.exceptions.CredentialsException;
 import it.polimi.se2.clup.CLupEJB.services.UserService;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -11,6 +13,9 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.Persistence;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class UserIntegrationTest {
     private static final String USER_CODE = "TTT000";
@@ -72,8 +77,13 @@ public class UserIntegrationTest {
 
     @Test
     public void checkCredentials_ValidUser_CorrectPassword() throws CredentialsException {
-        UserService userService = new UserService(em);
+        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
+        UserService userService = new UserService(em, encoder);
+
+        when(encoder.matches(anyString(), anyString())).thenReturn(true);
+
         UserEntity user = userService.checkCredentials(USER_CODE, PASSWORD);
+
         assertNotNull(user);
         assertEquals(USER_CODE, user.getUsercode());
         assertEquals(PASSWORD, user.getPassword());
@@ -81,14 +91,22 @@ public class UserIntegrationTest {
 
     @Test
     public void checkCredentials_ValidUser_WrongPassword() throws CredentialsException {
-        UserService userService = new UserService(em);
+        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
+        UserService userService = new UserService(em, encoder);
+
+        when(encoder.matches(anyString(), anyString())).thenReturn(false);
+
         UserEntity user = userService.checkCredentials(USER_CODE, INVALID_PASSWORD);
         assertNull(user);
     }
 
     @Test
     public void checkCredentials_InvalidUser() throws CredentialsException {
-        UserService userService = new UserService(em);
+        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
+        UserService userService = new UserService(em, encoder);
+
+        when(encoder.matches(anyString(), anyString())).thenReturn(false);
+
         UserEntity user = userService.checkCredentials(INVALID_USER_CODE, PASSWORD);
         assertNull(user);
     }
@@ -105,7 +123,11 @@ public class UserIntegrationTest {
         em.getTransaction().commit();
 
         // Testing
-        UserService userService = new UserService(em);
+        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
+        UserService userService = new UserService(em, encoder);
+
+        when(encoder.matches(anyString(), anyString())).thenReturn(false);
+
         assertThrows(NonUniqueResultException.class, () -> userService.checkCredentials(USER_CODE, PASSWORD));
 
         // Clean up

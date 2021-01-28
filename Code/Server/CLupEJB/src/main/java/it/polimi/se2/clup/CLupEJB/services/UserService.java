@@ -18,11 +18,15 @@ public class UserService {
     @PersistenceContext(unitName = "CLupEJB")
     private EntityManager em;
 
+    private final PasswordEncoder encoder;
+
     public UserService() {
+         encoder = new BCryptPasswordEncoder();
     }
 
-    public UserService(EntityManager em) {
+    public UserService(EntityManager em, BCryptPasswordEncoder encoder) {
         this.em = em;
+        this.encoder = encoder;
     }
 
     public UserEntity checkCredentials(String usercode, String password) throws CredentialsException, NonUniqueResultException {
@@ -40,7 +44,6 @@ public class UserService {
             return null;
         } else if (uList.size() == 1) {
             UserEntity user = uList.get(0);
-            PasswordEncoder encoder = new BCryptPasswordEncoder();
 
             if (encoder.matches(password, user.getPassword())) {
                 return user;

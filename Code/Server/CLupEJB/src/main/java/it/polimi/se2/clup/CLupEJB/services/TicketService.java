@@ -97,7 +97,7 @@ public class TicketService {
         List<TicketEntity> expiredTickets = new ArrayList<>();
 
         for (TicketEntity t : ticketList) {
-            Time lastTime = new Time(t.getArrivalTime().getTime() + 900000); // Last ticket time + 15 min
+            Time lastTime = Time.valueOf(new Time(t.getArrivalTime().getTime() + 900000).toString()); // Last ticket time + 15 min
 
             if (today.after(t.getDate()) || now.after(lastTime)) {
                 t.setPassStatus(PassStatus.EXPIRED);
