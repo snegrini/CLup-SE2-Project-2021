@@ -9,6 +9,7 @@ class ApiManager {
   static final _storeListUrl = "get_stores";
   static final _ticketListUrl = "get_tickets";
   static final _storeDetail = "detail_store";
+  static final _ticketDetail = "detail_ticket";
   static final _addTicketUrl = "add_ticket";
   static final _deleteTicketUrl = "delete_ticket";
 
@@ -112,6 +113,38 @@ class ApiManager {
     var jsonResponse;
     try {
       jsonResponse = await _makeRequest(_storeDetail, body);
+    } catch (e) {
+      return Future.error(e);
+    }
+
+    return jsonResponse['store'];
+  }
+
+  static Future<dynamic> ticketDetailRequest(String token, int ticketId) async {
+    var body = {
+      'token': token,
+      'ticket_id': ticketId.toString(),
+    };
+
+    var jsonResponse;
+    try {
+      jsonResponse = await _makeRequest(_ticketDetail, body);
+    } catch (e) {
+      return Future.error(e);
+    }
+
+    return jsonResponse['ticket'];
+  }
+
+  static Future<dynamic> addTicketRequest(String token, int storeId) async {
+    var body = {
+      'token': token,
+      'store_id': storeId.toString(),
+    };
+
+    var jsonResponse;
+    try {
+      jsonResponse = await _makeRequest(_addTicketUrl, body);
     } catch (e) {
       return Future.error(e);
     }

@@ -1,7 +1,9 @@
 import 'package:customer_app/model/store.dart';
+import 'package:customer_app/model/ticket.dart';
 import 'package:customer_app/util/api_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/util/data_manager.dart';
+import 'package:customer_app/views/ticket_detail_page.dart';
 import 'package:flutter/material.dart';
 
 class StoreDetailPage extends StatefulWidget {
@@ -13,23 +15,46 @@ class StoreDetailPage extends StatefulWidget {
 }
 
 class _StoreDetailState extends State<StoreDetailPage> {
-  Widget _body;
+  Store _store;
+  bool _loading = true;
+  bool _disabled = false;
+  bool _error = false;
+  String _errorText = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Store'),
-        backgroundColor: ClupColors.grapefruit,
-      ),
-      body: _body,
-    );
+        appBar: AppBar(
+          title: Text('Store'),
+          backgroundColor: ClupColors.grapefruit,
+        ),
+        body: _loading
+            ? Center(
+                child: CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation<Color>(
+                        ClupColors.grapefruit)))
+            : Center(
+                child: Column(
+                  children: [
+                    Text(_store.name),
+                    RaisedButton(
+                      onPressed: _disabled ? null : _addTicket,
+                      child: Text(
+                        'Retrieve a ticket',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: ClupColors.grapefruit,
+                      disabledColor: ClupColors.disabledGrapefruit,
+                    ),
+                    if (_error) Text(_errorText)
+                  ],
+                ),
+              ));
   }
 
   @override
   void initState() {
     super.initState();
-    _setLoadingBar();
     _storeDetailRequest();
   }
 
@@ -38,34 +63,45 @@ class _StoreDetailState extends State<StoreDetailPage> {
       var storeJson = await ApiManager.storeDetailRequest(
           DataManager().token, widget.storeId);
 
-      Store store = Store.fromJson(storeJson);
-      _setStoreDetails(store);
+      setState(() {
+        _loading = false;
+        _error = false;
+        _store = Store.fromJson(storeJson);
+      });
     } catch (e) {
       setState(() {
-        _setErrorPage(e);
+        _loading = false;
+        _error = true;
+        _errorText = e;
       });
     }
   }
 
-  /// Sets a page for displaying a loading bar.
-  void _setLoadingBar() {
+  Future<void> _addTicket() async {
     setState(() {
-      _body = Center(
-          child: CircularProgressIndicator(
-              valueColor:
-                  new AlwaysStoppedAnimation<Color>(ClupColors.grapefruit)));
+      _disabled = true;
     });
+
+    try {
+      var storeJson = await ApiManager.addTicketRequest(
+          DataManager().token, widget.storeId);
+
+      Ticket ticket = Ticket.fromJson(storeJson);
+      _redirectToTicketDetail(ticket);
+    } catch (e) {
+      setState(() {
+        _error = true;
+        _disabled = false;
+        _errorText = e;
+      });
+    }
   }
 
-  void _setErrorPage(String error) {
-    setState(() {
-      _body = Center(child: Text(error));
-    });
-  }
-
-  void _setStoreDetails(Store store) {
-    setState(() {
-      _body = Center(child: Text(store.name));
-    });
+  void _redirectToTicketDetail(Ticket ticket) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => TicketDetailPage.fromTicket(ticket)),
+    );
   }
 }

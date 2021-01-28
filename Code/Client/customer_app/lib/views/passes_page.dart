@@ -83,7 +83,7 @@ class _PassesState extends State<PassesPage> {
   void _openTicket(Ticket ticket) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TicketDetailPage(ticket: ticket)),
+      MaterialPageRoute(builder: (context) => TicketDetailPage(ticket.id)),
     );
   }
 }
