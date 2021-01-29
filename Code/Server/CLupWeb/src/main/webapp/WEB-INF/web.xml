@@ -4,8 +4,11 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
     <context-param>
+        <!-- NOTE: If using a *nix path on Windows, the folder must be on the same drive letter (e.g. C: or D:) of TomEE folder.
+                   Be sure to create the folder at the specified location.
+                   Please avoid the trailing slash '/'.-->
         <param-name>upload.location</param-name>
-        <param-value>C:\Users\Samuele\Desktop\uploads</param-value>
+        <param-value>/clup/uploads</param-value>
     </context-param>
 
     <filter-mapping>

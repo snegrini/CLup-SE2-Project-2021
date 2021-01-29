@@ -29,6 +29,15 @@ public class UserService {
         this.encoder = encoder;
     }
 
+    /**
+     * Checks user credentials against those saved in the database.
+     *
+     * @param usercode the code of the user.
+     * @param password the password of the user.
+     * @return the {@code UserEntity} linked to the usercode and password if the user is found and password matches, {@code null} otherwise.
+     * @throws CredentialsException when the connection with the database fails.
+     * @throws NonUniqueResultException when there are more than one user registered with same credentials.
+     */
     public UserEntity checkCredentials(String usercode, String password) throws CredentialsException, NonUniqueResultException {
         List<UserEntity> uList;
 
@@ -37,7 +46,7 @@ public class UserService {
                     .setParameter("usercode", usercode)
                     .getResultList();
         } catch (PersistenceException e) {
-            throw new CredentialsException("Could not verify credentals.");
+            throw new CredentialsException("Could not verify credentials.");
         }
 
         if (uList.isEmpty()) {

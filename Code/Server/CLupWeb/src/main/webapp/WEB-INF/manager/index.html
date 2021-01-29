@@ -7,7 +7,11 @@
 <body>
     <h1>Manager Index</h1>
     <a href="#" data-th-href="@{/dashboard/storeinfo}">Store info</a><br>
-    <a href="#" data-th-href="@{/dashboard/ticketlist}">Ticket List</a>
+    <a href="#" data-th-href="@{/dashboard/ticketlist}">Ticket List</a><br>
+
+    <br>
+
+    <img src="https://via.placeholder.com/200x100?text=Store+Logo" alt="Store logo" width="200" height="100" data-th-src="@{'/images/'+${imagePath}}">
 
     <h2>People inside the store</h2>
     <div data-th-text="${customersInside}">123</div>

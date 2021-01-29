@@ -17,10 +17,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
 
-@WebServlet(name = "StoreDetailServlet", value = "/api/detail_store")
+@WebServlet(name = "StoreDetailServlet", value = "/api/store_detail")
 public class StoreDetailServlet extends HttpServlet {
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
     private StoreService storeService;
@@ -69,7 +73,18 @@ public class StoreDetailServlet extends HttpServlet {
             return;
         }
 
-        // TODO Add image, store queue and estimated time
+
+        String uploadLocation = getServletContext().getInitParameter("upload.location");
+        Path fullPath = Path.of(uploadLocation + "/" + storeEntity.getImagePath());
+
+        if (!Files.exists(fullPath)) {
+            storeEntity.setImagePath("");
+        }
+
+        String encodeBytes = Base64.getEncoder().encodeToString(Files.readAllBytes(fullPath));
+        storeEntity.setImagePath(encodeBytes);
+
+        // TODO Add store queue and estimated time
 
         out.print(ow.writeValueAsString(new StoreMessage(MessageStatus.OK, "Success", storeEntity)));
     }

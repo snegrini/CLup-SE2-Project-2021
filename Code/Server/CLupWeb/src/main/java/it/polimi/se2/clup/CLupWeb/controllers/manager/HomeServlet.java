@@ -70,6 +70,7 @@ public class HomeServlet extends HttpServlet {
 
         ctx.setVariable("customersInside", customersInside);
         ctx.setVariable("customersQueue", customersQueue);
+        ctx.setVariable("imagePath", store.getImagePath());
 
         templateEngine.process(path, ctx, response.getWriter());
     }
