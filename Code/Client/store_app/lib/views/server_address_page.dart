@@ -1,9 +1,9 @@
-import 'package:customer_app/util/auth_manager.dart';
-import 'package:customer_app/util/clup_colors.dart';
-import 'package:customer_app/util/data_manager.dart';
-import 'package:customer_app/views/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:store_app/util/api_manager.dart';
+import 'package:store_app/util/clup_colors.dart';
+import 'package:store_app/util/data_manager.dart';
+import 'package:store_app/views/login_page.dart';
 
 class ServerAddressPage extends StatefulWidget {
   _ServerAddressState createState() => _ServerAddressState();
@@ -65,23 +65,19 @@ class _ServerAddressState extends State<ServerAddressPage> {
         _error = false;
       });
       DataManager().serverAddress = _addressTextController.text;
-      _requestCustomerToken();
+      _checkServerAddress();
     }
   }
 
   /// Requests a customer token to the server
-  Future<void> _requestCustomerToken() async {
-    AuthManager authManager = AuthManager();
-    String token;
+  Future<void> _checkServerAddress() async {
     try {
-      token = await authManager.requestCustomerToken();
-      authManager.writeAuthToken(token);
-      DataManager().token = token;
+      await ApiManager.pingRequest();
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('serverAddress', DataManager().serverAddress);
 
-      _redirectToHome();
+      _redirectToLogin();
     } catch (err) {
       setState(() {
         _disabled = false;
@@ -91,11 +87,11 @@ class _ServerAddressState extends State<ServerAddressPage> {
     }
   }
 
-  void _redirectToHome() {
+  void _redirectToLogin() {
     Navigator.pop(context);
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()),
+      MaterialPageRoute(builder: (context) => LoginPage()),
     );
   }
 

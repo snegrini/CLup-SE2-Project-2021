@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:store_app/util/clup_colors.dart';
-import 'package:store_app/util/token_manager.dart';
-import 'package:store_app/views/qr_button_page.dart';
 import 'package:store_app/util/api_manager.dart';
+import 'package:store_app/util/clup_colors.dart';
+import 'package:store_app/util/data_manager.dart';
+import 'package:store_app/views/qr_button_page.dart';
 
 /// Login page for the employee of the store
 class LoginPage extends StatefulWidget {
@@ -54,7 +54,7 @@ class _LoginState extends State<LoginPage> {
               _userCodeController.text, _passwordController.text)
           .then((value) {
         _storage.write(key: 'jwt', value: value);
-        TokenManager().token = value;
+        DataManager().token = value;
 
         Navigator.pop(context);
         Navigator.push(

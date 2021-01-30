@@ -1,10 +1,11 @@
+import 'dart:convert';
+
 import 'package:customer_app/model/store.dart';
 import 'package:customer_app/util/api_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/util/data_manager.dart';
 import 'package:customer_app/views/store_detail_page.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
 
 /// Page that displays the list of stores

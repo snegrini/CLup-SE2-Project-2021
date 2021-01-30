@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:store_app/util/api_manager.dart';
 import 'package:store_app/util/clup_colors.dart';
-import 'package:store_app/util/token_manager.dart';
+import 'package:store_app/util/data_manager.dart';
 import 'package:store_app/views/scan_page.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 /// Page that prompts the result of a validation request
 class ResultPage extends StatefulWidget {
@@ -87,7 +87,7 @@ class _ResultState extends State<ResultPage> {
   Future<void> _validationRequest() async {
     try {
       String message =
-          await ApiManager.validateRequest(TokenManager().token, widget.qrdata);
+          await ApiManager.validateRequest(DataManager().token, widget.qrdata);
       setState(() {
         _gotError = false;
         _text = message;

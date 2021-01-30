@@ -1,7 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:customer_app/enum/DayOfWeek.dart';
+import 'package:customer_app/enum/day_of_week.dart';
 import 'package:customer_app/model/opening_hour.dart';
 import 'package:customer_app/model/store.dart';
 import 'package:customer_app/model/ticket.dart';
