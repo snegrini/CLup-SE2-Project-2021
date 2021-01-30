@@ -10,9 +10,10 @@ class Store {
   final List<OpeningHour> openingHours;
   final String image;
   final int customerInQueue;
+  final int estimateTime;
 
   Store(this.id, this.name, this.address, this.pec, this.phone,
-      this.openingHours, this.image, this.customerInQueue);
+      this.openingHours, this.image, this.customerInQueue, this.estimateTime);
 
   Store.fromJson(Map<String, dynamic> json)
       : id = json['storeId'],
@@ -23,5 +24,6 @@ class Store {
         openingHours = List<OpeningHour>.unmodifiable(
             json['openingHours'].map((e) => OpeningHour.fromJson(e)).toList()),
         image = json['imagePath'],
-        customerInQueue = json['customersInQueue'];
+        customerInQueue = json['customersInQueue'],
+        estimateTime = json['estimateTime'];
 }

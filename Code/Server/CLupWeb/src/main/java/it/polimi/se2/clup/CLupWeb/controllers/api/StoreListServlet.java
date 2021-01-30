@@ -100,8 +100,8 @@ public class StoreListServlet extends HttpServlet {
         JsonNode storesJson = mapper.valueToTree(new StoreListMessage(MessageStatus.OK, "Success", stores));
 
         try {
-            addUserInQueueToJson(storesJson);
-        } catch (BadTicketException e) {
+            addUserEstimateInQueueToJson(storesJson);
+        } catch (BadTicketException | BadStoreException e) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;
         }
@@ -109,7 +109,7 @@ public class StoreListServlet extends HttpServlet {
         out.print(storesJson.toPrettyString());
     }
 
-    private void addUserInQueueToJson(JsonNode rootNode) throws BadTicketException {
+    private void addUserEstimateInQueueToJson(JsonNode rootNode) throws BadTicketException, BadStoreException {
         JsonNode s = rootNode.get("stores");
         Iterator<JsonNode> nodes = s.elements();
 
@@ -117,7 +117,9 @@ public class StoreListServlet extends HttpServlet {
             JsonNode entry = nodes.next();
 
             int custNum = ticketService.getCustomersQueue(entry.get("storeId").asInt());
+            int estimateTime = storeService.getEstimateTime(entry.get("storeId").asInt());
             ((ObjectNode) entry).put("customersInQueue", custNum);
+            ((ObjectNode) entry).put("estimateTime", estimateTime);
         }
     }
 }
