@@ -42,7 +42,7 @@ public class DeleteTicketServlet extends HttpServlet {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
         String token = StringEscapeUtils.escapeJava(request.getParameter("token"));
-        String passcode = StringEscapeUtils.escapeJava(request.getParameter("passcode"));
+        String requestId = StringEscapeUtils.escapeJava(request.getParameter("ticket_id"));
 
         if (token == null || token.isEmpty()) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing token")));
@@ -52,8 +52,11 @@ public class DeleteTicketServlet extends HttpServlet {
             return;
         }
 
-        if (passcode == null || passcode.isEmpty()) {
-            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Missing pass code")));
+        int ticketId;
+        try {
+            ticketId = Integer.parseInt(requestId);
+        } catch (Exception e) {
+            out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid ticket ID")));
             return;
         }
 
@@ -66,7 +69,7 @@ public class DeleteTicketServlet extends HttpServlet {
         }
 
         try {
-            ticketService.deleteTicket(customerId, passcode);
+            ticketService.deleteTicket(customerId, ticketId);
         } catch (BadTicketException | UnauthorizedException e) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, e.getMessage())));
             return;

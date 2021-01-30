@@ -151,4 +151,20 @@ class ApiManager {
 
     return jsonResponse['ticket'];
   }
+
+  static Future<dynamic> deleteTicketRequest(String token, int ticketId) async {
+    var body = {
+      'token': token,
+      'ticket_id': ticketId.toString(),
+    };
+
+    var jsonResponse;
+    try {
+      jsonResponse = await _makeRequest(_deleteTicketUrl, body);
+    } catch (e) {
+      return Future.error(e);
+    }
+
+    return jsonResponse;
+  }
 }

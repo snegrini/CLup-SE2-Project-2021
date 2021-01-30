@@ -2,6 +2,7 @@ import 'package:customer_app/model/ticket.dart';
 import 'package:customer_app/util/api_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/util/data_manager.dart';
+import 'package:customer_app/views/home_page.dart';
 import 'package:flutter/material.dart';
 
 /// Page that displays the details of ticket
@@ -10,32 +11,57 @@ class TicketDetailPage extends StatefulWidget {
   Ticket ticket;
 
   TicketDetailPage(this.ticketId);
+
   TicketDetailPage.fromTicket(this.ticket);
 
   _TicketDetailState createState() => _TicketDetailState();
 }
 
 class _TicketDetailState extends State<TicketDetailPage> {
-  Widget _body;
+  bool _loading = true;
+  bool _disabled = false;
+  bool _error = false;
+  String _errorText = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Ticket'),
-        backgroundColor: ClupColors.grapefruit,
-      ),
-      body: _body,
-    );
+        appBar: AppBar(
+          title: Text('Ticket'),
+          backgroundColor: ClupColors.grapefruit,
+        ),
+        body: _loading
+            ? Center(
+                child: CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation<Color>(
+                        ClupColors.grapefruit)))
+            : Center(
+                child: Column(
+                  children: [
+                    Text(widget.ticket.passCode),
+                    RaisedButton(
+                      onPressed: _disabled ? null : _deleteTicket,
+                      child: Text(
+                        'Delete the ticket',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: ClupColors.grapefruit,
+                      disabledColor: ClupColors.disabledGrapefruit,
+                    ),
+                    if (_error) Text(_errorText)
+                  ],
+                ),
+              ));
   }
 
   @override
   void initState() {
     super.initState();
-    _setLoadingBar();
 
     if (widget.ticket != null) {
-      _buildTicketDetails();
+      setState(() {
+        _loading = false;
+      });
     } else {
       _ticketDetailRequest();
     }
@@ -47,33 +73,39 @@ class _TicketDetailState extends State<TicketDetailPage> {
           DataManager().token, widget.ticketId);
 
       widget.ticket = Ticket.fromJson(ticketJson);
-      _buildTicketDetails();
+      setState(() {
+        _loading = false;
+        _error = false;
+      });
     } catch (e) {
       setState(() {
-        _setErrorPage(e);
+        _loading = false;
+        _error = true;
+        _errorText = e;
       });
     }
   }
-
-  void _buildTicketDetails() {
+      
+  Future<void> _deleteTicket() async {
     setState(() {
-      _body = Center(child: Text(widget.ticket.passCode));
+      _disabled = true;
     });
-  }
 
-  /// Sets a page for displaying a loading bar.
-  void _setLoadingBar() {
-    setState(() {
-      _body = Center(
-          child: CircularProgressIndicator(
-              valueColor:
-              new AlwaysStoppedAnimation<Color>(ClupColors.grapefruit)));
-    });
-  }
+    try {
+      await ApiManager.deleteTicketRequest(
+          DataManager().token, widget.ticketId);
 
-  void _setErrorPage(String error) {
-    setState(() {
-      _body = Center(child: Text(error));
-    });
+      Navigator.of(context).pop();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => HomePage()),
+      );
+    } catch (e) {
+      setState(() {
+        _error = true;
+        _disabled = false;
+        _errorText = e;
+      });
+    }
   }
 }

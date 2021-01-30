@@ -334,20 +334,15 @@ public class TicketService {
      * Delete a ticket from the customer side.
      *
      * @param customerId the unique id of the customer who is performing the delete.
-     * @param passCode   the passCode of the ticket to be deleted.
+     * @param ticketId   the id of the ticket to be deleted.
      * @throws BadTicketException    when the passCode is invalid.
      * @throws UnauthorizedException if the user has no permission to delete the specified ticket.
      */
-    public void deleteTicket(String customerId, String passCode) throws BadTicketException, UnauthorizedException {
-        TicketEntity ticket = em.createNamedQuery("TicketEntity.findByPassCode", TicketEntity.class)
-                .setParameter("passCode", passCode)
-                .setMaxResults(1)
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
+    public void deleteTicket(String customerId, int ticketId) throws BadTicketException, UnauthorizedException {
+        TicketEntity ticket = em.find(TicketEntity.class, ticketId);
 
         if (ticket == null) {
-            throw new BadTicketException("Invalid pass code");
+            throw new BadTicketException("Invalid ticket ID");
         }
 
         if (!ticket.getCustomerId().equals(customerId)) {

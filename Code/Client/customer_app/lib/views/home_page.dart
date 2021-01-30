@@ -1,3 +1,7 @@
+import 'package:customer_app/model/store.dart';
+import 'package:customer_app/util/api_manager.dart';
+import 'package:customer_app/util/data_manager.dart';
+import 'package:customer_app/views/store_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/views/stores_page.dart';
@@ -12,12 +16,25 @@ class HomePage extends StatefulWidget {
 
 class _HomeState extends State<HomePage> {
   int _selectedIndex = 0;
+  List<Widget> _actions;
 
   static List<Widget> _widgetOptions = <Widget>[StoresPage(), PassesPage()];
 
   void _onItemTapped(int index) {
+    List<Widget> actions = [];
+    if (index == 0) {
+      actions = [
+        (IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: StoreSearch());
+            }))
+      ];
+    }
+
     setState(() {
       _selectedIndex = index;
+      _actions = actions;
     });
   }
 
@@ -26,6 +43,7 @@ class _HomeState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('CLup'),
+        actions: _actions,
         backgroundColor: ClupColors.grapefruit,
       ),
       body: Center(
@@ -46,6 +64,100 @@ class _HomeState extends State<HomePage> {
         selectedItemColor: ClupColors.grapefruit,
         onTap: _onItemTapped,
       ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      _actions = [
+        (IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(context: context, delegate: StoreSearch());
+            }))
+      ];
+    });
+  }
+}
+
+class StoreSearch extends SearchDelegate {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+          icon: Icon(Icons.clear),
+          onPressed: () {
+            query = "";
+          })
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+        icon: AnimatedIcon(
+          icon: AnimatedIcons.menu_arrow,
+          progress: transitionAnimation,
+        ),
+        onPressed: () {
+          close(context, null);
+        });
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return FutureBuilder<List<Store>>(
+      future: _fetchStoreList(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.error != null) {
+            return Center(child: Text(snapshot.error),);
+          } else if (snapshot.data.isEmpty) {
+            return Center(child: Text("Wow, such empty"),);
+          } else {
+            return ListView.separated(
+              itemBuilder: (context, index) {
+                return _buildRow(context, snapshot.data[index]);
+              },
+              itemCount: snapshot.data.length,
+              separatorBuilder: (context, index) => Divider(color: Colors.grey),
+            );
+          }
+        } else {
+          return Center(
+            child: CircularProgressIndicator(
+                valueColor:
+                    new AlwaysStoppedAnimation<Color>(ClupColors.grapefruit)),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return Container();
+  }
+
+  Future<List<Store>> _fetchStoreList() async {
+    String token = DataManager().token;
+    var storeList = await ApiManager.storeListRequest(token, query);
+    return storeList.map((e) => Store.fromJson(e)).toList();
+  }
+
+  Widget _buildRow(BuildContext context, Store store) {
+    return new ListTile(
+      title: new Text(store.name),
+      subtitle: Text(store.address.toString()),
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => StoreDetailPage(store.id)),
+        );
+      },
     );
   }
 }
