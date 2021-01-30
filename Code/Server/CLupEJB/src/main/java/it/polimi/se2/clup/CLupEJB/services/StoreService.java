@@ -116,4 +116,23 @@ public class StoreService {
         em.merge(store);
     }
 
+    /**
+     * Gives the amount time to wait to enter the given store. Returns an integer value representing minutes.
+     *
+     * @param storeId the id of the store.
+     * @return {@code 0} if there is no wait time (the store is not full), {@code 15} otherwise.
+     * @throws BadStoreException if no store can be found.
+     */
+    public int getEstimateTime(int storeId) throws BadStoreException {
+        StoreEntity store = em.find(StoreEntity.class, storeId);
+
+        if (store == null) {
+            throw new BadStoreException("Cannot load store.");
+        }
+
+        if (store.getCustomersInside() < store.getStoreCap()) {
+            return 0;
+        }
+        return 15;
+    }
 }

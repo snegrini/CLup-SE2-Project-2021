@@ -64,7 +64,8 @@ public class TicketService {
     }
 
     /**
-     * Finds all the tickets of a specific store and returns them.
+     * Finds all the valid tickets of a specific store and returns them.
+     * A check is performed and tickets are updated to ensure the returned tickets are still valid.
      *
      * @param storeId ID of the store.
      * @return a list of tickets.
