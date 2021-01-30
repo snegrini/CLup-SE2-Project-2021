@@ -88,7 +88,7 @@ public class StoreListServlet extends HttpServlet {
         for (StoreEntity store : stores) {
             Path fullPath = Path.of(uploadLocation + "/" + store.getImagePath());
 
-            if (!Files.exists(fullPath)) {
+            if (store.getImagePath().isEmpty() || !Files.exists(fullPath) || !Files.exists(Path.of(uploadLocation))) {
                 store.setImagePath("");
             } else {
                 String encodeBytes = Base64.getEncoder().encodeToString(Files.readAllBytes(fullPath));

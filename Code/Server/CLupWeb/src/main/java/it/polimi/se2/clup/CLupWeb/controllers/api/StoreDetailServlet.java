@@ -72,11 +72,10 @@ public class StoreDetailServlet extends HttpServlet {
             return;
         }
 
-
         String uploadLocation = getServletContext().getInitParameter("upload.location");
         Path fullPath = Path.of(uploadLocation + "/" + storeEntity.getImagePath());
 
-        if (!Files.exists(fullPath)) {
+        if (storeEntity.getImagePath().isEmpty() || !Files.exists(fullPath) || !Files.exists(Path.of(uploadLocation))) {
             storeEntity.setImagePath("");
         } else {
             String encodeBytes = Base64.getEncoder().encodeToString(Files.readAllBytes(fullPath));
