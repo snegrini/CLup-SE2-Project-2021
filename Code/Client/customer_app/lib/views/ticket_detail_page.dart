@@ -4,6 +4,9 @@ import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/util/data_manager.dart';
 import 'package:customer_app/views/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:customer_app/enum/pass_status.dart';
 
 /// Page that displays the details of ticket
 class TicketDetailPage extends StatefulWidget {
@@ -35,23 +38,80 @@ class _TicketDetailState extends State<TicketDetailPage> {
                 child: CircularProgressIndicator(
                     valueColor: new AlwaysStoppedAnimation<Color>(
                         ClupColors.grapefruit)))
-            : Center(
+            : Container(
+                margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.ticket.passCode),
-                    RaisedButton(
-                      onPressed: _disabled ? null : _deleteTicket,
-                      child: Text(
-                        'Delete the ticket',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: ClupColors.grapefruit,
-                      disabledColor: ClupColors.disabledGrapefruit,
+                    Text(
+                      widget.ticket.store.name,
+                      style:
+                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                     ),
-                    if (_error) Text(_errorText)
+                    Text(widget.ticket.store.address.toString(),
+                        style: TextStyle(color: Colors.grey, fontSize: 20)),
+                    SizedBox(height: 18),
+                    Center(
+                      child: Column(
+                        children: [
+                          QrImage(
+                            data: widget.ticket.passCode,
+                            version: QrVersions.auto,
+                            size: 200.0,
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Date',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                              DateFormat('dd/MM/yyyy')
+                                  .format(widget.ticket.date),
+                              style: TextStyle(fontSize: 15)),
+                          SizedBox(height: 10),
+                          Text('Estimated Call Time',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 5),
+                          Text(widget.ticket.arrivalTime.format(context),
+                              style: TextStyle(fontSize: 15)),
+                          SizedBox(height: 10),
+                          Text(
+                            'Queue Number',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5),
+                          Text(widget.ticket.queueNumber.toString(),
+                              style: TextStyle(fontSize: 15)),
+                          SizedBox(height: 10),
+                          Text(
+                            'Ticket Status',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 5),
+                          Text(widget.ticket.passStatus.name,
+                              style: TextStyle(fontSize: 15)),
+                          SizedBox(height: 30),
+                          RaisedButton(
+                            onPressed: _disabled ? null : _deleteTicket,
+                            child: Text(
+                              'Delete the ticket',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: ClupColors.grapefruit,
+                            disabledColor: ClupColors.disabledGrapefruit,
+                          ),
+                          SizedBox(height: 20),
+                          if (_error) Text(_errorText)
+                        ],
+                      ),
+                    )
                   ],
-                ),
-              ));
+                )));
   }
 
   @override
@@ -59,6 +119,8 @@ class _TicketDetailState extends State<TicketDetailPage> {
     super.initState();
 
     if (widget.ticket != null) {
+      widget.ticketId = widget.ticket.id;
+
       setState(() {
         _loading = false;
       });
@@ -85,7 +147,7 @@ class _TicketDetailState extends State<TicketDetailPage> {
       });
     }
   }
-      
+
   Future<void> _deleteTicket() async {
     setState(() {
       _disabled = true;

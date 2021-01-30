@@ -1,10 +1,11 @@
+import 'package:customer_app/enum/pass_status.dart';
 import 'package:customer_app/model/store.dart';
 import 'package:flutter/material.dart';
 
 class Ticket {
   final int id;
   final String passCode;
-  final String passStatus;
+  final PassStatus passStatus;
   final int queueNumber;
   final DateTime date;
   final TimeOfDay arrivalTime;
@@ -17,7 +18,7 @@ class Ticket {
   Ticket.fromJson(Map<String, dynamic> json)
       : id = json['ticketId'],
         passCode = json['passCode'],
-        passStatus = json['passStatus'],
+        passStatus = json['passStatus'].toString().toPassStatus(),
         queueNumber = json['queueNumber'],
         date = DateTime.fromMillisecondsSinceEpoch(json['date']),
         arrivalTime = TimeOfDay(

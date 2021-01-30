@@ -4,6 +4,8 @@ import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/util/data_manager.dart';
 import 'package:customer_app/views/ticket_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:customer_app/enum/pass_status.dart';
+import 'package:intl/intl.dart';
 
 /// Page that displays the list of store passes bound with the customer.
 class PassesPage extends StatefulWidget {
@@ -49,6 +51,20 @@ class _PassesState extends State<PassesPage> {
     return new ListTile(
       title: new Text('Ticket'),
       subtitle: Text(ticket.store.name),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(DateFormat('dd/MM/yyyy').format(ticket.date)),
+          SizedBox(height: 2),
+          (ticket.passStatus != PassStatus.valid)
+              ? Text(
+                  ticket.passStatus.name,
+                  style: TextStyle(color: ClupColors.grapefruit),
+                )
+              : Text(ticket.arrivalTime.format(context),
+                  style: TextStyle(color: Colors.green))
+        ],
+      ),
       onTap: () => _openTicket(ticket),
     );
   }

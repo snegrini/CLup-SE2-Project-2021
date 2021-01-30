@@ -87,6 +87,11 @@ class _StoreDetailState extends State<StoreDetailPage> {
           DataManager().token, widget.storeId);
 
       Ticket ticket = Ticket.fromJson(storeJson);
+      setState(() {
+        _error = false;
+        _disabled = false;
+      });
+
       _redirectToTicketDetail(ticket);
     } catch (e) {
       setState(() {
