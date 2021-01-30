@@ -22,6 +22,7 @@ import org.mockito.quality.Strictness;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
@@ -366,14 +367,51 @@ class TicketServiceTest {
 
         TicketEntity t1 = new TicketEntity();
         t1.setPassCode(passCode);
-        //t1.setArrivalTime(new Time(08:00:00));
+        t1.setDate(new Date(new java.util.Date().getTime()));
+        t1.setArrivalTime(new Time(new java.util.Date().getTime()));
         t1.setStore(store1);
         t1.setPassStatus(PassStatus.VALID);
 
         when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
-        when(query1.getResultList()).thenReturn(List.of(t1));
+        when(query1.getResultList()).thenReturn(new ArrayList<>(List.of(t1)));
 
         List<TicketEntity> resultTickets = ticketService.findValidStoreTickets(store1.getStoreId());
         assertEquals(List.of(t1), resultTickets);
+    }
+
+    @Test
+    void findValidStoreTickets_NoTicketFound_ExpiredDate() throws BadTicketException {
+        String passCode = "AAA000";
+
+        TicketEntity t1 = new TicketEntity();
+        t1.setPassCode(passCode);
+        t1.setDate(new Date(949097495)); // Friday, January 28, 2000 10:11:35 PM
+        t1.setArrivalTime(new Time(new java.util.Date().getTime()));
+        t1.setStore(store1);
+        t1.setPassStatus(PassStatus.VALID);
+
+        when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
+        when(query1.getResultList()).thenReturn(new ArrayList<>(List.of(t1)));
+
+        List<TicketEntity> resultTickets = ticketService.findValidStoreTickets(store1.getStoreId());
+        assertEquals(List.of(), resultTickets);
+    }
+
+    @Test
+    void findValidStoreTickets_NoTicketFound_ExpiredArrivalTime() throws BadTicketException {
+        String passCode = "AAA000";
+
+        TicketEntity t1 = new TicketEntity();
+        t1.setPassCode(passCode);
+        t1.setDate(new Date(new java.util.Date().getTime()));
+        t1.setArrivalTime(new Time(new java.util.Date().getTime() - 900000 - 1000));
+        t1.setStore(store1);
+        t1.setPassStatus(PassStatus.VALID);
+
+        when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
+        when(query1.getResultList()).thenReturn(new ArrayList<>(List.of(t1)));
+
+        List<TicketEntity> resultTickets = ticketService.findValidStoreTickets(store1.getStoreId());
+        assertEquals(List.of(), resultTickets);
     }
 }

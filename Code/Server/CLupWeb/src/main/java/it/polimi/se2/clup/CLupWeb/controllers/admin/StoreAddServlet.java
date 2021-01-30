@@ -87,12 +87,19 @@ public class StoreAddServlet extends HttpServlet  {
 
         Map<String, String[]> parameterMap = request.getParameterMap();
 
+
         // Save uploaded image
         Part filePart = request.getPart("image"); // Retrieves <input type="file" name="image">
         //String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
 
-        File uploads = new File(getServletContext().getInitParameter("upload.location"));
-        File file = File.createTempFile("image-", ".png", uploads);
+        File uploads, file;
+        try {
+            uploads = new File(getServletContext().getInitParameter("upload.location"));
+            file = File.createTempFile("image-", ".png", uploads);
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find the folder to upload images. Please fix the specified folder in the web.xml file.");
+            return;
+        }
 
         try (InputStream fileContent = filePart.getInputStream()) {
             Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
