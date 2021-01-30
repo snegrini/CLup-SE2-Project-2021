@@ -64,11 +64,11 @@ class _PassesState extends State<PassesPage> {
     try {
       String token = DataManager().token;
 
-      var storeList = await ApiManager.ticketListRequest(token);
+      var ticketList = await ApiManager.ticketListRequest(token);
 
       setState(() {
         _loaded = true;
-        _list = storeList.map((e) => Ticket.fromJson(e)).toList();
+        _list = ticketList.map((e) => Ticket.fromJson(e)).toList();
       });
     } catch (err) {
       setState(() {
