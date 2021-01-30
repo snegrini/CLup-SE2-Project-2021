@@ -2,13 +2,11 @@ package it.polimi.se2.clup.CLupWeb.controllers.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.messages.Message;
-import it.polimi.se2.clup.CLupEJB.messages.TicketMessage;
 import it.polimi.se2.clup.CLupEJB.services.TicketService;
 import it.polimi.se2.clup.CLupEJB.util.TokenManager;
 import org.apache.commons.text.StringEscapeUtils;

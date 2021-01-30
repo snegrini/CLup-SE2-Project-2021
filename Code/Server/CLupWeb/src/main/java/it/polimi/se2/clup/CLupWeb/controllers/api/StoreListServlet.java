@@ -25,6 +25,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 
@@ -81,6 +84,18 @@ public class StoreListServlet extends HttpServlet {
             return;
         }
 
+        String uploadLocation = getServletContext().getInitParameter("upload.location");
+        for (StoreEntity store : stores) {
+            Path fullPath = Path.of(uploadLocation + "/" + store.getImagePath());
+
+            if (!Files.exists(fullPath)) {
+                store.setImagePath("");
+            } else {
+                String encodeBytes = Base64.getEncoder().encodeToString(Files.readAllBytes(fullPath));
+                store.setImagePath(encodeBytes);
+            }
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         JsonNode storesJson = mapper.valueToTree(new StoreListMessage(MessageStatus.OK, "Success", stores));
 
@@ -102,7 +117,7 @@ public class StoreListServlet extends HttpServlet {
             JsonNode entry = nodes.next();
 
             int custNum = ticketService.getCustomersQueue(entry.get("storeId").asInt());
-            ((ObjectNode)entry).put("customersInQueue", custNum);
+            ((ObjectNode) entry).put("customersInQueue", custNum);
         }
     }
 }

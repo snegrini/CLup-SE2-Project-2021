@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet(name = "TicketDetailServlet", value = "/api/detail_ticket")
+@WebServlet(name = "TicketDetailServlet", value = "/api/ticket_detail")
 public class TicketDetailServlet extends HttpServlet {
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/TicketService")
     private TicketService ticketService;

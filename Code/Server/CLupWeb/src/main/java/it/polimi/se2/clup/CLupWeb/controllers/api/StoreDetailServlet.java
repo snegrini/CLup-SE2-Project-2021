@@ -17,7 +17,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
@@ -79,12 +78,12 @@ public class StoreDetailServlet extends HttpServlet {
 
         if (!Files.exists(fullPath)) {
             storeEntity.setImagePath("");
+        } else {
+            String encodeBytes = Base64.getEncoder().encodeToString(Files.readAllBytes(fullPath));
+            storeEntity.setImagePath(encodeBytes);
         }
 
-        String encodeBytes = Base64.getEncoder().encodeToString(Files.readAllBytes(fullPath));
-        storeEntity.setImagePath(encodeBytes);
-
-        // TODO Add store queue and estimated time
+        // TODO Add estimated time
 
         out.print(ow.writeValueAsString(new StoreMessage(MessageStatus.OK, "Success", storeEntity)));
     }

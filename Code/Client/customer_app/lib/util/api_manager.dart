@@ -8,8 +8,8 @@ class ApiManager {
   static final _tokenUrl = "customer_token";
   static final _storeListUrl = "get_stores";
   static final _ticketListUrl = "get_tickets";
-  static final _storeDetail = "detail_store";
-  static final _ticketDetail = "detail_ticket";
+  static final _storeDetail = "store_detail";
+  static final _ticketDetail = "ticket_detail";
   static final _addTicketUrl = "add_ticket";
   static final _deleteTicketUrl = "delete_ticket";
 
