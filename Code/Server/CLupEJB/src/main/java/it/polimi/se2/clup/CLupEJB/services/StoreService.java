@@ -2,10 +2,12 @@ package it.polimi.se2.clup.CLupEJB.services;
 
 import it.polimi.se2.clup.CLupEJB.entities.*;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 
 import javax.ejb.DuplicateKeyException;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
@@ -20,6 +22,12 @@ import java.util.UUID;
 public class StoreService {
     @PersistenceContext(unitName = "CLupEJB")
     private EntityManager em;
+
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/OpeningHourService")
+    private OpeningHourService ohService;
+
+    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/UserService")
+    private UserService userService;
 
     public StoreService() {
     }
@@ -83,9 +91,20 @@ public class StoreService {
      * @param pec the PEC email address of the store.
      * @param phone the phone number of the store.
      * @param addressEntity the address entity of the store.
-     * @return the created store entity.
+     * @param ohFromMap
+     * @param ohToMap
+     * @param userId
+     * @return the generated users entity of the new store.
      */
-    public StoreEntity addStore(String storeName, String pec, String phone, String imagePath, AddressEntity addressEntity) throws BadStoreException {
+    public List<Map.Entry<String, String>> addStore(String storeName, String pec, String phone, String imagePath, AddressEntity addressEntity, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap, int userId) throws BadStoreException, UnauthorizedException {
+        UserEntity user = em.find(UserEntity.class, userId);
+
+        if (user == null) {
+            throw new BadStoreException("Cannot load user.");
+        }
+        if (user.getRole() != UserRole.ADMIN) {
+            throw new UnauthorizedException("Unauthorized operation.");
+        }
 
         if (findStoreByName(storeName) != null) {
             throw new BadStoreException("A store have already registered with same name.");
@@ -93,6 +112,8 @@ public class StoreService {
         if (findStoreByPec(pec) != null) {
             throw new BadStoreException("A store have already registered with same pec address.");
         }
+
+
 
         StoreEntity store = new StoreEntity();
         String passCode = UUID.randomUUID().toString().substring(0, 8);
@@ -105,7 +126,24 @@ public class StoreService {
         store.setDefaultPassCode(passCode);
 
         em.persist(store);
-        return store;
+
+        // Add opening hours to the created store.
+        try {
+            ohService.addAllOpeningHour(store, ohFromMap, ohToMap);
+        } catch (BadOpeningHourException e) {
+            em.remove(store);
+            throw new BadStoreException("Bad opening hour, store has not been added.");
+        }
+
+        List<Map.Entry<String, String>> genUsers;
+        // Generate manager and employee credentials.
+        try {
+            genUsers = userService.generateCredentials(store.getStoreId(), userId);
+        } catch (BadStoreException | UnauthorizedException e) {
+            em.remove(store);
+            throw new BadStoreException("Failed to generate credentials, store has not been added.");
+        }
+        return genUsers;
     }
 
     public void updateStoreCap(int storeCap, int storeId, int userId) throws BadStoreException, UnauthorizedException {

@@ -168,13 +168,9 @@ public class StoreAddServlet extends HttpServlet  {
             AddressEntity address = new AddressEntity(street, stnumber, city, province, postalcode, country);
 
             // Create the store.
-            store = storeService.addStore(storeName, pec, phone, file.getName(), address);
+            genUsers = storeService.addStore(storeName, pec, phone, file.getName(), address, ohFromMap, ohToMap, user.getUserId());
 
-            // Add opening hours to the created store.
-            ohService.addAllOpeningHour(store, ohFromMap, ohToMap);
-
-            // Generate manager and employee credentials.
-            genUsers = userService.generateCredentials(store.getStoreId(), user.getUserId());
+            store = storeService.findStoreByName(storeName);
 
         } catch (BadOpeningHourException | BadStoreException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
