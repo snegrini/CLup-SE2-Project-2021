@@ -130,7 +130,7 @@ class StoreSearch extends SearchDelegate {
           return Center(
             child: CircularProgressIndicator(
                 valueColor:
-                    new AlwaysStoppedAnimation<Color>(ClupColors.grapefruit)),
+                new AlwaysStoppedAnimation<Color>(ClupColors.grapefruit)),
           );
         }
       },
@@ -152,6 +152,20 @@ class StoreSearch extends SearchDelegate {
     return new ListTile(
       title: new Text(store.name),
       subtitle: Text(store.address.toString()),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Wait Time'),
+          SizedBox(height: 2),
+          (store.estimateTime < 45)
+              ? Text(
+            store.estimateTime.toString() + ' min',
+            style: TextStyle(color: Colors.green),
+          )
+              : Text(store.estimateTime.toString() + ' min',
+              style: TextStyle(color: ClupColors.grapefruit))
+        ],
+      ),
       onTap: () {
         Navigator.push(
           context,

@@ -27,7 +27,6 @@ class _StoreDetailState extends State<StoreDetailPage> {
   String _errorText = "";
   Map<String, List<OpeningHour>> _ohMap;
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,77 +39,113 @@ class _StoreDetailState extends State<StoreDetailPage> {
                 child: CircularProgressIndicator(
                     valueColor: new AlwaysStoppedAnimation<Color>(
                         ClupColors.grapefruit)))
-            : Center(
+            : Container(
+                margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
                 child: Column(
-                  children: [
-                    Text(
-                      _store.name,
-                      style:
-                      TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      _store.address.toString(),
-                      style: TextStyle(color: Colors.grey, fontSize: 20)
-                    ),
-                    SizedBox(
-                      height: 100.0,
-                      width: 100.0,
-                      child: Image.memory(base64Decode(_store.image))
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text('Estimated wait time', textAlign: TextAlign.center),
-                        ),
-                        Expanded(
-                          child: Text(_store.estimateTime.toString() + " min", textAlign: TextAlign.center),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text('People in queue', textAlign: TextAlign.center),
-                        ),
-                        Expanded(
-                          child: Text(_store.customerInQueue.toString() + " persons", textAlign: TextAlign.center),
-                        ),
-                      ],
-                    ),
-                    Text(
-                        "Opening hours",
-                        style: TextStyle(color: Colors.grey, fontSize: 20)
-                    ),
-
-                    // List of opening hours
-                    for (var ohEntry in _ohMap.entries) Row(children: <Widget>[
-                      Expanded(
-                        child: Text(ohEntry.key, textAlign: TextAlign.center),
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _store.name,
+                        style: TextStyle(
+                            fontSize: 23, fontWeight: FontWeight.bold),
                       ),
-                      Expanded(
-                        child: Column(
-                          children : [
-                            for (var oh in ohEntry.value) Row(children: <Widget>[
-                              Text(oh.from.format(context) + " - " + oh.to.format(context), textAlign: TextAlign.center)
-                            ])
-                          ]
-                        ),
-                      ),
-                    ]),
-
-                    RaisedButton(
-                      onPressed: _disabled ? null : _addTicket,
-                      child: Text(
-                        'Retrieve a ticket',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      color: ClupColors.grapefruit,
-                      disabledColor: ClupColors.disabledGrapefruit,
-                    ),
-                    if (_error) Text(_errorText)
-                  ],
-                ),
-              ));
+                      Text(_store.address.toString(),
+                          style: TextStyle(color: Colors.grey, fontSize: 18)),
+                      SizedBox(height: 4),
+                      Center(
+                          child: Column(
+                        children: [
+                          SizedBox(
+                              height: 140.0,
+                              width: 140.0,
+                              child: Image.memory(base64Decode(_store.image))),
+                          SizedBox(height: 4),
+                          Row(
+                            children: <Widget>[
+                              Spacer(flex: 1),
+                              Expanded(
+                                flex: 6,
+                                child: Text('Estimated wait time',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                    _store.estimateTime.toString() + " min",
+                                    style: TextStyle(fontSize: 16)),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 5),
+                          Row(
+                            children: <Widget>[
+                              Spacer(flex: 1),
+                              Expanded(
+                                flex: 6,
+                                child: Text('People in queue',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              Expanded(
+                                flex: 3,
+                                child: Text(
+                                    _store.customerInQueue.toString() +
+                                        " persons",
+                                    style: TextStyle(fontSize: 16)),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 15),
+                          Text("Opening hours",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          SizedBox(height: 10),
+                          // List of opening hours
+                          for (var ohEntry in _ohMap.entries)
+                            Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 3.5),
+                                child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Spacer(flex: 1),
+                                      Expanded(
+                                        flex: 6,
+                                        child: Text(ohEntry.key,
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)),
+                                      ),
+                                      Expanded(
+                                        flex: 3,
+                                        child: Column(children: [
+                                          for (var oh in ohEntry.value)
+                                            Row(children: <Widget>[
+                                              Text(oh.from.format(context) +
+                                                  " - " +
+                                                  oh.to.format(context))
+                                            ])
+                                        ]),
+                                      ),
+                                    ])),
+                          SizedBox(height: 20),
+                          RaisedButton(
+                            onPressed: _disabled ? null : _addTicket,
+                            child: Text(
+                              'Retrieve a ticket',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            color: ClupColors.grapefruit,
+                            disabledColor: ClupColors.disabledGrapefruit,
+                          ),
+                          SizedBox(height: 20),
+                          if (_error) Text(_errorText)
+                        ],
+                      ))
+                    ])));
   }
 
   @override

@@ -46,10 +46,10 @@ class _TicketDetailState extends State<TicketDetailPage> {
                     Text(
                       widget.ticket.store.name,
                       style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
                     ),
                     Text(widget.ticket.store.address.toString(),
-                        style: TextStyle(color: Colors.grey, fontSize: 20)),
+                        style: TextStyle(color: Colors.grey, fontSize: 18)),
                     SizedBox(height: 18),
                     Center(
                       child: Column(
