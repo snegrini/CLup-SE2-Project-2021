@@ -8,69 +8,120 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Manager Ticket List</h1>
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Customers Line-Up</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#" data-th-href="@{/logout}">Logout</a>
+        </li>
+    </ul>
+</nav>
 
-    <span><a href="#" data-th-href="@{/dashboard}">Back</a></span><br><br>
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-th-href="@{/dashboard}">
+                            <span data-feather="home"></span>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfo}">
+                            <span data-feather="file"></span>
+                            Store info
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfoedit}">
+                            <span data-feather="file"></span>
+                            Edit store info
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/ticketlist}">
+                            <span data-feather="file"></span>
+                            Ticket List <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-    <div data-th-if="${#lists.isEmpty(tickets)}">Wow, such empty</div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">Ticket List</h1>
+            </div>
 
-    <table data-th-unless="${#lists.isEmpty(tickets)}">
-        <thead>
-            <tr>
-                <th>Pass code</th>
-                <th>Pass status</th>
-                <th>Queue number</th>
-                <th>Date</th>
-                <th>Arrival time</th>
-                <th>Issued at</th>
-                <th>Manage</th>
-            </tr>
-        </thead>
-        <tbody data-th-remove="all-but-first">
-            <tr data-th-each="ticket : ${tickets}">
-                <td data-th-text="${ticket.passCode}">ZZZZ0001</td>
-                <td data-th-text="${ticket.passStatus}">VALID</td>
-                <td data-th-text="${ticket.queueNumber}">1</td>
-                <td data-th-text="${ticket.date}">2021-01-03</td>
-                <td data-th-text="${ticket.arrivalTime}">15:28:14</td>
-                <td data-th-text="${ticket.issuedAt}">2021-01-01 14:47:22.0</td>
-                <td>
-                    <form data-th-action="@{/dashboard/ticketdelete}" method="post">
-                        <input type="hidden" name="ticketId" data-th-value="${ticket.ticketId}">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>YYYY0002</td>
-                <td>USED</td>
-                <td>0</td>
-                <td>2021-05-05</td>
-                <td>08:45:41</td>
-                <td>2022-04-11 12:09:36.0</td>
-                <td>
-                    <form action="#" method="post">
-                        <input type="hidden" name="ticketId" value="2">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>WWWW0005</td>
-                <td>EXPIRED</td>
-                <td>0</td>
-                <td>2021-07-22</td>
-                <td>13:18:49</td>
-                <td>2021-07-22 19:08:04.0</td>
-                <td>
-                    <form action="#" method="post">
-                        <input type="hidden" name="ticketId" value="3">
-                        <button type="submit">Delete</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+            <div data-th-if="${#lists.isEmpty(tickets)}">Wow, such empty</div>
+
+            <table class="table table-striped table-sm" data-th-unless="${#lists.isEmpty(tickets)}">
+                <thead>
+                <tr>
+                    <th>Pass code</th>
+                    <th>Pass status</th>
+                    <th>Queue number</th>
+                    <th>Date</th>
+                    <th>Arrival time</th>
+                    <th>Issued at</th>
+                    <th>Manage</th>
+                </tr>
+                </thead>
+                <tbody data-th-remove="all-but-first">
+                <tr data-th-each="ticket : ${tickets}">
+                    <td data-th-text="${ticket.passCode}">ZZZZ0001</td>
+                    <td data-th-text="${ticket.passStatus}">VALID</td>
+                    <td data-th-text="${ticket.queueNumber}">1</td>
+                    <td data-th-text="${ticket.date}">2021-01-03</td>
+                    <td data-th-text="${ticket.arrivalTime}">15:28:14</td>
+                    <td data-th-text="${ticket.issuedAt}">2021-01-01 14:47:22.0</td>
+                    <td>
+                        <form data-th-action="@{/dashboard/ticketdelete}" method="post">
+                            <input type="hidden" name="ticketId" data-th-value="${ticket.ticketId}">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>YYYY0002</td>
+                    <td>USED</td>
+                    <td>0</td>
+                    <td>2021-05-05</td>
+                    <td>08:45:41</td>
+                    <td>2022-04-11 12:09:36.0</td>
+                    <td>
+                        <form action="#" method="post">
+                            <input type="hidden" name="ticketId" value="2">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>WWWW0005</td>
+                    <td>EXPIRED</td>
+                    <td>0</td>
+                    <td>2021-07-22</td>
+                    <td>13:18:49</td>
+                    <td>2021-07-22 19:08:04.0</td>
+                    <td>
+                        <form action="#" method="post">
+                            <input type="hidden" name="ticketId" value="3">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+</div>
+
+
 
 </body>
 </html>
