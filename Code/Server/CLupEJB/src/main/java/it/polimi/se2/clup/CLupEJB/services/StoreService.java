@@ -113,8 +113,6 @@ public class StoreService {
             throw new BadStoreException("A store have already registered with same pec address.");
         }
 
-
-
         StoreEntity store = new StoreEntity();
         String passCode = UUID.randomUUID().toString().substring(0, 8);
 
@@ -138,7 +136,7 @@ public class StoreService {
         List<Map.Entry<String, String>> genUsers;
         // Generate manager and employee credentials.
         try {
-            genUsers = userService.generateCredentials(store.getStoreId(), userId);
+            genUsers = userService.generateCredentials(store, userId);
         } catch (BadStoreException | UnauthorizedException e) {
             em.remove(store);
             throw new BadStoreException("Failed to generate credentials, store has not been added.");

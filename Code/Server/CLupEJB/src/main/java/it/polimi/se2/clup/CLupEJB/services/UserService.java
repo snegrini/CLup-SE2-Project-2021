@@ -120,18 +120,17 @@ public class UserService {
     /**
      * Generates manager and employee credentials for the specified store.
      *
-     * @param storeId the store id whose credentials shall be generated.
+     * @param store the store whose credentials shall be generated.
      * @param userId the user id who is performing this operation.
      * @return a list of user entity which contains the new created users.
      * @throws BadStoreException if store is not found.
      */
-    public List<Map.Entry<String, String>> generateCredentials(int storeId, int userId) throws BadStoreException, UnauthorizedException {
+    public List<Map.Entry<String, String>> generateCredentials(StoreEntity store, int userId) throws BadStoreException, UnauthorizedException {
 
         UserEntity user = em.find(UserEntity.class, userId);
-        StoreEntity store = em.find(StoreEntity.class, storeId);
 
         if (store == null) {
-            throw new BadStoreException("Cannot load store.");
+            throw new BadStoreException("Bad store parameter.");
         }
 
         // Check user permissions.

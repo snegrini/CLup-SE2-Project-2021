@@ -34,12 +34,10 @@ public class OpeningHourService {
         return em.find(OpeningHourEntity.class, ohId);
     }
 
-    private void addOpeningHour(int weekDay, Time fromTime, Time toTime, int storeId) throws BadOpeningHourException {
-
-        StoreEntity store = em.find(StoreEntity.class, storeId);
+    private void addOpeningHour(int weekDay, Time fromTime, Time toTime, StoreEntity store) throws BadOpeningHourException {
 
         if (store == null) {
-            throw new BadOpeningHourException("Cannot load store.");
+            throw new BadOpeningHourException("Bad store parameter.");
         }
 
         long numOhStore = store.getOpeningHours().stream()
@@ -64,7 +62,7 @@ public class OpeningHourService {
 
     private void addAllOpeningHour(List<OpeningHourEntity> ohList) throws BadOpeningHourException {
         for (OpeningHourEntity oh : ohList) {
-            addOpeningHour(oh.getWeekDay(), oh.getFromTime(), oh.getToTime(), oh.getStore().getStoreId());
+            addOpeningHour(oh.getWeekDay(), oh.getFromTime(), oh.getToTime(), oh.getStore());
         }
     }
 
