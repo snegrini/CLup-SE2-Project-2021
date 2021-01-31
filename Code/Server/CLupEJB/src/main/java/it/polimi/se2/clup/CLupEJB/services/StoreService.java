@@ -21,6 +21,13 @@ public class StoreService {
     @PersistenceContext(unitName = "CLupEJB")
     private EntityManager em;
 
+    public StoreService() {
+    }
+
+    public StoreService(EntityManager em) {
+        this.em = em;
+    }
+
     public StoreEntity findStoreById(int storeId) {
         return em.find(StoreEntity.class, storeId);
     }

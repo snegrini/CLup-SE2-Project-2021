@@ -40,7 +40,13 @@ public class TicketService {
     }
 
     public TicketEntity findTicketById(int ticketId) {
-        return em.find(TicketEntity.class, ticketId);
+        List<TicketEntity> tempList = new ArrayList<>();
+        tempList.add(em.find(TicketEntity.class, ticketId));
+
+        // Verify and update tickets status.
+        checkExpiredTickets(tempList);
+
+        return tempList.get(0);
     }
 
     /**
@@ -98,9 +104,9 @@ public class TicketService {
         List<TicketEntity> expiredTickets = new ArrayList<>();
 
         for (TicketEntity t : ticketList) {
-            Time lastTime = Time.valueOf(new Time(t.getArrivalTime().getTime() + 900000).toString()); // Last ticket time + 15 min
+            Time academicTime = Time.valueOf(new Time(t.getArrivalTime().getTime() + 900000).toString()); // Last ticket time + 15 min
 
-            if (today.after(t.getDate()) || now.after(lastTime)) {
+            if (!t.getPassStatus().equals(PassStatus.EXPIRED) && (today.after(t.getDate()) || now.after(academicTime))) {
                 t.setPassStatus(PassStatus.EXPIRED);
                 em.merge(t);
                 expiredTickets.add(t);
@@ -145,6 +151,10 @@ public class TicketService {
         } catch (PersistenceException e) {
             throw new BadTicketException("Cannot load tickets");
         }
+
+        // Verify and update tickets status.
+        checkExpiredTickets(tickets);
+
         return tickets;
     }
 
