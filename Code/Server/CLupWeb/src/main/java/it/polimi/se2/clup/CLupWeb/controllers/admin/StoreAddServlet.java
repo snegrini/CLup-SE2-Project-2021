@@ -169,10 +169,9 @@ public class StoreAddServlet extends HttpServlet  {
 
             // Create the store.
             genUsers = storeService.addStore(storeName, pec, phone, file.getName(), address, ohFromMap, ohToMap, user.getUserId());
-
             store = storeService.findStoreByName(storeName);
 
-        } catch (BadOpeningHourException | BadStoreException e) {
+        } catch (BadStoreException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         } catch (UnauthorizedException e) {
