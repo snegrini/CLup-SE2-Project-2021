@@ -18,10 +18,8 @@ import javax.persistence.PersistenceException;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 @Stateless
@@ -106,7 +104,11 @@ public class TicketService {
         for (TicketEntity t : ticketList) {
             Time academicTime = Time.valueOf(new Time(t.getArrivalTime().getTime() + 900000).toString()); // Last ticket time + 15 min
 
-            if (!t.getPassStatus().equals(PassStatus.EXPIRED) && (today.after(t.getDate()) || now.after(academicTime))) {
+            if (t.getPassStatus().equals(PassStatus.USED) && today.after(t.getDate())) {
+                t.setPassStatus(PassStatus.EXPIRED);
+                em.merge(t);
+                expiredTickets.add(t);
+            } else if (t.getPassStatus().equals(PassStatus.VALID) && (today.after(t.getDate()) || now.after(academicTime))) {
                 t.setPassStatus(PassStatus.EXPIRED);
                 em.merge(t);
                 expiredTickets.add(t);
@@ -166,8 +168,9 @@ public class TicketService {
      * @throws BadTicketException    when occurs an issue with the persistence or is performed an invalid operation.
      * @throws UnauthorizedException if the user has no permission to update the specified ticket.
      * @throws BadStoreException     when the store is not found
+     * @return the new ticket status.
      */
-    public void updateTicketStatus(String passCode, int storeId) throws BadTicketException, UnauthorizedException, BadStoreException {
+    public PassStatus updateTicketStatus(String passCode, int storeId) throws BadTicketException, UnauthorizedException, BadStoreException {
         TicketEntity ticket = em.createNamedQuery("TicketEntity.findByPassCode", TicketEntity.class)
                 .setParameter("passCode", passCode)
                 .setMaxResults(1)
@@ -175,6 +178,7 @@ public class TicketService {
                 .findFirst()
                 .orElse(null);
 
+        // Check for default pass code.
         if (ticket == null) {
             StoreEntity store = em.find(StoreEntity.class, storeId);
 
@@ -185,8 +189,7 @@ public class TicketService {
             if (store.getDefaultPassCode().equals(passCode)) {
                 store.setCustomersInside(store.getCustomersInside() - 1);
                 em.merge(store);
-
-                return;
+                return PassStatus.EXPIRED;
             } else {
                 throw new BadTicketException("Invalid pass code");
             }
@@ -212,6 +215,8 @@ public class TicketService {
 
         em.merge(store);
         em.merge(ticket);
+
+        return ticket.getPassStatus();
     }
 
     /**
