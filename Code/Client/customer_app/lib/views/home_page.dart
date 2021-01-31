@@ -1,11 +1,11 @@
 import 'package:customer_app/model/store.dart';
 import 'package:customer_app/util/api_manager.dart';
-import 'package:customer_app/util/data_manager.dart';
-import 'package:customer_app/views/store_detail_page.dart';
-import 'package:flutter/material.dart';
 import 'package:customer_app/util/clup_colors.dart';
-import 'package:customer_app/views/stores_page.dart';
+import 'package:customer_app/util/data_manager.dart';
 import 'package:customer_app/views/passes_page.dart';
+import 'package:customer_app/views/store_detail_page.dart';
+import 'package:customer_app/views/stores_page.dart';
+import 'package:flutter/material.dart';
 
 /// Home page of the app with a bottom navigation bar to switch from the store list
 /// to the store passes list and vice versa.
@@ -130,7 +130,7 @@ class StoreSearch extends SearchDelegate {
           return Center(
             child: CircularProgressIndicator(
                 valueColor:
-                    new AlwaysStoppedAnimation<Color>(ClupColors.grapefruit)),
+                new AlwaysStoppedAnimation<Color>(ClupColors.grapefruit)),
           );
         }
       },
@@ -152,6 +152,20 @@ class StoreSearch extends SearchDelegate {
     return new ListTile(
       title: new Text(store.name),
       subtitle: Text(store.address.toString()),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Wait Time'),
+          SizedBox(height: 2),
+          (store.estimateTime < 45)
+              ? Text(
+            store.estimateTime.toString() + ' min',
+            style: TextStyle(color: Colors.green),
+          )
+              : Text(store.estimateTime.toString() + ' min',
+              style: TextStyle(color: ClupColors.grapefruit))
+        ],
+      ),
       onTap: () {
         Navigator.push(
           context,

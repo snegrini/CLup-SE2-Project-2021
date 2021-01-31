@@ -1,10 +1,9 @@
 import 'package:customer_app/util/auth_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/util/data_manager.dart';
+import 'package:customer_app/views/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'home_page.dart';
 
 class ServerAddressPage extends StatefulWidget {
   _ServerAddressState createState() => _ServerAddressState();

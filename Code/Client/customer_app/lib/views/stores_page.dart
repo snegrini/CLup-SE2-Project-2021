@@ -1,11 +1,11 @@
+import 'dart:convert';
+
 import 'package:customer_app/model/store.dart';
 import 'package:customer_app/util/api_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
 import 'package:customer_app/util/data_manager.dart';
 import 'package:customer_app/views/store_detail_page.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-
 
 /// Page that displays the list of stores
 class StoresPage extends StatefulWidget {
@@ -51,11 +51,24 @@ class _StoresState extends State<StoresPage> {
     return new ListTile(
       title: new Text(store.name),
       subtitle: Text(store.address.toString()),
-        leading: SizedBox(
-            height: 100.0,
-            width: 100.0,
-            child: Image.memory(base64Decode(store.image))
-        ),
+      leading: SizedBox(
+          height: 60.0,
+          width: 60.0,
+          child: Image.memory(base64Decode(store.image))),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Wait Time'),
+          SizedBox(height: 2),
+          (store.estimateTime < 45)
+              ? Text(
+                  store.estimateTime.toString() + ' min',
+                  style: TextStyle(color: Colors.green),
+                )
+              : Text(store.estimateTime.toString() + ' min',
+                  style: TextStyle(color: ClupColors.grapefruit))
+        ],
+      ),
       onTap: () {
         Navigator.push(
           context,

@@ -1,11 +1,12 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:store_app/util/data_manager.dart';
 
 /// Class that handles the API requests to the server.
 class ApiManager {
-  static final _baseUrl =
-      "http://192.168.1.100:8080/CLupWeb_war_exploded/api/";
+  static final _apiPath = "api/";
+  static final _pingUrl = "ping";
   static final _loginUrl = "login";
   static final _validateUrl = "validate_ticket";
 
@@ -15,11 +16,13 @@ class ApiManager {
   static Future<Map<String, dynamic>> _makeRequest(url, body) async {
     // Performs an API request
     var response;
+    url = DataManager().serverAddress + _apiPath + url;
+
     try {
       response = await http.post(url, body: body).timeout(Duration(seconds: 2),
           onTimeout: () {
-            throw 'Timeout';
-          });
+        throw 'Timeout';
+      });
     } catch (_) {
       return Future.error('Couldn\'t reach the server');
     }
@@ -43,29 +46,48 @@ class ApiManager {
   }
 
   /// Performs a login request with the credentials [usercode] and [password].
+  static Future<void> pingRequest() async {
+    var body = {};
+
+    var jsonResponse;
+    try {
+      jsonResponse = await _makeRequest(_pingUrl, body);
+    } catch (e) {
+      return Future.error(e);
+    }
+
+    if (jsonResponse == null || jsonResponse['status'] != 'OK') {
+      return Future.error('Couldn\'t reach the server');
+    }
+  }
+
+  /// Performs a login request with the credentials [usercode] and [password].
   static Future<String> loginRequest(String usercode, String password) async {
-    var url = _baseUrl + _loginUrl;
+    var body = {'usercode': usercode, 'password': password};
 
-    var body = {
-      'usercode': usercode,
-      'password': password
-    };
-
-    var jsonResponse = await _makeRequest(url, body);
+    var jsonResponse;
+    try {
+      jsonResponse = await _makeRequest(_loginUrl, body);
+    } catch (e) {
+      return Future.error(e);
+    }
 
     return jsonResponse['token'];
   }
 
   /// Performs a store pass validation request passing the auth [token] and the [passcode].
   static Future<String> validateRequest(String token, String passcode) async {
-    var url = _baseUrl + _validateUrl;
-
     var body = {
       'token': token,
       'passcode': passcode,
     };
 
-    var jsonResponse = await _makeRequest(url, body);
+    var jsonResponse;
+    try {
+      jsonResponse = await _makeRequest(_validateUrl, body);
+    } catch (e) {
+      return Future.error(e);
+    }
 
     return jsonResponse['message'];
   }

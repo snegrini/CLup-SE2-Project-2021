@@ -1,3 +1,4 @@
+import 'package:customer_app/enum/pass_status.dart';
 import 'package:customer_app/model/ticket.dart';
 import 'package:customer_app/util/api_manager.dart';
 import 'package:customer_app/util/clup_colors.dart';
@@ -6,7 +7,6 @@ import 'package:customer_app/views/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:customer_app/enum/pass_status.dart';
 
 /// Page that displays the details of ticket
 class TicketDetailPage extends StatefulWidget {
@@ -46,10 +46,10 @@ class _TicketDetailState extends State<TicketDetailPage> {
                     Text(
                       widget.ticket.store.name,
                       style:
-                          TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
                     ),
                     Text(widget.ticket.store.address.toString(),
-                        style: TextStyle(color: Colors.grey, fontSize: 20)),
+                        style: TextStyle(color: Colors.grey, fontSize: 18)),
                     SizedBox(height: 18),
                     Center(
                       child: Column(
