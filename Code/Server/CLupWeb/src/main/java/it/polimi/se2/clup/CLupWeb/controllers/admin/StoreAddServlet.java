@@ -17,6 +17,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -91,7 +92,7 @@ public class StoreAddServlet extends HttpServlet  {
         // Save uploaded image
         Part filePart = request.getPart("image"); // Retrieves <input type="file" name="image">
 
-        if (filePart == null) {
+        if (filePart.getSize() == 0) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing store logo.");
             return;
         }
@@ -180,6 +181,9 @@ public class StoreAddServlet extends HttpServlet  {
             return;
         } catch (UnauthorizedException e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+            return;
+        } catch (EJBException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad input data.");
             return;
         }
 
