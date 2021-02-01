@@ -55,7 +55,7 @@ public class TicketService {
      * @throws BadTicketException when occurs an issue with the persistence.
      */
     public List<TicketEntity> findStoreTickets(int storeId) throws BadTicketException {
-        List<TicketEntity> tickets = null;
+        List<TicketEntity> tickets;
 
         try {
             tickets = em.createNamedQuery("TicketEntity.findByStore", TicketEntity.class)
@@ -76,7 +76,7 @@ public class TicketService {
      * @throws BadTicketException when occurs an issue with the persistence.
      */
     public List<TicketEntity> findValidStoreTickets(int storeId) throws BadTicketException {
-        List<TicketEntity> tickets = null;
+        List<TicketEntity> tickets;
 
         try {
             tickets = em.createNamedQuery("TicketEntity.findByStoreAndPassStatusSorted", TicketEntity.class)
@@ -229,7 +229,6 @@ public class TicketService {
      * @throws BadStoreException  when the store is not found
      */
     public TicketEntity addTicket(String customerId, int storeId) throws BadTicketException, BadStoreException, BadOpeningHourException {
-        TicketEntity ticket = new TicketEntity();
         StoreEntity store = em.find(StoreEntity.class, storeId);
 
         if (store == null) {
@@ -239,18 +238,27 @@ public class TicketService {
         long timestamp = new java.util.Date().getTime();
         Date date = new Date(timestamp);
 
-        TicketEntity alreadyRetrievedTicket = em.createNamedQuery("TicketEntity.findByCustomerIdOnDay", TicketEntity.class)
-                .setParameter("customerId", customerId)
-                .setParameter("date", date)
-                .setMaxResults(1)
-                .getResultStream()
-                .findFirst()
-                .orElse(null);
-
-        if (alreadyRetrievedTicket != null) {
+        if (gotAlreadyATicket(customerId, date)) {
             throw new BadTicketException("Already retrieved a ticket for today");
         }
 
+        TicketEntity ticket = new TicketEntity();
+
+        ticket.setCustomerId(customerId);
+        ticket.setPassCode(getUniquePassCode());
+        ticket.setPassStatus(PassStatus.VALID);
+        ticket.setStore(store);
+        ticket.setDate(new Date(System.currentTimeMillis()));
+        ticket.setIssuedAt(new Timestamp(System.currentTimeMillis()));
+
+        addQueueNumberAndTime(ticket, store, date, storeId);
+
+        store.addTicket(ticket);
+        em.persist(store);
+        return ticket;
+    }
+
+    private String getUniquePassCode() {
         String passCode;
         TicketEntity collisionTicket;
         do {
@@ -265,10 +273,22 @@ public class TicketService {
                     .orElse(null);
         } while (collisionTicket != null);
 
-        // Fetching last emitted ticket
-        Time ticketTime;
-        int queueNumber;
+        return passCode;
+    }
 
+    private Boolean gotAlreadyATicket(String customerId, Date date) {
+        TicketEntity alreadyRetrievedTicket = em.createNamedQuery("TicketEntity.findByCustomerIdOnDay", TicketEntity.class)
+                .setParameter("customerId", customerId)
+                .setParameter("date", date)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        return alreadyRetrievedTicket != null;
+    }
+
+    private void addQueueNumberAndTime(TicketEntity ticket, StoreEntity store, Date date, int storeId) throws BadStoreException, BadOpeningHourException, BadTicketException {
         try {
             TicketEntity lastTicket = em.createNamedQuery("TicketEntity.findByStoreSorted", TicketEntity.class)
                     .setParameter("storeId", storeId)
@@ -279,41 +299,28 @@ public class TicketService {
                     .orElse(null);
 
             if (store.getCustomersInside() < store.getStoreCap()) {
-                ticketTime = Time.valueOf(new Time(timestamp).toString());
+                ticket.setArrivalTime(Time.valueOf(new Time(date.getTime()).toString()));
 
                 if (lastTicket == null) {
-                    queueNumber = 1;
+                    ticket.setQueueNumber(1);
                 } else {
-                    queueNumber = lastTicket.getQueueNumber() + 1;
+                    ticket.setQueueNumber(lastTicket.getQueueNumber() + 1);
                 }
             } else {
                 if (lastTicket == null) {
                     throw new BadStoreException("Invalid store cap");
                 } else {
-                    ticketTime = new Time(lastTicket.getArrivalTime().getTime() + 900000); // Last ticket time + 15 min
-                    queueNumber = lastTicket.getQueueNumber() + 1;
+                    ticket.setArrivalTime(new Time(lastTicket.getArrivalTime().getTime() + 900000)); // Last ticket time + 15 min
+                    ticket.setQueueNumber(lastTicket.getQueueNumber() + 1);
                 }
             }
 
-            if (!ohs.isInOpeningHour(storeId, ticketTime)) {
+            if (!ohs.isInOpeningHour(storeId, ticket.getArrivalTime())) {
                 throw new BadOpeningHourException("The store is closed");
             }
         } catch (PersistenceException e) {
             throw new BadTicketException("Cannot load tickets");
         }
-
-        ticket.setCustomerId(customerId);
-        ticket.setPassCode(passCode);
-        ticket.setPassStatus(PassStatus.VALID);
-        ticket.setQueueNumber(queueNumber);
-        ticket.setArrivalTime(ticketTime);
-        ticket.setStore(store);
-        ticket.setDate(new Date(System.currentTimeMillis()));
-        ticket.setIssuedAt(new Timestamp(System.currentTimeMillis()));
-
-        store.addTicket(ticket);
-        em.persist(store);
-        return ticket;
     }
 
     /**

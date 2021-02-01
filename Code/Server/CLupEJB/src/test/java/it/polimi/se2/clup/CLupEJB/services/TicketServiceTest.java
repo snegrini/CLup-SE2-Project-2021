@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
@@ -30,7 +29,6 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -148,52 +146,49 @@ class TicketServiceTest {
         when(ohs.isInOpeningHour(anyInt(), any())).thenReturn(false);
         assertThrows(BadOpeningHourException.class, () -> ticketService.addTicket(customerId, store1.getStoreId()));
     }
-/*
+
     @Test
-    void deleteTicket_CustomerSuccessfulDelete_TicketValid() throws UnauthorizedException, BadTicketException {
+    void deleteTicket_CustomerSuccessfulDelete_TicketValid() {
         String customerId = "aaaa";
-        String passCode = "AAA000";
+        int ticketId = 1;
 
         TicketEntity t1 = new TicketEntity();
         t1.setCustomerId(customerId);
-        t1.setPassCode(passCode);
+        t1.setTicketId(ticketId);
         t1.setStore(store1);
         store1.setTickets(new ArrayList<>(List.of(t1)));
 
-        when(em.createNamedQuery(any(), any())).thenReturn(query1);
-        when(query1.getResultStream()).thenReturn(Stream.of(t1));
+        when(em.find(eq(TicketEntity.class), any())).thenReturn(t1);
 
-        assertDoesNotThrow(() -> ticketService.deleteTicket(customerId, passCode));
+        assertDoesNotThrow(() -> ticketService.deleteTicket(customerId, ticketId));
     }
 
     @Test
     void deleteTicket_CustomerFailDelete_TicketNull() {
         String customerId = "aaaa";
-        String passCode = "AAA000";
+        int ticketId = 1;
 
-        when(em.createNamedQuery(any(), any())).thenReturn(query1);
-        when(query1.getResultStream()).thenReturn(Stream.empty());
+        when(em.find(eq(TicketEntity.class), any())).thenReturn(null);
 
-        assertThrows(BadTicketException.class, () -> ticketService.deleteTicket(customerId, passCode));
+        assertThrows(BadTicketException.class, () -> ticketService.deleteTicket(customerId, ticketId));
     }
 
     @Test
     void deleteTicket_CustomerFailDelete_Unauthorized() {
         String customerId = "aaaa";
-        String passCode = "AAA000";
+        int ticketId = 1;
 
         TicketEntity t1 = new TicketEntity();
         t1.setCustomerId(customerId);
-        t1.setPassCode(passCode);
+        t1.setTicketId(ticketId);
 
-        when(em.createNamedQuery(any(), any())).thenReturn(query1);
-        when(query1.getResultStream()).thenReturn(Stream.of(t1));
+        when(em.find(eq(TicketEntity.class), any())).thenReturn(t1);
 
-        assertThrows(UnauthorizedException.class, () -> ticketService.deleteTicket(customerId + "A", passCode));
+        assertThrows(UnauthorizedException.class, () -> ticketService.deleteTicket(customerId + "A", ticketId));
     }
-*/
+
     @Test
-    void deleteTicket_ManagerSuccessfulDelete_TicketValid() throws UnauthorizedException, BadTicketException {
+    void deleteTicket_ManagerSuccessfulDelete_TicketValid() {
         int ticketId = 1;
         int userId = 1;
 
@@ -246,7 +241,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void deleteTicket_ManagerFailDelete_UnauthorizedRole() throws UnauthorizedException, BadTicketException {
+    void deleteTicket_ManagerFailDelete_UnauthorizedRole() {
         int ticketId = 1;
         int userId = 1;
 
@@ -266,7 +261,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void deleteTicket_ManagerFailDelete_UnauthorizedStore() throws UnauthorizedException, BadTicketException {
+    void deleteTicket_ManagerFailDelete_UnauthorizedStore() {
         int ticketId = 1;
         int userId = 1;
 
@@ -297,7 +292,7 @@ class TicketServiceTest {
         when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
         when(query1.getResultStream()).thenReturn(Stream.of(t1));
 
-        ticketService.updateTicketStatus(passCode, store1.getStoreId());
+        assertEquals(PassStatus.USED, ticketService.updateTicketStatus(passCode, store1.getStoreId()));
         assertEquals(PassStatus.USED, t1.getPassStatus());
     }
 
@@ -313,7 +308,7 @@ class TicketServiceTest {
         when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
         when(query1.getResultStream()).thenReturn(Stream.of(t1));
 
-        ticketService.updateTicketStatus(passCode, store1.getStoreId());
+        assertEquals(PassStatus.EXPIRED, ticketService.updateTicketStatus(passCode, store1.getStoreId()));
         assertEquals(PassStatus.EXPIRED, t1.getPassStatus());
     }
 
