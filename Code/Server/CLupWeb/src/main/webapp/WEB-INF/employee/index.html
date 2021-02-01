@@ -44,14 +44,17 @@
                 <h1 class="h2">Dashboard EMPLOYEE</h1>
             </div>
 
-            <h2>People inside the store</h2>
-            <span id="customersInside" data-th-text="${customersInside}">123</span> of
-            <span id="storeCap" data-th-text="${storeCap}">200</span>
+            <h1 class="h3" data-th-text="${store.storeName}"></h1>
+            <img src="https://via.placeholder.com/200x100?text=Store+Logo" alt="Store logo" width="200" height="100" data-th-src="@{'/images/'+${store.imagePath}}">
 
-            <h2>People in queue</h2>
+            <h1 class="h3">People inside the store</h1>
+            <span id="customersInside" data-th-text="${store.customersInside}">123</span> of
+            <span id="storeCap" data-th-text="${store.storeCap}">200</span>
+
+            <h1 class="h3">People in queue</h1>
             <div id="customersQueue" data-th-text="${customersQueue}">456</div>
 
-            <h2>Valid Ticket List</h2>
+            <h1 class="h3">Valid Ticket List</h1>
             <div id="divPassCode" class="table-responsive">
                 <div data-th-if="${#lists.isEmpty(validTickets)}">Wow, such empty</div>
 

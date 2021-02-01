@@ -13,7 +13,10 @@ function update() {
         $customersQueue.text(data.customersQueue);
         $storeCap.text(data.storeCap);
 
-        var $table_obj = $("<table>");
+        var $table_obj = $("<table>", {
+            class: "table table-striped table-sm"
+        });
+
         var $tr = $("<tr>");
 
         $tr.append($("<th>").text("Pass code"))

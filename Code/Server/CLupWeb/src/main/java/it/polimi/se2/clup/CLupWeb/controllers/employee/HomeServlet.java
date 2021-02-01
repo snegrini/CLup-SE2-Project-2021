@@ -89,9 +89,8 @@ public class HomeServlet extends HttpServlet {
         WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
         String path = "/WEB-INF/employee/index.html";
 
-        ctx.setVariable("customersInside", customersInside);
+        ctx.setVariable("store", store);
         ctx.setVariable("customersQueue", customersQueue);
-        ctx.setVariable("storeCap", store.getStoreCap());
         ctx.setVariable("validTickets", validTickets);
 
         templateEngine.process(path, ctx, response.getWriter());

@@ -53,7 +53,8 @@
                 <h1 class="h2">Store details</h1>
             </div>
 
-            <img src="test.jpg" alt="" width="300" height="200"><br>
+            <img src="https://via.placeholder.com/200x100?text=Store+Logo" alt="Store logo" width="200" height="100" data-th-src="@{'/images/'+${store.imagePath}}">
+            <br>
 
             <strong>Store name: </strong>
             <span data-th-text="${store.storeName}">StoreName</span><br>
