@@ -113,6 +113,35 @@ class OpeningHourServiceTest {
     }
 
     @Test
+    void addAllOpeningHour_FailAdd_FromAfterTo() {
+        List<Time> fromTimeList = List.of(to1);
+        List<Time> toTimeList = List.of(from1);
+
+        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store));
+    }
+
+    @Test
+    void addAllOpeningHour_FailAdd_ToBorderline() {
+        Time toBorderline = new Time(1612219800000L); // 23:50:00
+
+        List<Time> fromTimeList = List.of(from1);
+        List<Time> toTimeList = List.of(toBorderline);
+
+        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store));
+    }
+
+    @Test
+    void addAllOpeningHour_FailAdd_FromAndToBorderline() {
+        Time fromBorderline = new Time(1612219800000L); // 23:50:00
+        Time toBorderline = new Time(1612220100000L); // 23:55:00
+
+        List<Time> fromTimeList = List.of(fromBorderline);
+        List<Time> toTimeList = List.of(toBorderline);
+
+        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store));
+    }
+
+    @Test
     void addAllOpeningHour_FailAdd_BadListOfTimes() {
         List<Time> fromTimeList = List.of(from1, from2);
         List<Time> toTimeList = List.of(to1);

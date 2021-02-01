@@ -84,8 +84,47 @@ public class OpeningHourService {
         if (hasOverlap(ohList)) {
             throw new BadOpeningHourException("Two opening hours are overlapping.");
         }
+        if (hasFromAfterTo(ohList)) {
+            throw new BadOpeningHourException("From time cannot be after to time.");
+        }
+        if (isBorderline(ohList)) {
+            throw new BadOpeningHourException("Opening hour must finish before 23:45.");
+        }
 
         addAllOpeningHour(ohList);
+    }
+
+    /**
+     * Checks if an opening hour has the from-time after the to-time.
+     *
+     * @param ohList the list of opening hour to be checked.
+     * @return {@code true} if an opening hour has the from-time after the to-time, {@code false} otherwise.
+     */
+    private boolean hasFromAfterTo(List<OpeningHourEntity> ohList) {
+        for (OpeningHourEntity oh : ohList) {
+            if (oh.getFromTime().after(oh.getToTime())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks if an opening hour is borderline, i.e. it is defined between 23:45:00 and 00:00:00 which is a forbidden time.
+     *
+     * @param ohList the list of opening hour to be checked.
+     * @return {@code true} if an opening hour is borderline, {@code false} otherwise.
+     */
+    private boolean isBorderline(List<OpeningHourEntity> ohList) {
+        Time badTimeFrom = new Time(81900000); // 23:45:00
+
+        for (OpeningHourEntity oh : ohList) {
+            Time time = Time.valueOf(oh.getToTime().toString());
+            if (!time.before(badTimeFrom)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addAllOpeningHour(StoreEntity store, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap)

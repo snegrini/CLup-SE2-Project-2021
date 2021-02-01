@@ -130,7 +130,7 @@ public class StoreService {
             ohService.addAllOpeningHour(store, ohFromMap, ohToMap);
         } catch (BadOpeningHourException e) {
             em.remove(store);
-            throw new BadStoreException("Bad opening hour, store has not been added.");
+            throw new BadStoreException("Store has not been added. " + e.getMessage());
         }
 
         List<Map.Entry<String, String>> genUsers;
