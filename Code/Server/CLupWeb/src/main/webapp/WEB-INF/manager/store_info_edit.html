@@ -8,74 +8,128 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Manager Store Info Edit</h1>
-    <a href="#" data-th-href="@{/dashboard/storeinfo}">Back</a><br><br>
 
-    <h2>Store cap</h2>
-    <form action="storeinfoedit" method="post">
-        <fieldset>
-            <label>Store cap
-                <input type="number" name="storeCap" value="123" data-th-value="${storeCap}" required></label><br>
-            <input type="submit" value="Update">
-        </fieldset>
-    </form>
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Customers Line-Up</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#" data-th-href="@{/logout}">Logout</a>
+        </li>
+    </ul>
+</nav>
 
-    <br>
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-th-href="@{/dashboard}">
+                            <span data-feather="home"></span>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfo}">
+                            <span data-feather="file"></span>
+                            Store info
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfoedit}">
+                            <span data-feather="file"></span>
+                            Edit store info <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/ticketlist}">
+                            <span data-feather="file"></span>
+                            Ticket List
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-    <h2>Opening hours</h2>
-    <form action="ohedit" method="post">
-        <fieldset>
-            <legend>Opening Hours</legend>
-
-            <div data-th-each="ohday : ${openingHourMap}">
-                <label>
-                    <input type="checkbox" name="day[]" data-th-value="${ohday.key}" data-th-checked="${not #lists.isEmpty(ohday.value)}">
-                    <strong data-th-text="${ohday.key}">Day of week</strong>
-                </label>
-                <br>
-
-                <div data-th-if="${#lists.isEmpty(ohday.value)}" data-th-each="i : ${#numbers.sequence(1, 2)}">
-                    <label>
-                        From:
-                        <input type="time" name="from" step="1" data-th-name="${ohday.key + '-from-' + i}">
-                    </label>
-                    <label>
-                        To:
-                        <input type="time" name="to" step="1" data-th-name="${ohday.key + '-to-' + i}">
-                    </label>
-                    <br>
-                </div>
-
-                <div data-th-unless="${#lists.isEmpty(ohday.value)}" data-th-each="ohtime, iterStat : ${ohday.value}">
-                    <label>
-                        From:
-                        <input type="time" name="from" step="1" data-th-name="${ohday.key + '-from-' + iterStat.count}" data-th-value="${ohtime.fromTime}">
-                    </label>
-                    <label>
-                        To:
-                        <input type="time" name="to" step="1" data-th-name="${ohday.key + '-to-' + iterStat.count}" data-th-value="${ohtime.toTime}">
-                    </label>
-                    <br>
-                </div>
-
-                <div data-th-if="${#lists.size(ohday.value) == 1}">
-                    <label>
-                        From:
-                        <input type="time" name="from" step="1" data-th-name="${ohday.key + '-from-2'}">
-                    </label>
-                    <label>
-                        To:
-                        <input type="time" name="to" step="1" data-th-name="${ohday.key + '-to-2'}">
-                    </label>
-                    <br>
-                </div>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">Edit store info</h1>
             </div>
 
-            <br>
-            <input type="submit" value="Update">
+            <h2>Store cap</h2>
+            <form action="storeinfoedit" method="post">
+                <fieldset>
+                    <label>Store cap
+                        <input type="number" name="storeCap" value="123" data-th-value="${storeCap}" required></label><br>
+                    <input type="submit" value="Update">
+                </fieldset>
+            </form>
 
-        </fieldset>
-    </form>
+            <br>
+
+            <h2>Opening hours</h2>
+            <form action="ohedit" method="post">
+                <fieldset>
+                    <legend>Opening Hours</legend>
+
+                    <div data-th-each="ohday : ${openingHourMap}">
+                        <label>
+                            <input type="checkbox" name="day[]" data-th-value="${ohday.key}" data-th-checked="${not #lists.isEmpty(ohday.value)}">
+                            <strong data-th-text="${ohday.key}">Day of week</strong>
+                        </label>
+                        <br>
+
+                        <div data-th-if="${#lists.isEmpty(ohday.value)}" data-th-each="i : ${#numbers.sequence(1, 2)}">
+                            <label>
+                                From:
+                                <input type="time" name="from" step="1" data-th-name="${ohday.key + '-from-' + i}">
+                            </label>
+                            <label>
+                                To:
+                                <input type="time" name="to" step="1" data-th-name="${ohday.key + '-to-' + i}">
+                            </label>
+                            <br>
+                        </div>
+
+                        <div data-th-unless="${#lists.isEmpty(ohday.value)}" data-th-each="ohtime, iterStat : ${ohday.value}">
+                            <label>
+                                From:
+                                <input type="time" name="from" step="1" data-th-name="${ohday.key + '-from-' + iterStat.count}" data-th-value="${ohtime.fromTime}">
+                            </label>
+                            <label>
+                                To:
+                                <input type="time" name="to" step="1" data-th-name="${ohday.key + '-to-' + iterStat.count}" data-th-value="${ohtime.toTime}">
+                            </label>
+                            <br>
+                        </div>
+
+                        <div data-th-if="${#lists.size(ohday.value) == 1}">
+                            <label>
+                                From:
+                                <input type="time" name="from" step="1" data-th-name="${ohday.key + '-from-2'}">
+                            </label>
+                            <label>
+                                To:
+                                <input type="time" name="to" step="1" data-th-name="${ohday.key + '-to-2'}">
+                            </label>
+                            <br>
+                        </div>
+                    </div>
+
+                    <br>
+                    <input type="submit" value="Update">
+
+                </fieldset>
+            </form>
+
+        </main>
+    </div>
+</div>
+
+
 
 </body>
 </html>

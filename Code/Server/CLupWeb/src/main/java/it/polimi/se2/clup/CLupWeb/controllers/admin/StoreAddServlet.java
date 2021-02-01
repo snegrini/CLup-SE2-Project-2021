@@ -90,7 +90,11 @@ public class StoreAddServlet extends HttpServlet  {
 
         // Save uploaded image
         Part filePart = request.getPart("image"); // Retrieves <input type="file" name="image">
-        //String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString(); // MSIE fix.
+
+        if (filePart == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing store logo.");
+            return;
+        }
 
         File uploads, file;
         try {

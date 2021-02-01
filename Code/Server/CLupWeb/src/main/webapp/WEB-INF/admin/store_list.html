@@ -8,34 +8,81 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Store List</h1>
-    <span><a href="#" data-th-href="@{/dashboard}">Back</a></span><br>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Store Name</th>
-                <th>Store Cap</th>
-                <th>Details</th>
-            </tr>
-        </thead>
-        <tbody data-th-remove="all-but-first">
-            <tr data-th-each="store : ${stores}">
-                <td data-th-text="${store.storeName}">Onions</td>
-                <td data-th-text="${store.storeCap}">2</td>
-                <td><a href="#" data-th-href="@{/dashboard/storedetails(id=${store.storeId})}">Go</a></td>
-            </tr>
-            <tr>
-                <td>Apples</td>
-                <td>40</td>
-                <td><a href="#">Go</a></td>
-            </tr>
-            <tr>
-                <td>Tomatoes</td>
-                <td>7</td>
-                <td><a href="#">Go</a></td>
-            </tr>
-        </tbody>
-    </table>
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Customers Line-Up</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#" data-th-href="@{/logout}">Logout</a>
+        </li>
+    </ul>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-th-href="@{/dashboard}">
+                            <span data-feather="home"></span>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storelist}">
+                            <span data-feather="file"></span>
+                            Store list <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeadd}">
+                            <span data-feather="file"></span>
+                            Add a store
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">Store list</h1>
+            </div>
+
+            <table class="table table-striped table-sm">
+                <thead>
+                <tr>
+                    <th>Store Name</th>
+                    <th>Store Cap</th>
+                    <th>Details</th>
+                </tr>
+                </thead>
+                <tbody data-th-remove="all-but-first">
+                <tr data-th-each="store : ${stores}">
+                    <td data-th-text="${store.storeName}">Onions</td>
+                    <td data-th-text="${store.storeCap}">2</td>
+                    <td><a href="#" data-th-href="@{/dashboard/storedetails(id=${store.storeId})}">Go</a></td>
+                </tr>
+                <tr>
+                    <td>Apples</td>
+                    <td>40</td>
+                    <td><a href="#">Go</a></td>
+                </tr>
+                <tr>
+                    <td>Tomatoes</td>
+                    <td>7</td>
+                    <td><a href="#">Go</a></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </main>
+    </div>
+</div>
+
 </body>
 </html>

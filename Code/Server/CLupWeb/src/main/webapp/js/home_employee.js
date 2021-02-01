@@ -7,9 +7,11 @@ function update() {
 
         var $customersInside = $("#customersInside");
         var $customersQueue = $("#customersQueue");
+        var $storeCap = $("#storeCap");
 
         $customersInside.text(data.customersInside);
         $customersQueue.text(data.customersQueue);
+        $storeCap.text(data.storeCap);
 
         var $table_obj = $("<table>");
         var $tr = $("<tr>");

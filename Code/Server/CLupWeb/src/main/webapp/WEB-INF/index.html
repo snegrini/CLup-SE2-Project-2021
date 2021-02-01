@@ -6,36 +6,27 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="../css/default.css" data-th-href="@{/css/default.css}"/>
+
+    <link href="../css/default.css" data-th-href="@{/css/default.css}" rel="stylesheet">
+    <link href="../css/signin.css" data-th-href="@{/css/signin.css}" rel="stylesheet">
 </head>
-<body>
+<body class="text-center">
 
-<header class="headerrow">
-    <div class="titlecolumn">
-        <h1>Welcome to the Customers Line-up application.</h1>
-        <div>Please log in</div>
-    </div>
-</header>
+<form class="form-signin" action="login" method="post">
+    <img class="mb-4" src="/docs/4.6/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 
-<form action="login" method="post">
+    <label for="inputUsercode" class="sr-only">Usercode</label>
+    <input type="text" id="inputUsercode" class="form-control" placeholder="Enter Usercode" name="usercode" required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" class="form-control" placeholder="Enter Password" name="password" required>
 
-    <label>
-        <b>Usercode</b>
-        <input type="text" placeholder="Enter Usercode" name="usercode" required>
-    </label>
-
-    <br>
-
-    <label>
-        <b>Password</b>
-        <input type="password" placeholder="Enter Password" name="password" required>
-    </label>
-
-    <br>
-
-    <button type="submit">Login</button>
     <div data-th-text="${errorMessage}"></div>
+
+    <button class="btn btn-lg btn-primary btn-block btn-clup" type="submit">Sign in</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2021</p>
 </form>
+
 
 </body>
 </html>

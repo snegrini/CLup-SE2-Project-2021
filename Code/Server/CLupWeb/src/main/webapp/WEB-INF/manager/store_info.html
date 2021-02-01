@@ -8,23 +8,73 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Manager Store information</h1>
-    <span><a href="#" data-th-href="@{/dashboard/storeinfoedit}">Edit store info</a></span>
-    <span><a href="#" data-th-href="@{/dashboard}">Back</a></span><br>
 
-    <h2>Store cap</h2>
-    <div data-th-text="${storeCap}">123</div>
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Customers Line-Up</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#" data-th-href="@{/logout}">Logout</a>
+        </li>
+    </ul>
+</nav>
 
-    <h2>Opening hours</h2>
-    <div data-th-each="ohday : ${openingHourMap}">
-        - <strong data-th-text="${ohday.key}">Day of week</strong>
-        <div data-th-each="ohtime : ${ohday.value}">
-            From: <span data-th-text="${ohtime.fromTime}">99:99</span>
-            To: <span data-th-text="${ohtime.toTime}">99:99</span>
-        </div>
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-th-href="@{/dashboard}">
+                            <span data-feather="home"></span>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfo}">
+                            <span data-feather="file"></span>
+                            Store info <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfoedit}">
+                            <span data-feather="file"></span>
+                            Edit store info
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/ticketlist}">
+                            <span data-feather="file"></span>
+                            Ticket List
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-        <br>
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">Store info</h1>
+            </div>
+
+            <h2>Store cap</h2>
+            <div data-th-text="${storeCap}">123</div>
+
+            <h2>Opening hours</h2>
+            <div data-th-each="ohday : ${openingHourMap}">
+                - <strong data-th-text="${ohday.key}">Day of week</strong>
+                <div data-th-each="ohtime : ${ohday.value}">
+                    From: <span data-th-text="${ohtime.fromTime}">99:99</span>
+                    To: <span data-th-text="${ohtime.toTime}">99:99</span>
+                </div>
+
+                <br>
+            </div>
+        </main>
     </div>
+</div>
 
 </body>
 </html>

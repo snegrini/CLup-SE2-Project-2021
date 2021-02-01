@@ -8,19 +8,67 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 </head>
 <body>
-    <h1>Manager Index</h1>
-    <a href="#" data-th-href="@{/dashboard/storeinfo}">Store info</a><br>
-    <a href="#" data-th-href="@{/dashboard/ticketlist}">Ticket List</a><br>
+<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Customers Line-Up</a>
+    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <ul class="navbar-nav px-3">
+        <li class="nav-item text-nowrap">
+            <a class="nav-link" href="#" data-th-href="@{/logout}">Logout</a>
+        </li>
+    </ul>
+</nav>
 
-    <br>
+<div class="container-fluid">
+    <div class="row">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+            <div class="sidebar-sticky pt-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" data-th-href="@{/dashboard}">
+                            <span data-feather="home"></span>
+                            Dashboard <span class="sr-only">(current)</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfo}">
+                            <span data-feather="file"></span>
+                            Store info
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfoedit}">
+                            <span data-feather="file"></span>
+                            Edit store info
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-th-href="@{/dashboard/ticketlist}">
+                            <span data-feather="file"></span>
+                            Ticket List
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-    <img src="https://via.placeholder.com/200x100?text=Store+Logo" alt="Store logo" width="200" height="100" data-th-src="@{'/images/'+${imagePath}}">
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
+                <h1 class="h2">Dashboard MANAGER</h1>
+            </div>
 
-    <h2>People inside the store</h2>
-    <div data-th-text="${customersInside}">123</div>
+            <img src="https://via.placeholder.com/200x100?text=Store+Logo" alt="Store logo" width="200" height="100" data-th-src="@{'/images/'+${imagePath}}">
 
-    <h2>People in queue</h2>
-    <div data-th-text="${customersQueue}">456</div>
+            <h2>People inside the store</h2>
+            <div data-th-text="${customersInside}">123</div>
+
+            <h2>People in queue</h2>
+            <div data-th-text="${customersQueue}">456</div>
+        </main>
+    </div>
+</div>
+
 
 </body>
 </html>

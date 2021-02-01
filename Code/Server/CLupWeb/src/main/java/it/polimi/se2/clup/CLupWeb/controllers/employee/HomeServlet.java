@@ -91,6 +91,7 @@ public class HomeServlet extends HttpServlet {
 
         ctx.setVariable("customersInside", customersInside);
         ctx.setVariable("customersQueue", customersQueue);
+        ctx.setVariable("storeCap", store.getStoreCap());
         ctx.setVariable("validTickets", validTickets);
 
         templateEngine.process(path, ctx, response.getWriter());
@@ -133,6 +134,8 @@ public class HomeServlet extends HttpServlet {
             return;
         }
 
-        out.print(ow.writeValueAsString(new EmployeeMessage(MessageStatus.OK, "Success", validTickets, customersInside, customersQueue)));
+        int storeCap = store.getStoreCap();
+
+        out.print(ow.writeValueAsString(new EmployeeMessage(MessageStatus.OK, "Success", validTickets, customersInside, customersQueue, storeCap)));
     }
 }

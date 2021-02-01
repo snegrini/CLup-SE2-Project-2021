@@ -80,4 +80,17 @@ public class OpeningHourEntity {
     public void setStore(StoreEntity store) {
         this.store = store;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OpeningHourEntity that = (OpeningHourEntity) o;
+        return weekDay == that.weekDay && fromTime.equals(that.fromTime) && toTime.equals(that.toTime) && store.equals(that.store);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fromTime, toTime, weekDay, store);
+    }
 }
