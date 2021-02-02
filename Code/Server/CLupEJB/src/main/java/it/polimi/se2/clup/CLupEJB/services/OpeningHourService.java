@@ -166,6 +166,23 @@ public class OpeningHourService {
         em.remove(oh);
     }
 
+    /**
+     * Delete all opening hours given a week day and a store.
+     *
+     * @param weekDay the week day of the opening hours to delete.
+     * @param store the store of the opening hours.
+     * @param userId the user id performing the operation.
+     * @throws BadOpeningHourException when user is unauthorized or when opening hour is not found.
+     */
+    public void deleteOpeningHours(int weekDay, StoreEntity store, int userId) throws BadOpeningHourException {
+        List<OpeningHourEntity> ohStoredList = em.createNamedQuery("OpeningHourEntity.findByStoreIdAndWeekDay", OpeningHourEntity.class)
+                .setParameter("storeId", store.getStoreId())
+                .setParameter("weekDay", weekDay)
+                .getResultList();
+
+        deleteAllOpeningHour(ohStoredList, userId);
+    }
+
     public void deleteAllOpeningHour(List<OpeningHourEntity> ohList, int userId) throws BadOpeningHourException {
         for (OpeningHourEntity oh : ohList) {
             deleteOpeningHour(oh.getOpeningHoursId(), userId);
@@ -214,11 +231,19 @@ public class OpeningHourService {
             throw new BadOpeningHourException("Cannot load store.");
         }
 
-        for (Integer day : ohFromMap.keySet()) {
-            if (!ohToMap.containsKey(day)) {
+        for (DayOfWeek day : DayOfWeek.values()) {
+            Integer dayNum = day.getValue();
+
+            // ^ is the XOR operator.
+            if (ohFromMap.containsKey(dayNum) ^ ohToMap.containsKey(dayNum)) {
                 throw new BadOpeningHourException("Opening hours missing from-to fields.");
+            } else if (!ohFromMap.containsKey(dayNum) && !ohToMap.containsKey(dayNum)) {
+                // Unchecked opening hour, performing a delete.
+                deleteOpeningHours(dayNum, store, userId);
+            } else {
+                // Opening hour must be updated.
+                updateOpeningHour(dayNum, ohFromMap.get(dayNum), ohToMap.get(dayNum), store, userId);
             }
-            updateOpeningHour(day, ohFromMap.get(day), ohToMap.get(day), store, userId);
         }
     }
 

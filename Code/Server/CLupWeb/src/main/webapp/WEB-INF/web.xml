@@ -24,7 +24,6 @@
     <filter-mapping>
         <filter-name>ManagerChecker</filter-name>
         <servlet-name>ManagerHomeServlet</servlet-name>
-        <servlet-name>ManagerOpeningDeleteServlet</servlet-name>
         <servlet-name>ManagerOpeningEditServlet</servlet-name>
         <servlet-name>ManagerStoreInfoEditServlet</servlet-name>
         <servlet-name>ManagerStoreInfoServlet</servlet-name>
