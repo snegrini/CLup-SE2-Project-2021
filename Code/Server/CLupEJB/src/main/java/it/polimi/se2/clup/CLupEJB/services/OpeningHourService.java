@@ -204,10 +204,6 @@ public class OpeningHourService {
     public void updateOpeningHour(int weekDay, List<Time> fromTimeList, List<Time> toTimeList, StoreEntity store, int userId) throws BadOpeningHourException {
         List<OpeningHourEntity> ohList = buildOpeningHourList(weekDay, fromTimeList, toTimeList, store);
 
-        /*if (ohList.size() < MAX_OPENING_HOURS) {
-            throw new BadOpeningHourException("At least one opening hour is missing.");
-        }*/
-
         if (hasOverlap(ohList)) {
             throw new BadOpeningHourException("Two opening hours are overlapping.");
         }

@@ -22,6 +22,7 @@ import javax.persistence.TypedQuery;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -76,12 +77,14 @@ class OpeningHourServiceTest {
         to2 = new Time(1612112400000L); // 18:00
 
         oh1 = new OpeningHourEntity();
+        oh1.setOpeningHoursId(1);
         oh1.setWeekDay(WEEK_DAY_MONDAY);
         oh1.setFromTime(from1);
         oh1.setToTime(to1);
         oh1.setStore(store);
 
         oh2 = new OpeningHourEntity();
+        oh2.setOpeningHoursId(2);
         oh2.setWeekDay(WEEK_DAY_MONDAY);
         oh2.setFromTime(from2);
         oh2.setToTime(to2);
@@ -268,5 +271,153 @@ class OpeningHourServiceTest {
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(null);
 
         assertThrows(BadOpeningHourException.class, () -> ohService.isInOpeningHour(store.getStoreId(), time));
+    }
+
+    @Test
+    void updateAllOpeningHour_UpdateSuccessful() {
+        Time fromTimeNew = new Time(1612083600000L); // 10:00
+        List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
+
+        store.setOpeningHours(new ArrayList<>(ohListOld));
+
+        // Create new opening hour.
+        OpeningHourEntity oh3 = new OpeningHourEntity();
+        oh3.setOpeningHoursId(3);
+        oh3.setWeekDay(WEEK_DAY_MONDAY);
+        oh3.setFromTime(fromTimeNew);
+        oh3.setToTime(to1);
+        oh3.setStore(store);
+
+        List<OpeningHourEntity> ohListNew = List.of(oh2, oh3);
+
+        assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
+        Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
+        Map<Integer, List<Time>> ohToMap = Map.of(oh2.getWeekDay(), List.of(oh2.getToTime(), oh3.getToTime()));
+
+        UserEntity u1 = new UserEntity();
+        u1.setUserId(1);
+        u1.setRole(UserRole.MANAGER);
+        u1.setStore(store);
+
+        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
+        when(em.find(eq(UserEntity.class), anyInt())).thenReturn(u1);
+        when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(oh1);
+        when(em.find(OpeningHourEntity.class, oh2.getOpeningHoursId())).thenReturn(oh2);
+
+        when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
+        when(query1.getResultList()).thenReturn(new ArrayList<>(ohListOld));
+
+        assertDoesNotThrow(() -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, u1.getUserId()));
+    }
+
+    @Test
+    void updateAllOpeningHour_UpdateFailed_BadUser() {
+        Time fromTimeNew = new Time(1612083600000L); // 10:00
+        List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
+
+        store.setOpeningHours(new ArrayList<>(ohListOld));
+
+        // Create new opening hour.
+        OpeningHourEntity oh3 = new OpeningHourEntity();
+        oh3.setOpeningHoursId(3);
+        oh3.setWeekDay(WEEK_DAY_MONDAY);
+        oh3.setFromTime(fromTimeNew);
+        oh3.setToTime(to1);
+        oh3.setStore(store);
+
+        List<OpeningHourEntity> ohListNew = List.of(oh2, oh3);
+
+        assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
+        Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
+        Map<Integer, List<Time>> ohToMap = Map.of(oh2.getWeekDay(), List.of(oh2.getToTime(), oh3.getToTime()));
+
+        UserEntity u1 = new UserEntity();
+        u1.setUserId(1);
+        u1.setRole(UserRole.MANAGER);
+        u1.setStore(store);
+
+        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
+        when(em.find(eq(UserEntity.class), anyInt())).thenReturn(null);
+        when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(oh1);
+        when(em.find(OpeningHourEntity.class, oh2.getOpeningHoursId())).thenReturn(oh2);
+
+        when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
+        when(query1.getResultList()).thenReturn(new ArrayList<>(ohListOld));
+
+        assertThrows(BadOpeningHourException.class, () -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, 555));
+    }
+
+    @Test
+    void updateAllOpeningHour_UpdateFailed_BadStore() {
+        Time fromTimeNew = new Time(1612083600000L); // 10:00
+        List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
+
+        store.setOpeningHours(new ArrayList<>(ohListOld));
+
+        // Create new opening hour.
+        OpeningHourEntity oh3 = new OpeningHourEntity();
+        oh3.setOpeningHoursId(3);
+        oh3.setWeekDay(WEEK_DAY_MONDAY);
+        oh3.setFromTime(fromTimeNew);
+        oh3.setToTime(to1);
+        oh3.setStore(store);
+
+        List<OpeningHourEntity> ohListNew = List.of(oh2, oh3);
+
+        assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
+        Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
+        Map<Integer, List<Time>> ohToMap = Map.of(oh2.getWeekDay(), List.of(oh2.getToTime(), oh3.getToTime()));
+
+        UserEntity u1 = new UserEntity();
+        u1.setUserId(1);
+        u1.setRole(UserRole.MANAGER);
+        u1.setStore(store);
+
+        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(null);
+        when(em.find(eq(UserEntity.class), anyInt())).thenReturn(u1);
+        when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(oh1);
+        when(em.find(OpeningHourEntity.class, oh2.getOpeningHoursId())).thenReturn(oh2);
+
+        when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
+        when(query1.getResultList()).thenReturn(new ArrayList<>(ohListOld));
+
+        assertThrows(BadOpeningHourException.class, () -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, u1.getUserId()));
+    }
+
+    @Test
+    void updateAllOpeningHour_UpdateFailed_BadOpeningHourFormat() {
+        Time fromTimeNew = new Time(1612083600000L); // 10:00
+        List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
+
+        store.setOpeningHours(new ArrayList<>(ohListOld));
+
+        // Create new opening hour.
+        OpeningHourEntity oh3 = new OpeningHourEntity();
+        oh3.setOpeningHoursId(3);
+        oh3.setWeekDay(WEEK_DAY_MONDAY);
+        oh3.setFromTime(fromTimeNew);
+        oh3.setToTime(to1);
+        oh3.setStore(store);
+
+        List<OpeningHourEntity> ohListNew = List.of(oh2, oh3);
+
+        assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
+        Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
+        Map<Integer, List<Time>> ohToMap = Map.of(oh2.getWeekDay(), List.of(oh2.getToTime()));
+
+        UserEntity u1 = new UserEntity();
+        u1.setUserId(1);
+        u1.setRole(UserRole.MANAGER);
+        u1.setStore(store);
+
+        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
+        when(em.find(eq(UserEntity.class), anyInt())).thenReturn(u1);
+        when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(oh1);
+        when(em.find(OpeningHourEntity.class, oh2.getOpeningHoursId())).thenReturn(oh2);
+
+        when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
+        when(query1.getResultList()).thenReturn(new ArrayList<>(ohListOld));
+
+        assertThrows(BadOpeningHourException.class, () -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, u1.getUserId()));
     }
 }
