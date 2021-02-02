@@ -34,8 +34,8 @@ import java.time.format.TextStyle;
 import java.util.*;
 import java.util.List;
 
-@WebServlet(name = "ManagerStoreInfoServlet", value = "/dashboard/storeinfo")
-public class StoreInfoServlet extends HttpServlet {
+@WebServlet(name = "ManagerPassCodeQRServlet", value = "/dashboard/defaultpasscode")
+public class PassCodeQRServlet extends HttpServlet {
 
     private static final int QRCODE_IMAGE_HEIGHT = 250;
     private static final int QRCODE_IMAGE_WIDTH = 250;
@@ -66,24 +66,6 @@ public class StoreInfoServlet extends HttpServlet {
             return;
         }
 
-        int storeCap = store.getStoreCap();
-
-        // Build a custom map of opening hours for thymeleaf templating.
-        // The map is composed of the name of the day (e.g. Monday) with all its opening hours.
-        // Indeed one day could have more than one opening hour.
-        // (e.g.) Monday: 08:00 - 12:00, 14:00 - 18:00.
-        List<OpeningHourEntity> openingHourList = store.getOpeningHours();
-        Map<String, List<OpeningHourEntity>> openingHourMap = new LinkedHashMap<>();
-
-        for (OpeningHourEntity oh : openingHourList) {
-            String dayName = DayOfWeek.of(oh.getWeekDay()).getDisplayName(TextStyle.FULL, Locale.getDefault());
-
-            if (!openingHourMap.containsKey(dayName)) {
-                openingHourMap.put(dayName, new ArrayList<>());
-            }
-            openingHourMap.get(dayName).add(oh);
-        }
-
         String defaultPassCode = store.getDefaultPassCode();
 
         QRCodeWriter qrWriter = new QRCodeWriter();
@@ -104,10 +86,8 @@ public class StoreInfoServlet extends HttpServlet {
 
         ServletContext servletContext = getServletContext();
         WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-        String path = "/WEB-INF/manager/store_info.html";
+        String path = "/WEB-INF/manager/default_passcode.html";
 
-        ctx.setVariable("storeCap", storeCap);
-        ctx.setVariable("openingHourMap", openingHourMap);
         ctx.setVariable("defaultPassCode", defaultPassCode);
         ctx.setVariable("base64QRCode", base64QRCode);
 

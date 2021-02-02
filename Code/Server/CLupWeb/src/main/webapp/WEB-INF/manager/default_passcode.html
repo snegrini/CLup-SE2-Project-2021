@@ -35,7 +35,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfo}">
                             <span data-feather="file"></span>
-                            Store info <span class="sr-only">(current)</span>
+                            Store info
                         </a>
                     </li>
                     <li class="nav-item">
@@ -53,7 +53,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="#" data-th-href="@{/dashboard/defaultpasscode}">
                             <span data-feather="file"></span>
-                            Default pass code
+                            Default pass code <span class="sr-only">(current)</span>
                         </a>
                     </li>
                 </ul>
@@ -61,23 +61,13 @@
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2">Store info</h1>
+                <h1 class="h2">Default pass code</h1>
             </div>
 
-            <h1 class="h3">Store cap</h1>
-            <div data-th-text="${storeCap}">123</div>
-
-            <h1 class="h3">Opening hours</h1>
-            <div data-th-each="ohday : ${openingHourMap}">
-                - <strong data-th-text="${ohday.key}">Day of week</strong>
-                <div data-th-each="ohtime : ${ohday.value}">
-                    From: <span data-th-text="${ohtime.fromTime}">99:99</span>
-                    To: <span data-th-text="${ohtime.toTime}">99:99</span>
-                </div>
-
-                <br>
-            </div>
+            <img src="" data-th-src="@{'data:image/jpeg;base64,'+ ${base64QRCode}}"  alt="QR code"/>
+            Value: <div data-th-text="${defaultPassCode}">123</div>
 
         </main>
     </div>

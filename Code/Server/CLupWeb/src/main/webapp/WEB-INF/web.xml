@@ -29,6 +29,7 @@
         <servlet-name>ManagerStoreInfoServlet</servlet-name>
         <servlet-name>ManagerTicketDeleteServlet</servlet-name>
         <servlet-name>ManagerTicketListServlet</servlet-name>
+        <servlet-name>ManagerPassCodeQRServlet</servlet-name>
     </filter-mapping>
 
     <filter-mapping>
