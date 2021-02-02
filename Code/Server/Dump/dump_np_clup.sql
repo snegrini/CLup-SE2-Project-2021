@@ -33,7 +33,7 @@ CREATE TABLE `address` (
   `postal_code` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `country` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   PRIMARY KEY (`address_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -62,7 +62,7 @@ CREATE TABLE `opening_hour` (
   PRIMARY KEY (`opening_hours_id`),
   KEY `FK_opening_hour_store` (`store_id`),
   CONSTRAINT `FK_opening_hour_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,7 +71,7 @@ CREATE TABLE `opening_hour` (
 
 LOCK TABLES `opening_hour` WRITE;
 /*!40000 ALTER TABLE `opening_hour` DISABLE KEYS */;
-INSERT INTO `opening_hour` VALUES (1,'08:00:00','12:00:00',1,1),(2,'14:00:00','18:00:00',1,1),(3,'09:30:00','14:00:00',2,1),(4,'08:00:00','20:00:00',1,2);
+INSERT INTO `opening_hour` VALUES (1,'08:00:00','12:00:00',1,2),(2,'14:00:00','18:00:00',1,2),(3,'08:00:00','12:00:00',2,2),(4,'14:00:00','18:00:00',2,2),(5,'07:00:00','22:00:00',3,2),(6,'08:00:00','12:00:00',4,2),(7,'14:00:00','18:00:00',4,2),(8,'08:00:00','12:00:00',5,2),(9,'14:00:00','18:00:00',5,2),(10,'09:00:00','13:00:00',6,2),(11,'14:00:00','19:00:00',6,2),(12,'07:00:00','22:00:00',7,2),(13,'14:00:00','18:00:00',1,1),(14,'08:00:00','12:00:00',1,1),(15,'14:00:00','18:00:00',2,1),(16,'08:00:00','12:00:00',2,1),(17,'07:00:00','22:00:00',3,1),(18,'14:00:00','18:00:00',4,1),(19,'08:00:00','12:00:00',4,1),(20,'08:00:00','12:00:00',5,1),(21,'14:00:00','18:00:00',5,1),(22,'09:00:00','13:00:00',6,1),(23,'14:00:00','19:00:00',6,1),(24,'07:00:00','22:00:00',7,1);
 /*!40000 ALTER TABLE `opening_hour` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,13 +91,13 @@ CREATE TABLE `store` (
   `store_cap` int NOT NULL,
   `customers_inside` int NOT NULL,
   `default_pass_code` char(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `image_path` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'default.png',
+  `image_path` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   PRIMARY KEY (`store_id`),
   UNIQUE KEY `pec_email` (`pec_email`),
   UNIQUE KEY `store_name` (`store_name`),
   KEY `FK_store_address` (`address_id`),
   CONSTRAINT `FK_store_address` FOREIGN KEY (`address_id`) REFERENCES `address` (`address_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -106,7 +106,7 @@ CREATE TABLE `store` (
 
 LOCK TABLES `store` WRITE;
 /*!40000 ALTER TABLE `store` DISABLE KEYS */;
-INSERT INTO `store` VALUES (1,'Essecorta',1,'essecorta@example.org','5556645211',10,0,'12345678',''),(2,'Superal',2,'superal@example.org','5552256633',20,0,'12345678','');
+INSERT INTO `store` VALUES (1,'Essecorta',1,'essecorta@example.org','5556645211',60,0,'12345678','superal_logo.png'),(2,'Superal',2,'superal@example.org','5552256633',20,0,'12345678','essecorta_logo.png');
 /*!40000 ALTER TABLE `store` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -130,7 +130,7 @@ CREATE TABLE `ticket` (
   PRIMARY KEY (`ticket_id`),
   KEY `FK_ticket_store` (`store_id`),
   CONSTRAINT `FK_ticket_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -139,7 +139,6 @@ CREATE TABLE `ticket` (
 
 LOCK TABLES `ticket` WRITE;
 /*!40000 ALTER TABLE `ticket` DISABLE KEYS */;
-INSERT INTO `ticket` VALUES (1,'9970626666560a32465d4ce10d28f3233365af833e15eed59884d9477862c379','AAAA0001','VALID',1,'2021-01-06','22:09:13','2021-01-03 13:30:24',1),(2,'9970626666560a32465d4ce10d28f3233365af833e15eed59884d9477862c379','BBBBYYY2','EXPIRED',0,'2021-01-06','18:21:08','2021-01-02 16:51:20',1),(3,'6cf398553353d5e99e8a17c60dc7ee07288e2b33aa54490a79b2ed720225ebfe','CCCCZZZ1','VALID',1,'2021-01-03','11:22:01','2021-01-03 09:59:09',2);
 /*!40000 ALTER TABLE `ticket` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -160,7 +159,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `user_code` (`user_code`),
   KEY `FK_user_store` (`store_id`),
   CONSTRAINT `FK_user_store` FOREIGN KEY (`store_id`) REFERENCES `store` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -169,7 +168,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'555001','password','ADMIN',NULL),(2,'000001','password','MANAGER',1),(3,'222001','password','EMPLOYEE',1),(4,'000002','password','MANAGER',2),(5,'222002','password','EMPLOYEE',2);
+INSERT INTO `user` VALUES (1,'555001','$2a$10$zW3PseEo0FIAwS2N6rjfv.8qsHnw1B.ic1TVJfdDKpYv39Eerg1N6','ADMIN',NULL),(2,'000001','$2a$10$zW3PseEo0FIAwS2N6rjfv.8qsHnw1B.ic1TVJfdDKpYv39Eerg1N6','MANAGER',1),(3,'222001','$2a$10$zW3PseEo0FIAwS2N6rjfv.8qsHnw1B.ic1TVJfdDKpYv39Eerg1N6','EMPLOYEE',1),(4,'000002','$2a$10$zW3PseEo0FIAwS2N6rjfv.8qsHnw1B.ic1TVJfdDKpYv39Eerg1N6','MANAGER',2),(5,'222002','$2a$10$zW3PseEo0FIAwS2N6rjfv.8qsHnw1B.ic1TVJfdDKpYv39Eerg1N6','EMPLOYEE',2);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -182,4 +181,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-01-23 19:08:02
+-- Dump completed on 2021-02-02 23:00:35
