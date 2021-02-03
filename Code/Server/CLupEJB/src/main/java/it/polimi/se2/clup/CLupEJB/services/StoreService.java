@@ -2,6 +2,7 @@ package it.polimi.se2.clup.CLupEJB.services;
 
 import it.polimi.se2.clup.CLupEJB.entities.AddressEntity;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
+import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
