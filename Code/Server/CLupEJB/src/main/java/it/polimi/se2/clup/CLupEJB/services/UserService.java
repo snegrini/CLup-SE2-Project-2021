@@ -72,14 +72,6 @@ public class UserService {
      * @throws  CredentialsException if the user role is of type forbidden.
      */
     private UserEntity buildUser(StoreEntity store, UserRole userRole) throws CredentialsException, BadStoreException {
-
-        if (userRole.equals(UserRole.ADMIN)) {
-            throw new CredentialsException("Cannot create credentials of this type!");
-        }
-        if (store == null) {
-            throw new BadStoreException("Invalid store!");
-        }
-
         UserEntity user = new UserEntity();
 
         String usercode = generateUsercode();
@@ -152,7 +144,6 @@ public class UserService {
         String employeePassword = employee.getPassword();
 
         // After sending the email, hash the password to be stored in the DB.
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
         manager.setPassword(encoder.encode(managerPassword));
         employee.setPassword(encoder.encode(employeePassword));
 

@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
 import java.util.Map;
@@ -163,7 +164,8 @@ public class StoreService {
      * Gives the amount time to wait to enter the given store. Returns an integer value representing minutes.
      *
      * @param storeId the id of the store.
-     * @return {@code 0} if there is no wait time (the store is not full), {@code 15} otherwise.
+     * @return {@code 0} if there is no wait time (the store is not full), {@code 15} if the store is full but queue is empty,
+     * then it will return the last ticket arrival time plus 15 minutes.
      * @throws BadStoreException if no store can be found.
      */
     public int getEstimateTime(int storeId) throws BadStoreException {
@@ -176,6 +178,37 @@ public class StoreService {
         if (store.getCustomersInside() < store.getStoreCap()) {
             return 0;
         }
-        return 15;
+
+        Time lastTime = findLastTicketTime(store);
+
+        if (lastTime == null) {
+            return 0;
+        }
+
+        long timestamp = new java.util.Date().getTime();
+        long timeDiff = lastTime.getTime() - timestamp;
+
+        if (timeDiff < 0) {
+            return 15;
+        }
+        return Math.toIntExact(timeDiff / 60000) + 15;
+    }
+
+    private Time findLastTicketTime(StoreEntity store) {
+        long timestamp = new java.util.Date().getTime();
+        Date today = Date.valueOf(new Date(timestamp).toString());
+
+        TicketEntity lastTicket = em.createNamedQuery("TicketEntity.findByStoreSorted", TicketEntity.class)
+                .setParameter("storeId", store.getStoreId())
+                .setParameter("date", today)
+                .setMaxResults(1)
+                .getResultStream()
+                .findFirst()
+                .orElse(null);
+
+        if (lastTicket == null) {
+            return null;
+        }
+        return lastTicket.getArrivalTime();
     }
 }
