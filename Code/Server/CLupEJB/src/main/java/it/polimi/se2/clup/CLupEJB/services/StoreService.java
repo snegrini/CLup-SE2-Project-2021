@@ -1,16 +1,16 @@
 package it.polimi.se2.clup.CLupEJB.services;
 
-import it.polimi.se2.clup.CLupEJB.entities.*;
+import it.polimi.se2.clup.CLupEJB.entities.AddressEntity;
+import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
+import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 
-import javax.ejb.DuplicateKeyException;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.sql.Time;
@@ -59,7 +59,7 @@ public class StoreService {
     }
 
     public List<StoreEntity> findAllStores() throws BadStoreException {
-        List<StoreEntity> stores = null;
+        List<StoreEntity> stores;
 
         try {
             stores = em.createNamedQuery("StoreEntity.findAll", StoreEntity.class)
@@ -70,8 +70,15 @@ public class StoreService {
         return stores;
     }
 
+    /**
+     * Finds all the stores that starts with the filter string.
+     *
+     * @param filter string prompted.
+     * @return the list of stores retrieved.
+     * @throws BadStoreException when occurs an issue with the persistence.
+     */
     public List<StoreEntity> findAllStoresFiltered(String filter) throws BadStoreException {
-        List<StoreEntity> stores = null;
+        List<StoreEntity> stores;
         filter += "%";
 
         try {
@@ -87,25 +94,16 @@ public class StoreService {
     /**
      * Adds a new store to the system.
      *
-     * @param storeName the name of the store.
-     * @param pec the PEC email address of the store.
-     * @param phone the phone number of the store.
+     * @param storeName     the name of the store.
+     * @param pec           the PEC email address of the store.
+     * @param phone         the phone number of the store.
      * @param addressEntity the address entity of the store.
-     * @param ohFromMap
-     * @param ohToMap
-     * @param userId
+     * @param ohFromMap     the map of the FROM opening hours.
+     * @param ohToMap       the map of the TO opening hours.
+     * @param userId        the ID of the user who is performing the action.
      * @return the generated users entity of the new store.
      */
     public List<Map.Entry<String, String>> addStore(String storeName, String pec, String phone, String imagePath, AddressEntity addressEntity, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap, int userId) throws BadStoreException, UnauthorizedException {
-        UserEntity user = em.find(UserEntity.class, userId);
-
-        if (user == null) {
-            throw new BadStoreException("Cannot load user.");
-        }
-        if (user.getRole() != UserRole.ADMIN) {
-            throw new UnauthorizedException("Unauthorized operation.");
-        }
-
         if (findStoreByName(storeName) != null) {
             throw new BadStoreException("A store have already registered with same name.");
         }
@@ -144,6 +142,15 @@ public class StoreService {
         return genUsers;
     }
 
+    /**
+     * Updates the store cap of a store.
+     *
+     * @param storeCap the desired store cap.
+     * @param storeId the ID of the store.
+     * @param userId the ID of the user who perform the action.
+     * @throws BadStoreException when occurs an issue with the persistence
+     * @throws UnauthorizedException when a user without permission tries to perform the action
+     */
     public void updateStoreCap(int storeCap, int storeId, int userId) throws BadStoreException, UnauthorizedException {
         StoreEntity store = em.find(StoreEntity.class, storeId);
         UserEntity user = em.find(UserEntity.class, userId);

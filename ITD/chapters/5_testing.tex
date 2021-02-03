@@ -8,16 +8,16 @@ No unit tests have been performed on the apps as they are thin clients and most 
 \subsection{TicketService}
 \subsubsection{Add Ticket}
 \begin{itemize}
-	\item Insertion of a new ticket from a customer.
+	\item Valid insertion of a new ticket from a customer.
 	\item Attempt to insert a new ticket from a customer to a not existing store.
 \end{itemize}
 
 \subsubsection{Delete Ticket}
 \begin{itemize}
-	\item Deletion of a ticket performed by the customer who own the ticket.
+	\item Valid deletion of a ticket performed by the customer who own the ticket.
 	\item Attempt to delete an invalid ticket performed by the customer who own the ticket.
 	\item Attempt to delete a valid ticket performed by a customer who doesn't own the ticket.
-	\item Deletion of a ticket performed by an authorized manager.
+	\item Valid deletion of a ticket performed by an authorized manager.
 	\item Attempt to delete a valid ticket performed by a null user.
 	\item Attempt to delete an invalid ticket performed by an authorized manager.
 	\item Attempt to delete a valid ticket performed by a non manager user.
@@ -26,10 +26,28 @@ No unit tests have been performed on the apps as they are thin clients and most 
 
 \subsubsection{Update Ticket Status}
 \begin{itemize}
-	\item Status update of a VALID ticket performed by an authorized employee.
-	\item Status update of an USED ticket performed by an authorized employee.
+	\item Valid status update of a VALID ticket performed by an authorized employee.
+	\item Valid status update of an USED ticket performed by an authorized employee.
 	\item Attempt to update the status of an EXPIRED ticket performed by an authorized employee.
 	\item Attempt to update a not existing ticket performed by an authorized employee.
-	\item Status update of a VALID ticket performed by an not authorized employee.
+	\item Valid status update of a VALID ticket performed by an not authorized employee.
 \end{itemize}
 
+\subsection{StoreService}
+\subsubsection{Add Store}
+\begin{itemize}
+	\item Valid insertion of a new store from a CLup admin.
+	\item Attempt to insert a new store with a non unique name from a CLup admin.
+	\item Attempt to insert a new store with a non unique pec address from a CLup admin.
+	\item Attempt to insert a new store with invalid opening hours from a CLup admin.
+	\item Attempt to insert a new store from an unauthorized user.
+\end{itemize}
+
+\subsubsection{Update Store Cap}
+\begin{itemize}
+	\item Valid update of the store cap of a store from a store manager.
+	\item Attempt to update the store cap of an invalid store from a store manager.
+	\item Attempt to update the store cap of a store from an invalid user.
+	\item Attempt to update the store cap of a store from an unauthorized user.
+	\item Attempt to update the store cap of a store from a manager of another store.
+\end{itemize}
