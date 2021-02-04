@@ -9,6 +9,7 @@ import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.services.UserService;
 import org.junit.jupiter.api.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -35,6 +36,9 @@ public class UserIntegrationTest {
     private static EntityManagerFactory emf;
     private static EntityManager em;
 
+    private BCryptPasswordEncoder encoder;
+    private UserService userService;
+
     @BeforeAll
     public static void setUpBeforeClass() {
         emf = Persistence.createEntityManagerFactory("CLupEJB-testing");
@@ -50,6 +54,9 @@ public class UserIntegrationTest {
     @BeforeEach
     void setUp() {
         em = emf.createEntityManager();
+        encoder = new BCryptPasswordEncoder();
+
+        userService = new UserService(em, encoder);
         createTestData();
     }
 
@@ -63,7 +70,7 @@ public class UserIntegrationTest {
 
     private void createTestData() {
         UserEntity user = new UserEntity();
-        user.setPassword(PASSWORD);
+        user.setPassword(encoder.encode(PASSWORD));
         user.setUsercode(USER_CODE);
         user.setRole(UserRole.ADMIN);
 
@@ -94,45 +101,27 @@ public class UserIntegrationTest {
 
     @Test
     public void checkCredentials_ValidUser_CorrectPassword() throws CredentialsException {
-        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
-        UserService userService = new UserService(em, encoder);
-
-        when(encoder.matches(anyString(), anyString())).thenReturn(true);
-
         UserEntity user = userService.checkCredentials(USER_CODE, PASSWORD);
 
         assertNotNull(user);
         assertEquals(USER_CODE, user.getUsercode());
-        assertEquals(PASSWORD, user.getPassword());
+        assertTrue(encoder.matches(PASSWORD, user.getPassword()));
     }
 
     @Test
     public void checkCredentials_ValidUser_WrongPassword() throws CredentialsException {
-        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
-        UserService userService = new UserService(em, encoder);
-
-        when(encoder.matches(anyString(), anyString())).thenReturn(false);
-
         UserEntity user = userService.checkCredentials(USER_CODE, INVALID_PASSWORD);
         assertNull(user);
     }
 
     @Test
     public void checkCredentials_InvalidUser() throws CredentialsException {
-        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
-        UserService userService = new UserService(em, encoder);
-
-        when(encoder.matches(anyString(), anyString())).thenReturn(false);
-
         UserEntity user = userService.checkCredentials(INVALID_USER_CODE, PASSWORD);
         assertNull(user);
     }
 
     @Test
     public void generateCredentials_Authorized_Success() throws UnauthorizedException, BadStoreException, CredentialsException {
-        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
-        UserService userService = new UserService(em, encoder);
-
         UserEntity admin = em.find(UserEntity.class, LAST_USER_ID);
         StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
 
@@ -146,9 +135,6 @@ public class UserIntegrationTest {
 
     @Test
     public void generateCredentials_Unauthorized_Failure() throws UnauthorizedException, BadStoreException, CredentialsException {
-        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
-        UserService userService = new UserService(em, encoder);
-
         UserEntity admin = em.find(UserEntity.class, LAST_USER_ID);
         StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
 
@@ -160,9 +146,6 @@ public class UserIntegrationTest {
 
     @Test
     public void generateCredentials_BadUser_Failure() {
-        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
-        UserService userService = new UserService(em, encoder);
-
         StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
 
         em.getTransaction().begin();
@@ -172,9 +155,6 @@ public class UserIntegrationTest {
 
     @Test
     public void generateCredentials_BadStore_Failure() {
-        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
-        UserService userService = new UserService(em, encoder);
-
         UserEntity admin = em.find(UserEntity.class, LAST_USER_ID);
 
         em.getTransaction().begin();
