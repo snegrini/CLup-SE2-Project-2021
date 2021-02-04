@@ -1,19 +1,24 @@
 package it.polimi.se2.clup.CLupEJB.integration;
 
+import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
+import it.polimi.se2.clup.CLupEJB.enums.UserRole;
+import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.CredentialsException;
+import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.services.UserService;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.Persistence;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -23,7 +28,9 @@ public class UserIntegrationTest {
     private static final String INVALID_USER_CODE = "test";
     private static final String INVALID_PASSWORD = "test_pss";
 
-    private static int LAST_INSERT_ID = 0;
+    private static int LAST_USER_ID = 0;
+
+    private static int LAST_STORE_ID = 0;
 
     private static EntityManagerFactory emf;
     private static EntityManager em;
@@ -58,19 +65,29 @@ public class UserIntegrationTest {
         UserEntity user = new UserEntity();
         user.setPassword(PASSWORD);
         user.setUsercode(USER_CODE);
+        user.setRole(UserRole.ADMIN);
+
+        StoreEntity store = new StoreEntity();
 
         em.getTransaction().begin();
         em.persist(user);
+        em.persist(store);
         em.flush();
-        LAST_INSERT_ID = user.getUserId();
+        LAST_USER_ID = user.getUserId();
+        LAST_STORE_ID = store.getStoreId();
         em.getTransaction().commit();
     }
 
     private void removeTestData() {
         em.getTransaction().begin();
-        UserEntity user = em.find(UserEntity.class, LAST_INSERT_ID);
+        UserEntity user = em.find(UserEntity.class, LAST_USER_ID);
         if (user != null) {
             em.remove(user);
+        }
+
+        StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
+        if (store != null) {
+            em.remove(store);
         }
         em.getTransaction().commit();
     }
@@ -112,28 +129,57 @@ public class UserIntegrationTest {
     }
 
     @Test
-    public void checkCredentials_TwoUserSameCode_FailLogin() {
-        // Create a second user with same credentials.
-        UserEntity user = new UserEntity();
-        user.setPassword(PASSWORD);
-        user.setUsercode(USER_CODE);
-
-        em.getTransaction().begin();
-        em.persist(user);
-        em.getTransaction().commit();
-
-        // Testing
+    public void generateCredentials_Authorized_Success() throws UnauthorizedException, BadStoreException, CredentialsException {
         BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
         UserService userService = new UserService(em, encoder);
 
-        when(encoder.matches(anyString(), anyString())).thenReturn(false);
+        UserEntity admin = em.find(UserEntity.class, LAST_USER_ID);
+        StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
 
-        assertThrows(NonUniqueResultException.class, () -> userService.checkCredentials(USER_CODE, PASSWORD));
-
-        // Clean up
         em.getTransaction().begin();
-        em.remove(user);
-        em.getTransaction().commit();
+        List<Map.Entry<String, String>> genUsers = userService.generateCredentials(store, admin.getUserId());
+        em.getTransaction().rollback();
+
+        assertNotNull(genUsers);
+        assertFalse(genUsers.isEmpty());
+    }
+
+    @Test
+    public void generateCredentials_Unauthorized_Failure() throws UnauthorizedException, BadStoreException, CredentialsException {
+        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
+        UserService userService = new UserService(em, encoder);
+
+        UserEntity admin = em.find(UserEntity.class, LAST_USER_ID);
+        StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
+
+        em.getTransaction().begin();
+        admin.setRole(UserRole.MANAGER);
+        assertThrows(UnauthorizedException.class, () -> userService.generateCredentials(store, admin.getUserId()));
+        em.getTransaction().rollback();
+    }
+
+    @Test
+    public void generateCredentials_BadUser_Failure() {
+        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
+        UserService userService = new UserService(em, encoder);
+
+        StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
+
+        em.getTransaction().begin();
+        assertThrows(UnauthorizedException.class, () -> userService.generateCredentials(store, -1));
+        em.getTransaction().rollback();
+    }
+
+    @Test
+    public void generateCredentials_BadStore_Failure() {
+        BCryptPasswordEncoder encoder = mock(BCryptPasswordEncoder.class);
+        UserService userService = new UserService(em, encoder);
+
+        UserEntity admin = em.find(UserEntity.class, LAST_USER_ID);
+
+        em.getTransaction().begin();
+        assertThrows(BadStoreException.class, () -> userService.generateCredentials(null, admin.getUserId()));
+        em.getTransaction().rollback();
     }
 
 }

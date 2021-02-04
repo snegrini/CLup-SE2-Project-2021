@@ -118,15 +118,14 @@ public class UserService {
      * @throws BadStoreException if store is not found.
      */
     public List<Map.Entry<String, String>> generateCredentials(StoreEntity store, int userId) throws BadStoreException, UnauthorizedException {
+        if (store == null) {
+            throw new BadStoreException("Bad store or user parameter.");
+        }
 
         UserEntity user = em.find(UserEntity.class, userId);
 
-        if (store == null) {
-            throw new BadStoreException("Bad store parameter.");
-        }
-
         // Check user permissions.
-        if (user.getRole() != UserRole.ADMIN) {
+        if (user == null || user.getRole() != UserRole.ADMIN) {
             throw new UnauthorizedException("Unauthorized operation.");
         }
 
