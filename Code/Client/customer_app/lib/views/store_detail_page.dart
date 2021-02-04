@@ -30,6 +30,7 @@ class _StoreDetailState extends State<StoreDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text('Store'),
           backgroundColor: ClupColors.grapefruit,
@@ -41,8 +42,8 @@ class _StoreDetailState extends State<StoreDetailPage> {
                         ClupColors.grapefruit)))
             : Container(
                 margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                child: ListView(
+                    //crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         _store.name,
