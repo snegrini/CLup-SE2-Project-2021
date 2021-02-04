@@ -93,6 +93,11 @@ public class TicketService {
         return tickets;
     }
 
+    /**
+     * For all the prompted tickets checks if the tickets are expired. If so their status is updated.
+     *
+     * @param ticketList list of tickets to be checked.
+     */
     private void checkExpiredTickets(List<TicketEntity> ticketList) {
         long timestamp = new java.util.Date().getTime();
 
@@ -165,10 +170,10 @@ public class TicketService {
      *
      * @param passCode code of the ticket.
      * @param storeId  ID of the store to be checked.
+     * @return the new ticket status.
      * @throws BadTicketException    when occurs an issue with the persistence or is performed an invalid operation.
      * @throws UnauthorizedException if the user has no permission to update the specified ticket.
      * @throws BadStoreException     when the store is not found
-     * @return the new ticket status.
      */
     public PassStatus updateTicketStatus(String passCode, int storeId) throws BadTicketException, UnauthorizedException, BadStoreException {
         TicketEntity ticket = em.createNamedQuery("TicketEntity.findByPassCode", TicketEntity.class)
@@ -258,6 +263,9 @@ public class TicketService {
         return ticket;
     }
 
+    /**
+     * @return a unique PassCode
+     */
     private String getUniquePassCode() {
         String passCode;
         TicketEntity collisionTicket;

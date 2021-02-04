@@ -29,6 +29,7 @@ class _TicketDetailState extends State<TicketDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           title: Text('Ticket'),
           backgroundColor: ClupColors.grapefruit,
@@ -40,8 +41,7 @@ class _TicketDetailState extends State<TicketDetailPage> {
                         ClupColors.grapefruit)))
             : Container(
                 margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: ListView(
                   children: [
                     Text(
                       widget.ticket.store.name,
