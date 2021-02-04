@@ -4,6 +4,7 @@ import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
+import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.services.OpeningHourService;
 import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import org.thymeleaf.TemplateEngine;
@@ -87,7 +88,7 @@ public class OpeningEditServlet extends HttpServlet {
         // Store the opening hours.
         try {
             ohService.updateAllOpeningHour(storeId, ohFromMap, ohToMap, user.getUserId());
-        } catch (BadOpeningHourException e) {
+        } catch (BadOpeningHourException | UnauthorizedException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
             return;
         }

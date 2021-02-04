@@ -6,6 +6,7 @@ import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
+import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -34,10 +35,21 @@ public class OpeningHourService {
         return em.find(OpeningHourEntity.class, ohId);
     }
 
-    private void addOpeningHour(int weekDay, Time fromTime, Time toTime, StoreEntity store) throws BadOpeningHourException {
+    private void addOpeningHour(int weekDay, Time fromTime, Time toTime, StoreEntity store, int userId) throws BadOpeningHourException, UnauthorizedException {
 
         if (store == null) {
             throw new BadOpeningHourException("Bad store parameter.");
+        }
+
+        UserEntity user = em.find(UserEntity.class, userId);
+
+        if (user == null) {
+            throw new BadOpeningHourException("User not found.");
+        }
+
+        // Check if user has the permission to add an opening hour for the given store.
+        if (!user.getRole().equals(UserRole.MANAGER) || store.getStoreId() != user.getStore().getStoreId()) {
+            throw new UnauthorizedException("User not authorized to delete this opening hour.");
         }
 
         long numOhStore = store.getOpeningHours().stream()
@@ -60,9 +72,9 @@ public class OpeningHourService {
         em.persist(store);
     }
 
-    private void addAllOpeningHour(List<OpeningHourEntity> ohList) throws BadOpeningHourException {
+    private void addAllOpeningHour(List<OpeningHourEntity> ohList, int userId) throws BadOpeningHourException, UnauthorizedException {
         for (OpeningHourEntity oh : ohList) {
-            addOpeningHour(oh.getWeekDay(), oh.getFromTime(), oh.getToTime(), oh.getStore());
+            addOpeningHour(oh.getWeekDay(), oh.getFromTime(), oh.getToTime(), oh.getStore(), userId);
         }
     }
 
@@ -73,11 +85,12 @@ public class OpeningHourService {
      * @param fromTimeList the list of times to start an opening hour.
      * @param toTimeList the list of times to end an opening hour.
      * @param store the store entity to be updated.
+     * @param userId the user id who is performing the add.
      * @throws BadOpeningHourException when the list is null, empty or week day are not the same
      *                                 for all the elements in the list.
      */
-    public void addAllOpeningHour(int weekDay, List<Time> fromTimeList, List<Time> toTimeList, StoreEntity store)
-            throws BadOpeningHourException {
+    public void addAllOpeningHour(int weekDay, List<Time> fromTimeList, List<Time> toTimeList, StoreEntity store, int userId)
+            throws BadOpeningHourException, UnauthorizedException {
 
         List<OpeningHourEntity> ohList = buildOpeningHourList(weekDay, fromTimeList, toTimeList, store);
 
@@ -91,7 +104,7 @@ public class OpeningHourService {
             throw new BadOpeningHourException("Opening hour must finish before 23:45.");
         }
 
-        addAllOpeningHour(ohList);
+        addAllOpeningHour(ohList, userId);
     }
 
     /**
@@ -127,8 +140,19 @@ public class OpeningHourService {
         return false;
     }
 
-    public void addAllOpeningHour(StoreEntity store, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap)
-            throws BadOpeningHourException {
+    /**
+     * Adds the opening hours to a store for a specific day.
+     * All the opening hour in the maps must refer to the same week day.
+     *
+     * @param store the store to add the opening hours to.
+     * @param ohFromMap the map of times to start an opening hour.
+     * @param ohToMap the map of times to end an opening hour.
+     * @param userId the user id who is performing the add.
+     * @throws BadOpeningHourException when the list is null, empty or week day are not the same
+     *                                 for all the elements in the list.
+     */
+    public void addAllOpeningHour(StoreEntity store, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap, int userId)
+            throws BadOpeningHourException, UnauthorizedException {
 
         if (store == null) {
             throw new BadOpeningHourException("Bad store parameter.");
@@ -144,11 +168,11 @@ public class OpeningHourService {
             if (!ohToMap.containsKey(day)) {
                 throw new BadOpeningHourException("Opening hours missing from-to fields.");
             }
-            addAllOpeningHour(day, ohFromMap.get(day), ohToMap.get(day), store);
+            addAllOpeningHour(day, ohFromMap.get(day), ohToMap.get(day), store, userId);
         }
     }
 
-    public void deleteOpeningHour(int ohId, int userId) throws BadOpeningHourException {
+    private void deleteOpeningHour(int ohId, int userId) throws BadOpeningHourException {
         UserEntity user = em.find(UserEntity.class, userId);
         OpeningHourEntity oh = em.find(OpeningHourEntity.class, ohId);
 
@@ -171,10 +195,10 @@ public class OpeningHourService {
      *
      * @param weekDay the week day of the opening hours to delete.
      * @param store the store of the opening hours.
-     * @param userId the user id performing the operation.
+     * @param userId the user is performing the operation.
      * @throws BadOpeningHourException when user is unauthorized or when opening hour is not found.
      */
-    public void deleteOpeningHours(int weekDay, StoreEntity store, int userId) throws BadOpeningHourException {
+    private void deleteOpeningHours(int weekDay, StoreEntity store, int userId) throws BadOpeningHourException {
         List<OpeningHourEntity> ohStoredList = em.createNamedQuery("OpeningHourEntity.findByStoreIdAndWeekDay", OpeningHourEntity.class)
                 .setParameter("storeId", store.getStoreId())
                 .setParameter("weekDay", weekDay)
@@ -183,6 +207,13 @@ public class OpeningHourService {
         deleteAllOpeningHour(ohStoredList, userId);
     }
 
+    /**
+     * Delete all opening hours inside the given list.
+     *
+     * @param ohList the list of opening hours to be deleted.
+     * @param userId the user is performing the operation.
+     * @throws BadOpeningHourException
+     */
     public void deleteAllOpeningHour(List<OpeningHourEntity> ohList, int userId) throws BadOpeningHourException {
         for (OpeningHourEntity oh : ohList) {
             deleteOpeningHour(oh.getOpeningHoursId(), userId);
@@ -201,7 +232,7 @@ public class OpeningHourService {
      * @throws BadOpeningHourException when the list is null, empty or week day are not the same
      *                                 for all the elements in the list.
      */
-    public void updateOpeningHour(int weekDay, List<Time> fromTimeList, List<Time> toTimeList, StoreEntity store, int userId) throws BadOpeningHourException {
+    public void updateOpeningHour(int weekDay, List<Time> fromTimeList, List<Time> toTimeList, StoreEntity store, int userId) throws BadOpeningHourException, UnauthorizedException {
         List<OpeningHourEntity> ohList = buildOpeningHourList(weekDay, fromTimeList, toTimeList, store);
 
         if (hasOverlap(ohList)) {
@@ -217,10 +248,10 @@ public class OpeningHourService {
         if (!ohStoredList.isEmpty()) {
             deleteAllOpeningHour(ohStoredList, userId);
         }
-        addAllOpeningHour(ohList);
+        addAllOpeningHour(ohList, userId);
     }
 
-    public void updateAllOpeningHour(int storeId, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap, int userId) throws BadOpeningHourException {
+    public void updateAllOpeningHour(int storeId, Map<Integer, List<Time>> ohFromMap, Map<Integer, List<Time>> ohToMap, int userId) throws BadOpeningHourException, UnauthorizedException {
         StoreEntity store = em.find(StoreEntity.class, storeId);
 
         if (store == null) {

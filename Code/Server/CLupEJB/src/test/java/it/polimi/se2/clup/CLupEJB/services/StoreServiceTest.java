@@ -91,7 +91,7 @@ public class StoreServiceTest {
         when(query1.getResultStream()).thenReturn(Stream.empty());
         when(query2.getResultStream()).thenReturn(Stream.empty());
 
-        doNothing().when(ohs).addAllOpeningHour(any(), anyMap(), anyMap());
+        doNothing().when(ohs).addAllOpeningHour(any(), anyMap(), anyMap(), anyInt());
         when(us.generateCredentials(any(), anyInt())).thenReturn(getCredentials());
 
         assertEquals(getCredentials(), storeService.addStore(storeName, pec, phone, imagePath, addressEntity, ohFromMap, ohToMap, userId));
@@ -130,7 +130,7 @@ public class StoreServiceTest {
     }
 
     @Test
-    public void addStore_FailAdd_InvalidOpeningHours() throws BadOpeningHourException {
+    public void addStore_FailAdd_InvalidOpeningHours() throws BadOpeningHourException, UnauthorizedException {
         String storeName = "Store";
         String pec = "email@pec.it";
         String phone = "000000000";
@@ -143,7 +143,7 @@ public class StoreServiceTest {
         when(query1.getResultStream()).thenReturn(Stream.empty());
         when(query2.getResultStream()).thenReturn(Stream.empty());
 
-        doThrow(BadOpeningHourException.class).when(ohs).addAllOpeningHour(any(), anyMap(), anyMap());
+        doThrow(BadOpeningHourException.class).when(ohs).addAllOpeningHour(any(), anyMap(), anyMap(), anyInt());
 
         assertThrows(BadStoreException.class, () -> storeService.addStore(storeName, pec, phone, imagePath, addressEntity, ohFromMap, ohToMap, userId));
     }
@@ -162,7 +162,7 @@ public class StoreServiceTest {
         when(query1.getResultStream()).thenReturn(Stream.empty());
         when(query2.getResultStream()).thenReturn(Stream.empty());
 
-        doNothing().when(ohs).addAllOpeningHour(any(), anyMap(), anyMap());
+        doNothing().when(ohs).addAllOpeningHour(any(), anyMap(), anyMap(), anyInt());
         when(us.generateCredentials(any(), anyInt())).thenThrow(UnauthorizedException.class);
 
         assertThrows(BadStoreException.class, () -> storeService.addStore(storeName, pec, phone, imagePath, addressEntity, ohFromMap, ohToMap, userId));
