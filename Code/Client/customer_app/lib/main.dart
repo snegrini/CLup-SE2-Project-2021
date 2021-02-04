@@ -4,6 +4,7 @@ import 'package:customer_app/util/data_manager.dart';
 import 'package:customer_app/views/home_page.dart';
 import 'package:customer_app/views/server_address_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(ClupApp());
@@ -18,6 +19,10 @@ class _ClupAppState extends State<ClupApp> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return MaterialApp(
       title: _title,
       home: _homePage,
