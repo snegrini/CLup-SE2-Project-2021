@@ -2,6 +2,7 @@ package it.polimi.se2.clup.CLupEJB.services;
 
 import it.polimi.se2.clup.CLupEJB.entities.AddressEntity;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
+import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
@@ -62,7 +63,7 @@ public class StoreServiceTest {
     private StoreService storeService;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
 
         when(query1.setParameter(anyString(), any())).thenReturn(query1);
@@ -207,7 +208,7 @@ public class StoreServiceTest {
     }
 
     @Test
-    public void updateStoreCap_FailUpdate_NotManagerUser() throws UnauthorizedException, BadStoreException {
+    public void updateStoreCap_FailUpdate_NotManagerUser() {
         StoreEntity storeEntity = new StoreEntity();
         storeEntity.setStoreId(1);
         storeEntity.setStoreCap(35);
@@ -225,7 +226,7 @@ public class StoreServiceTest {
     }
 
     @Test
-    public void updateStoreCap_FailUpdate_NotManagerOfStore() throws UnauthorizedException, BadStoreException {
+    public void updateStoreCap_FailUpdate_NotManagerOfStore() {
         StoreEntity storeEntity = new StoreEntity();
         storeEntity.setStoreId(1);
         storeEntity.setStoreCap(35);
@@ -242,4 +243,60 @@ public class StoreServiceTest {
         assertEquals(35, storeEntity.getStoreCap());
     }
 
+    @Test
+    public void getEstimateTime_SuccessfulEstimation_NotFullStore() throws BadStoreException {
+        StoreEntity storeEntity = new StoreEntity();
+        storeEntity.setCustomersInside(15);
+        storeEntity.setStoreCap(35);
+
+        when(em.find(eq(StoreEntity.class), any())).thenReturn(storeEntity);
+        assertEquals(0, storeService.getEstimateTime(1));
+    }
+
+    @Test
+    public void getEstimateTime_SuccessfulEstimation_LastTicketCalled() throws BadStoreException {
+        long timestamp = new java.util.Date().getTime();
+
+        StoreEntity storeEntity = new StoreEntity();
+        storeEntity.setCustomersInside(35);
+        storeEntity.setStoreCap(35);
+
+        TicketEntity ticketEntity = new TicketEntity();
+        ticketEntity.setArrivalTime(new Time(timestamp - 60000));
+
+
+        when(em.find(eq(StoreEntity.class), any())).thenReturn(storeEntity);
+
+        when(em.createNamedQuery(eq("TicketEntity.findByStoreSorted"), any())).thenReturn(query1);
+        when(query1.getResultStream()).thenReturn(Stream.of(ticketEntity));
+
+        assertEquals(15, storeService.getEstimateTime(1));
+    }
+
+    @Test
+    public void getEstimateTime_SuccessfulEstimation_AnotherTicketInQueue() throws BadStoreException {
+        long timestamp = new java.util.Date().getTime();
+
+        StoreEntity storeEntity = new StoreEntity();
+        storeEntity.setCustomersInside(35);
+        storeEntity.setStoreCap(35);
+
+        TicketEntity ticketEntity = new TicketEntity();
+        ticketEntity.setArrivalTime(new Time(timestamp + 900000));
+
+
+        when(em.find(eq(StoreEntity.class), any())).thenReturn(storeEntity);
+
+        when(em.createNamedQuery(eq("TicketEntity.findByStoreSorted"), any())).thenReturn(query1);
+        when(query1.getResultStream()).thenReturn(Stream.of(ticketEntity));
+
+        assertEquals(29, storeService.getEstimateTime(1));
+    }
+
+    @Test
+    public void getEstimateTime_FailEstimation_InvalidStore() {
+        when(em.find(eq(StoreEntity.class), any())).thenReturn(null);
+
+        assertThrows(BadStoreException.class, () -> storeService.getEstimateTime(1));
+    }
 }

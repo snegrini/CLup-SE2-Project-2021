@@ -231,7 +231,7 @@ public class TicketService {
      * @param storeId    ID of the store.
      * @return the ticket just created
      * @throws BadTicketException when occurs an issue with the persistence or is performed an invalid operation.
-     * @throws BadStoreException  when the store is not found
+     * @throws BadStoreException  when the store is not found.
      */
     public TicketEntity addTicket(String customerId, int storeId) throws BadTicketException, BadStoreException, BadOpeningHourException {
         StoreEntity store = em.find(StoreEntity.class, storeId);
@@ -256,7 +256,7 @@ public class TicketService {
         ticket.setDate(new Date(System.currentTimeMillis()));
         ticket.setIssuedAt(new Timestamp(System.currentTimeMillis()));
 
-        addQueueNumberAndTime(ticket, store, date, storeId);
+        addQueueNumberAndTime(ticket, store, date);
 
         store.addTicket(ticket);
         em.persist(store);
@@ -284,6 +284,13 @@ public class TicketService {
         return passCode;
     }
 
+    /**
+     * Checks if the user already got a ticket on that day.
+     *
+     * @param customerId the ID of the customer to be checked.
+     * @param date       the date to be checked.
+     * @return true if the user already took a ticket on that day, false otherwise.
+     */
     private Boolean gotAlreadyATicket(String customerId, Date date) {
         TicketEntity alreadyRetrievedTicket = em.createNamedQuery("TicketEntity.findByCustomerIdOnDay", TicketEntity.class)
                 .setParameter("customerId", customerId)
@@ -296,10 +303,20 @@ public class TicketService {
         return alreadyRetrievedTicket != null;
     }
 
-    private void addQueueNumberAndTime(TicketEntity ticket, StoreEntity store, Date date, int storeId) throws BadStoreException, BadOpeningHourException, BadTicketException {
+    /**
+     * Sets the queue number and the arrival time to a ticket.
+     *
+     * @param ticket the ticket that has to be modified.
+     * @param store  the store that owns the ticket
+     * @param date   the date of the
+     * @throws BadStoreException       when the store is not found.
+     * @throws BadOpeningHourException when the store is closed.
+     * @throws BadTicketException      when occurs an issue with the persistence.
+     */
+    private void addQueueNumberAndTime(TicketEntity ticket, StoreEntity store, Date date) throws BadStoreException, BadOpeningHourException, BadTicketException {
         try {
             TicketEntity lastTicket = em.createNamedQuery("TicketEntity.findByStoreSorted", TicketEntity.class)
-                    .setParameter("storeId", storeId)
+                    .setParameter("storeId", store.getStoreId())
                     .setParameter("date", date)
                     .setMaxResults(1)
                     .getResultStream()
@@ -323,7 +340,7 @@ public class TicketService {
                 }
             }
 
-            if (!ohs.isInOpeningHour(storeId, ticket.getArrivalTime())) {
+            if (!ohs.isInOpeningHour(store.getStoreId(), ticket.getArrivalTime())) {
                 throw new BadOpeningHourException("The store is closed");
             }
         } catch (PersistenceException e) {
