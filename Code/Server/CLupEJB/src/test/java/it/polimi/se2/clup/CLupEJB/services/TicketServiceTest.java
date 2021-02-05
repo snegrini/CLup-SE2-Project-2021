@@ -60,7 +60,7 @@ class TicketServiceTest {
     private StoreEntity store2;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
 
         when(query1.setParameter(anyString(), any())).thenReturn(query1);
@@ -84,7 +84,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void addTicket_SuccessfulAdd_InputValid() throws BadTicketException, BadStoreException, BadOpeningHourException {
+    public void addTicket_SuccessfulAdd_InputValid() throws BadTicketException, BadStoreException, BadOpeningHourException {
         String customerId = "aaaa";
 
         TicketEntity t1 = new TicketEntity();
@@ -114,7 +114,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void addTicket_FailAdd_InvalidStore() {
+    public void addTicket_FailAdd_InvalidStore() {
         String customerId = "aaaa";
 
         when(em.find(eq(StoreEntity.class), any())).thenReturn(null);
@@ -122,7 +122,20 @@ class TicketServiceTest {
     }
 
     @Test
-    void addTicket_FailAdd_StoreClosed() throws BadOpeningHourException {
+    public void addTicket_FailAdd_GotAlreadyTicket() {
+        String customerId = "aaaa";
+
+        TicketEntity t1 = new TicketEntity();
+
+        when(em.find(eq(StoreEntity.class), any())).thenReturn(store1);
+        when(em.createNamedQuery(eq("TicketEntity.findByCustomerIdOnDay"), any())).thenReturn(query1);
+        when(query1.getResultStream()).thenReturn(Stream.of(t1));
+
+        assertThrows(BadTicketException.class, () -> ticketService.addTicket(customerId, store1.getStoreId()));
+    }
+
+    @Test
+    public void addTicket_FailAdd_StoreClosed() throws BadOpeningHourException {
         String customerId = "aaaa";
 
         TicketEntity t1 = new TicketEntity();
@@ -148,7 +161,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void deleteTicket_CustomerSuccessfulDelete_TicketValid() {
+    public void deleteTicket_CustomerSuccessfulDelete_TicketValid() {
         String customerId = "aaaa";
         int ticketId = 1;
 
@@ -164,7 +177,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void deleteTicket_CustomerFailDelete_TicketNull() {
+    public void deleteTicket_CustomerFailDelete_TicketNull() {
         String customerId = "aaaa";
         int ticketId = 1;
 
@@ -174,7 +187,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void deleteTicket_CustomerFailDelete_Unauthorized() {
+    public void deleteTicket_CustomerFailDelete_Unauthorized() {
         String customerId = "aaaa";
         int ticketId = 1;
 
@@ -188,7 +201,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void deleteTicket_ManagerSuccessfulDelete_TicketValid() {
+    public void deleteTicket_ManagerSuccessfulDelete_TicketValid() {
         int ticketId = 1;
         int userId = 1;
 
@@ -210,7 +223,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void deleteTicket_ManagerFailDelete_UserNull() {
+    public void deleteTicket_ManagerFailDelete_UserNull() {
         int ticketId = 1;
         int userId = 1;
 
@@ -225,7 +238,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void deleteTicket_ManagerFailDelete_TicketNull() {
+    public void deleteTicket_ManagerFailDelete_TicketNull() {
         int ticketId = 1;
         int userId = 1;
 
@@ -241,7 +254,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void deleteTicket_ManagerFailDelete_UnauthorizedRole() {
+    public void deleteTicket_ManagerFailDelete_UnauthorizedRole() {
         int ticketId = 1;
         int userId = 1;
 
@@ -261,7 +274,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void deleteTicket_ManagerFailDelete_UnauthorizedStore() {
+    public void deleteTicket_ManagerFailDelete_UnauthorizedStore() {
         int ticketId = 1;
         int userId = 1;
 
@@ -281,8 +294,11 @@ class TicketServiceTest {
     }
 
     @Test
-    void updateTicketStatus_SuccessfulUpdate_TicketValid() throws UnauthorizedException, BadTicketException, BadStoreException {
+    public void updateTicketStatus_SuccessfulUpdate_TicketValid() throws UnauthorizedException, BadTicketException, BadStoreException {
         String passCode = "AAA000";
+        int customerInside = 5;
+
+        store1.setCustomersInside(customerInside);
 
         TicketEntity t1 = new TicketEntity();
         t1.setPassCode(passCode);
@@ -294,11 +310,15 @@ class TicketServiceTest {
 
         assertEquals(PassStatus.USED, ticketService.updateTicketStatus(passCode, store1.getStoreId()));
         assertEquals(PassStatus.USED, t1.getPassStatus());
+        assertEquals(customerInside + 1, store1.getCustomersInside());
     }
 
     @Test
-    void updateTicketStatus_SuccessfulUpdate_TicketUsed() throws UnauthorizedException, BadTicketException, BadStoreException {
+    public void updateTicketStatus_SuccessfulUpdate_TicketUsed() throws UnauthorizedException, BadTicketException, BadStoreException {
         String passCode = "AAA000";
+        int customerInside = 5;
+
+        store1.setCustomersInside(customerInside);
 
         TicketEntity t1 = new TicketEntity();
         t1.setPassCode(passCode);
@@ -310,10 +330,28 @@ class TicketServiceTest {
 
         assertEquals(PassStatus.EXPIRED, ticketService.updateTicketStatus(passCode, store1.getStoreId()));
         assertEquals(PassStatus.EXPIRED, t1.getPassStatus());
+        assertEquals(customerInside - 1, store1.getCustomersInside());
     }
 
     @Test
-    void updateTicketStatus_FailedUpdate_TicketExpired() {
+    public void updateTicketStatus_SuccessfulUpdate_DefaultPassCode() throws UnauthorizedException, BadTicketException, BadStoreException {
+        String passCode = "AAA000";
+        int customerInside = 5;
+
+        store1.setCustomersInside(customerInside);
+        store1.setDefaultPassCode(passCode);
+
+        when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
+        when(query1.getResultStream()).thenReturn(Stream.empty());
+
+        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store1);
+
+        assertEquals(PassStatus.EXPIRED, ticketService.updateTicketStatus(passCode, store1.getStoreId()));
+        assertEquals(customerInside - 1, store1.getCustomersInside());
+    }
+
+    @Test
+    public void updateTicketStatus_FailUpdate_TicketExpired() {
         String passCode = "AAA000";
 
         TicketEntity t1 = new TicketEntity();
@@ -329,7 +367,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void updateTicketStatus_FailedUpdate_TicketNull() {
+    public void updateTicketStatus_FailUpdate_TicketNull() {
         String passCode = "AAA000";
         store1.setDefaultPassCode("AAA001");
 
@@ -341,7 +379,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void updateTicketStatus_FailedUpdate_Unauthorized() {
+    public void updateTicketStatus_FailUpdate_Unauthorized() {
         String passCode = "AAA000";
 
         TicketEntity t1 = new TicketEntity();
@@ -357,7 +395,19 @@ class TicketServiceTest {
     }
 
     @Test
-    void findValidStoreTickets_TicketFound() throws BadTicketException {
+    public void updateTicketStatus_FailUpdate_InvalidStoreId() {
+        String passCode = "AAA000";
+
+        when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
+        when(query1.getResultStream()).thenReturn(Stream.empty());
+
+        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(null);
+
+        assertThrows(BadStoreException.class, () -> ticketService.updateTicketStatus(passCode, store1.getStoreId()));
+    }
+
+    @Test
+    public void findValidStoreTickets_TicketFound() throws BadTicketException {
         String passCode = "AAA000";
 
         TicketEntity t1 = new TicketEntity();
@@ -375,7 +425,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void findValidStoreTickets_NoTicketFound_ExpiredDate() throws BadTicketException {
+    public void findValidStoreTickets_NoTicketFound_ExpiredDate() throws BadTicketException {
         String passCode = "AAA000";
 
         TicketEntity t1 = new TicketEntity();
@@ -393,7 +443,7 @@ class TicketServiceTest {
     }
 
     @Test
-    void findValidStoreTickets_NoTicketFound_ExpiredArrivalTime() throws BadTicketException {
+    public void findValidStoreTickets_NoTicketFound_ExpiredArrivalTime() throws BadTicketException {
         String passCode = "AAA000";
 
         TicketEntity t1 = new TicketEntity();

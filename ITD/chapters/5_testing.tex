@@ -10,6 +10,8 @@ No unit tests have been performed on the apps as they are thin clients and most 
 \begin{itemize}
 	\item Valid insertion of a new ticket from a customer.
 	\item Attempt to insert a new ticket from a customer to a not existing store.
+	\item Attempt to insert a new ticket from a customer to a closed store.
+	\item Attempt to insert a new ticket from a customer while he already has a ticket.
 \end{itemize}
 
 \subsubsection{Delete Ticket}
@@ -28,9 +30,11 @@ No unit tests have been performed on the apps as they are thin clients and most 
 \begin{itemize}
 	\item Valid status update of a VALID ticket performed by an authorized employee.
 	\item Valid status update of an USED ticket performed by an authorized employee.
+	\item Valid status update of default pass code performed by an authorized employee.
 	\item Attempt to update the status of an EXPIRED ticket performed by an authorized employee.
-	\item Attempt to update a not existing ticket performed by an authorized employee.
-	\item Valid status update of a VALID ticket performed by an not authorized employee.
+	\item Attempt to update the status of a not existing ticket performed by an authorized employee.
+	\item Attempt to update the status of a ticket performed by an unauthorized employee.
+	\item Attempt to update the status of default pass code of a not existing store.
 \end{itemize}
 
 \subsection{StoreService}
@@ -50,4 +54,12 @@ No unit tests have been performed on the apps as they are thin clients and most 
 	\item Attempt to update the store cap of a store from an invalid user.
 	\item Attempt to update the store cap of a store from an unauthorized user.
 	\item Attempt to update the store cap of a store from a manager of another store.
+\end{itemize}
+
+\subsubsection{Get Estimate Wait Time}
+\begin{itemize}
+	\item Valid fetch of the store wait time while the store is not full.
+	\item Valid fetch of the store wait time while the last ticket of the queue is called.
+	\item Valid fetch of the store wait time while the ticket queue is not empty.
+	\item Attempt to fetch the wait time of a not existing store.
 \end{itemize}
