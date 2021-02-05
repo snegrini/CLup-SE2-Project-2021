@@ -104,11 +104,11 @@
                         <div data-th-each="i : ${#numbers.sequence(1, 2)}">
                             <label>
                                 From:
-                                <input type="time" name="from" step="1" data-th-name="${day + '-from-' + i}">
+                                <input type="time" name="from" data-th-name="${day + '-from-' + i}">
                             </label>
                             <label>
                                 To:
-                                <input type="time" name="to" step="1" data-th-name="${day + '-to-' + i}">
+                                <input type="time" name="to" data-th-name="${day + '-to-' + i}">
                             </label>
                             <br>
                         </div>

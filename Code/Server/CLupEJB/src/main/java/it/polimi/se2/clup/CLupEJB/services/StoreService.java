@@ -14,6 +14,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.List;
@@ -34,8 +35,10 @@ public class StoreService {
     public StoreService() {
     }
 
-    public StoreService(EntityManager em) {
+    public StoreService(EntityManager em, OpeningHourService ohService, UserService userService) {
         this.em = em;
+        this.ohService = ohService;
+        this.userService = userService;
     }
 
     public StoreEntity findStoreById(int storeId) {

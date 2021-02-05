@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Time;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -60,6 +61,8 @@ public class OpeningEditServlet extends HttpServlet {
             return;
         }
 
+        DateFormat sdf = new SimpleDateFormat("HH:mm");
+
         // Prepare a map of opening hours.
         for (String day : days) {
 
@@ -72,9 +75,9 @@ public class OpeningEditServlet extends HttpServlet {
 
                 if (!fromTimeStr.isEmpty() && !toTimeStr.isEmpty()) {
                     try {
-                        tempFromOh.add(Time.valueOf(fromTimeStr));
-                        tempToOh.add(Time.valueOf(toTimeStr));
-                    } catch (IllegalArgumentException e) {
+                        tempFromOh.add(new java.sql.Time(sdf.parse(fromTimeStr).getTime()));
+                        tempToOh.add(new java.sql.Time(sdf.parse(toTimeStr).getTime()));
+                    } catch (IllegalArgumentException | ParseException e) {
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad input time value.");
                         return;
                     }

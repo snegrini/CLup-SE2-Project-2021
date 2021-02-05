@@ -324,8 +324,6 @@ class OpeningHourServiceTest {
         oh3.setToTime(to1);
         oh3.setStore(store);
 
-        List<OpeningHourEntity> ohListNew = List.of(oh2, oh3);
-
         assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
         Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
         Map<Integer, List<Time>> ohToMap = Map.of(oh2.getWeekDay(), List.of(oh2.getToTime(), oh3.getToTime()));

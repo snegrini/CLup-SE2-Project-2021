@@ -4,23 +4,17 @@ import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.enums.PassStatus;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
-import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import it.polimi.se2.clup.CLupEJB.services.TicketService;
 import org.junit.jupiter.api.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
 import java.sql.Date;
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
 
 public class TicketIntegrationTest {
     private static final String PASS_CODE = "test_pass_code";
