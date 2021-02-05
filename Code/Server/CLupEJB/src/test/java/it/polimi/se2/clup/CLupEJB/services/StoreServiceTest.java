@@ -284,7 +284,6 @@ public class StoreServiceTest {
         TicketEntity ticketEntity = new TicketEntity();
         ticketEntity.setArrivalTime(new Time(timestamp + 900000));
 
-
         when(em.find(eq(StoreEntity.class), any())).thenReturn(storeEntity);
 
         when(em.createNamedQuery(eq("TicketEntity.findByStoreSorted"), any())).thenReturn(query1);

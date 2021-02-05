@@ -127,10 +127,17 @@ public class UserIntegrationTest {
 
         em.getTransaction().begin();
         List<Map.Entry<String, String>> genUsers = userService.generateCredentials(store, admin.getUserId());
-        em.getTransaction().rollback();
-
         assertNotNull(genUsers);
         assertFalse(genUsers.isEmpty());
+        assertFalse(genUsers.get(0).getKey().isEmpty());
+        assertFalse(genUsers.get(0).getValue().isEmpty());
+        assertFalse(genUsers.get(1).getKey().isEmpty());
+        assertFalse(genUsers.get(1).getValue().isEmpty());
+
+        assertEquals(genUsers.get(0).getKey(), userService.checkCredentials(genUsers.get(0).getKey(), genUsers.get(0).getValue()).getUsercode());
+        assertEquals(genUsers.get(1).getKey(), userService.checkCredentials(genUsers.get(1).getKey(), genUsers.get(1).getValue()).getUsercode());
+
+        em.getTransaction().rollback();
     }
 
     @Test
