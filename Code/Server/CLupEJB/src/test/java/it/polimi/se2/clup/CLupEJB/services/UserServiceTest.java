@@ -80,7 +80,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void checkCredentials_ValidUser_CorrectPassword() throws CredentialsException {
+    void checkCredentials_ValidUser_CorrectPassword() throws CredentialsException {
         when(em.createNamedQuery(eq("UserEntity.findByUserCode"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(List.of(user));
         when(encoder.matches(anyString(), anyString())).thenReturn(true);
@@ -93,7 +93,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void checkCredentials_ValidUser_WrongPassword() throws CredentialsException {
+    void checkCredentials_ValidUser_WrongPassword() throws CredentialsException {
         when(em.createNamedQuery(eq("UserEntity.findByUserCode"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(List.of(user));
         when(encoder.matches(anyString(), anyString())).thenReturn(false);
@@ -104,7 +104,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void checkCredentials_InvalidUser() throws CredentialsException {
+    void checkCredentials_InvalidUser() throws CredentialsException {
         when(em.createNamedQuery(eq("UserEntity.findByUserCode"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(List.of(user));
         when(encoder.matches(anyString(), anyString())).thenReturn(false);
@@ -115,7 +115,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void checkCredentials_TwoUserSameCode_FailLogin() {
+    void checkCredentials_TwoUserSameCode_FailLogin() {
         // Create a second user with same credentials.
         UserEntity user2 = new UserEntity();
         user2.setPassword(PASSWORD);

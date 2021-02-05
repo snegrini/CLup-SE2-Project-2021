@@ -127,7 +127,7 @@ public class StoreService {
 
         // Add opening hours to the created store.
         try {
-            ohService.addAllOpeningHour(store, ohFromMap, ohToMap);
+            ohService.addAllOpeningHour(store, ohFromMap, ohToMap, userId);
         } catch (BadOpeningHourException e) {
             em.remove(store);
             throw new BadStoreException("Store has not been added. " + e.getMessage());

@@ -6,6 +6,7 @@ import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
+import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,6 +44,7 @@ class OpeningHourServiceTest {
     private OpeningHourService ohService;
 
     private StoreEntity store;
+    private UserEntity manager;
     private OpeningHourEntity oh1;
     private OpeningHourEntity oh2;
 
@@ -51,10 +53,13 @@ class OpeningHourServiceTest {
     private Time from2;
     private Time to2;
 
+    private static final String USER_CODE = "TTT000";
+    private static final String PASSWORD = "test_password";
+
     private static final int WEEK_DAY_MONDAY = 1; // Monday
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         when(query1.setParameter(anyString(), any())).thenReturn(query1);
         when(query1.setMaxResults(anyInt())).thenReturn(query1);
 
@@ -65,6 +70,14 @@ class OpeningHourServiceTest {
 
         store.setStoreId(1);
         store.setOpeningHours(new ArrayList<>());
+        store.setUsers(new ArrayList<>());
+
+        manager = new UserEntity();
+        manager.setPassword(USER_CODE);
+        manager.setPassword(PASSWORD);
+        manager.setRole(UserRole.MANAGER);
+        manager.setStore(store);
+        store.addUser(manager);
 
         createOpeningHours();
     }
@@ -92,121 +105,144 @@ class OpeningHourServiceTest {
     }
 
     @AfterEach
-    void tearDown() {
+    public void tearDown() {
     }
 
     @Test
-    void addAllOpeningHour_SuccessfulAdd_InputValid() throws BadOpeningHourException {
+    public void addAllOpeningHour_SuccessfulAdd_InputValid() throws BadOpeningHourException, UnauthorizedException {
         List<Time> fromTimeList = List.of(from1, from2);
         List<Time> toTimeList = List.of(to1, to2);
 
-        ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store);
+        when(em.find(eq(UserEntity.class), any())).thenReturn(manager);
+
+        ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId());
 
         assertEquals(List.of(oh1, oh2), store.getOpeningHours());
     }
 
     @Test
-    void addAllOpeningHour_FailAdd_TimeOverlaps() {
+    public void addAllOpeningHour_FailAdd_TimeOverlaps() {
         Time fromOverlap = new Time(1612083600000L); // 10:00
 
         List<Time> fromTimeList = List.of(from1, fromOverlap);
         List<Time> toTimeList = List.of(to1, to2);
 
-        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store));
+        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId()));
     }
 
     @Test
-    void addAllOpeningHour_FailAdd_FromAfterTo() {
+    public void addAllOpeningHour_FailAdd_FromAfterTo() {
         List<Time> fromTimeList = List.of(to1);
         List<Time> toTimeList = List.of(from1);
 
-        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store));
+        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId()));
     }
 
     @Test
-    void addAllOpeningHour_FailAdd_ToBorderline() {
+    public void addAllOpeningHour_FailAdd_ToBorderline() {
         Time toBorderline = new Time(1612219800000L); // 23:50:00
 
         List<Time> fromTimeList = List.of(from1);
         List<Time> toTimeList = List.of(toBorderline);
 
-        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store));
+        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId()));
     }
 
     @Test
-    void addAllOpeningHour_FailAdd_FromAndToBorderline() {
+    public void addAllOpeningHour_FailAdd_FromAndToBorderline() {
         Time fromBorderline = new Time(1612219800000L); // 23:50:00
         Time toBorderline = new Time(1612220100000L); // 23:55:00
 
         List<Time> fromTimeList = List.of(fromBorderline);
         List<Time> toTimeList = List.of(toBorderline);
 
-        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store));
+        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId()));
     }
 
     @Test
-    void addAllOpeningHour_FailAdd_BadListOfTimes() {
+    public void addAllOpeningHour_FailAdd_BadListOfTimes() {
         List<Time> fromTimeList = List.of(from1, from2);
         List<Time> toTimeList = List.of(to1);
 
-        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store));
+        assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId()));
     }
 
     @Test
-    void deleteAllOpeningHour_SuccessfulDelete() {
-        List<OpeningHourEntity> ohList = List.of(oh1, oh2);
+    public void addAllOpeningHour_FailAdd_UnauthorizedDifferentStore() {
+        List<Time> fromTimeList = List.of(from1, from2);
+        List<Time> toTimeList = List.of(to1, to2);
+
+        StoreEntity store2 = new StoreEntity();
+        store2.setStoreId(2);
 
         UserEntity u1 = new UserEntity();
-        u1.setUserId(1);
+        u1.setUserId(2);
         u1.setRole(UserRole.MANAGER);
+        u1.setStore(store2);
+
+        when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
+
+        assertThrows(UnauthorizedException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, u1.getUserId()));
+    }
+
+    @Test
+    public void addAllOpeningHour_FailAdd_UnauthorizedEmployee() {
+        List<Time> fromTimeList = List.of(from1, from2);
+        List<Time> toTimeList = List.of(to1, to2);
+
+        StoreEntity store2 = new StoreEntity();
+        store2.setStoreId(2);
+
+        UserEntity u1 = new UserEntity();
+        u1.setUserId(2);
+        u1.setRole(UserRole.EMPLOYEE);
         u1.setStore(store);
 
         when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
+
+        assertThrows(UnauthorizedException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, u1.getUserId()));
+    }
+
+    @Test
+    public void deleteAllOpeningHour_SuccessfulDelete() {
+        List<OpeningHourEntity> ohList = List.of(oh1, oh2);
+
+        when(em.find(eq(UserEntity.class), any())).thenReturn(manager);
         when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(oh1);
         when(em.find(OpeningHourEntity.class, oh2.getOpeningHoursId())).thenReturn(oh2);
 
-        assertDoesNotThrow(() -> ohService.deleteAllOpeningHour(ohList, u1.getUserId()));
+        assertDoesNotThrow(() -> ohService.deleteAllOpeningHour(ohList, manager.getUserId()));
     }
 
     @Test
-    void deleteAllOpeningHour_FailDelete_UserNotFound() {
+    public void deleteAllOpeningHour_FailDelete_UserNotFound() {
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
-        UserEntity u1 = new UserEntity();
-        u1.setUserId(1);
-        u1.setRole(UserRole.MANAGER);
-        u1.setStore(store);
+        when(em.find(eq(UserEntity.class), any())).thenReturn(manager);
 
-        when(em.find(eq(UserEntity.class), any())).thenReturn(null);
-
-        assertThrows(BadOpeningHourException.class, () -> ohService.deleteAllOpeningHour(ohList, u1.getUserId()));
+        assertThrows(BadOpeningHourException.class, () -> ohService.deleteAllOpeningHour(ohList, manager.getUserId()));
     }
 
     @Test
-    void deleteAllOpeningHour_FailDelete_OpeningHourNotFound() {
+    public void deleteAllOpeningHour_FailDelete_OpeningHourNotFound() {
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
-        UserEntity u1 = new UserEntity();
-        u1.setUserId(1);
-        u1.setRole(UserRole.MANAGER);
-        u1.setStore(store);
-
-        when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
+        when(em.find(eq(UserEntity.class), any())).thenReturn(manager);
         when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(null);
         when(em.find(OpeningHourEntity.class, oh2.getOpeningHoursId())).thenReturn(null);
 
-        assertThrows(BadOpeningHourException.class, () -> ohService.deleteAllOpeningHour(ohList, u1.getUserId()));
+        assertThrows(BadOpeningHourException.class, () -> ohService.deleteAllOpeningHour(ohList, manager.getUserId()));
     }
 
     @Test
-    void deleteAllOpeningHour_FailDelete_UnauthorizedAccessDifferentStore() {
+    public void deleteAllOpeningHour_FailDelete_UnauthorizedAccessDifferentStore() {
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
         StoreEntity store2 = new StoreEntity();
         store2.setStoreId(2);
 
         UserEntity u1 = new UserEntity();
-        u1.setUserId(1);
+        u1.setUserId(2);
         u1.setRole(UserRole.MANAGER);
         u1.setStore(store2);
 
@@ -218,11 +254,11 @@ class OpeningHourServiceTest {
     }
 
     @Test
-    void deleteAllOpeningHour_FailDelete_UnauthorizedAccessEmployee() {
+    public void deleteAllOpeningHour_FailDelete_UnauthorizedAccessEmployee() {
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
         UserEntity u1 = new UserEntity();
-        u1.setUserId(1);
+        u1.setUserId(2);
         u1.setRole(UserRole.EMPLOYEE);
         u1.setStore(store);
 
@@ -234,7 +270,7 @@ class OpeningHourServiceTest {
     }
 
     @Test
-    void isInOpeningHour_TimeValid_True() throws BadOpeningHourException {
+    public void isInOpeningHour_TimeValid_True() throws BadOpeningHourException {
         Time time = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
@@ -248,7 +284,7 @@ class OpeningHourServiceTest {
     }
 
     @Test
-    void isInOpeningHour_TimeValid_False() throws BadOpeningHourException {
+    public void isInOpeningHour_TimeValid_False() throws BadOpeningHourException {
         Time time = new Time(1612094400000L); // 13:00
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
@@ -262,7 +298,7 @@ class OpeningHourServiceTest {
     }
 
     @Test
-    void isInOpeningHour_BadStore() throws BadOpeningHourException {
+    public void isInOpeningHour_BadStore() throws BadOpeningHourException {
         Time time = new Time(1612094400000L); // 13:00
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
@@ -274,7 +310,7 @@ class OpeningHourServiceTest {
     }
 
     @Test
-    void updateAllOpeningHour_UpdateSuccessful() {
+    public void updateAllOpeningHour_UpdateSuccessful() {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
 
@@ -294,24 +330,19 @@ class OpeningHourServiceTest {
         Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
         Map<Integer, List<Time>> ohToMap = Map.of(oh2.getWeekDay(), List.of(oh2.getToTime(), oh3.getToTime()));
 
-        UserEntity u1 = new UserEntity();
-        u1.setUserId(1);
-        u1.setRole(UserRole.MANAGER);
-        u1.setStore(store);
-
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
-        when(em.find(eq(UserEntity.class), anyInt())).thenReturn(u1);
+        when(em.find(eq(UserEntity.class), anyInt())).thenReturn(manager);
         when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(oh1);
         when(em.find(OpeningHourEntity.class, oh2.getOpeningHoursId())).thenReturn(oh2);
 
         when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(new ArrayList<>(ohListOld));
 
-        assertDoesNotThrow(() -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, u1.getUserId()));
+        assertDoesNotThrow(() -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, manager.getUserId()));
     }
 
     @Test
-    void updateAllOpeningHour_UpdateFailed_BadUser() {
+    public void updateAllOpeningHour_UpdateFailed_BadUser() {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
 
@@ -348,7 +379,7 @@ class OpeningHourServiceTest {
     }
 
     @Test
-    void updateAllOpeningHour_UpdateFailed_BadStore() {
+    public void updateAllOpeningHour_UpdateFailed_BadStore() {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
 
@@ -361,31 +392,24 @@ class OpeningHourServiceTest {
         oh3.setFromTime(fromTimeNew);
         oh3.setToTime(to1);
         oh3.setStore(store);
-
-        List<OpeningHourEntity> ohListNew = List.of(oh2, oh3);
 
         assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
         Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
         Map<Integer, List<Time>> ohToMap = Map.of(oh2.getWeekDay(), List.of(oh2.getToTime(), oh3.getToTime()));
 
-        UserEntity u1 = new UserEntity();
-        u1.setUserId(1);
-        u1.setRole(UserRole.MANAGER);
-        u1.setStore(store);
-
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(null);
-        when(em.find(eq(UserEntity.class), anyInt())).thenReturn(u1);
+        when(em.find(eq(UserEntity.class), anyInt())).thenReturn(manager);
         when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(oh1);
         when(em.find(OpeningHourEntity.class, oh2.getOpeningHoursId())).thenReturn(oh2);
 
         when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(new ArrayList<>(ohListOld));
 
-        assertThrows(BadOpeningHourException.class, () -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, u1.getUserId()));
+        assertThrows(BadOpeningHourException.class, () -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, manager.getUserId()));
     }
 
     @Test
-    void updateAllOpeningHour_UpdateFailed_BadOpeningHourFormat() {
+    public void updateAllOpeningHour_UpdateFailed_BadOpeningHourFormat() {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
 
@@ -399,25 +423,18 @@ class OpeningHourServiceTest {
         oh3.setToTime(to1);
         oh3.setStore(store);
 
-        List<OpeningHourEntity> ohListNew = List.of(oh2, oh3);
-
         assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
         Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
         Map<Integer, List<Time>> ohToMap = Map.of(oh2.getWeekDay(), List.of(oh2.getToTime()));
 
-        UserEntity u1 = new UserEntity();
-        u1.setUserId(1);
-        u1.setRole(UserRole.MANAGER);
-        u1.setStore(store);
-
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
-        when(em.find(eq(UserEntity.class), anyInt())).thenReturn(u1);
+        when(em.find(eq(UserEntity.class), anyInt())).thenReturn(manager);
         when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(oh1);
         when(em.find(OpeningHourEntity.class, oh2.getOpeningHoursId())).thenReturn(oh2);
 
         when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(new ArrayList<>(ohListOld));
 
-        assertThrows(BadOpeningHourException.class, () -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, u1.getUserId()));
+        assertThrows(BadOpeningHourException.class, () -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, manager.getUserId()));
     }
 }
