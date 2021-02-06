@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 
 public class TicketIntegrationTest {
     private static final String INIT_PASS_CODE = "test_init_pass_code";
