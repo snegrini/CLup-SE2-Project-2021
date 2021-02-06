@@ -39,6 +39,16 @@ public class TicketService {
     }
 
     /**
+     * Finds a ticket by his id.
+     *
+     * @param ticketId the id of the ticket to be found.
+     * @return the found ticket if any, null otherwise.
+     */
+    public TicketEntity findTicketById(int ticketId) {
+       return em.find(TicketEntity.class, ticketId);
+    }
+
+    /**
      * Finds a valid ticket by his id.
      *
      * @param ticketId the id of the ticket to be found.

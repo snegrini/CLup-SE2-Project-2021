@@ -38,7 +38,7 @@ public class TicketDeleteServlet extends HttpServlet {
 
         // Delete ticket.
         try {
-            TicketEntity ticket = ticketService.findValidTicketById(ticketId);
+            TicketEntity ticket = ticketService.findTicketById(ticketId);
 
             if (ticket == null) {
                 response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Ticket not found.");
