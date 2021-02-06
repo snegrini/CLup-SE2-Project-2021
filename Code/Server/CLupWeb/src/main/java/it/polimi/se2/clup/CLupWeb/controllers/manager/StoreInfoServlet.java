@@ -1,17 +1,13 @@
 package it.polimi.se2.clup.CLupWeb.controllers.manager;
 
 import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
-import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -25,14 +21,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.*;
-import java.util.List;
 
 @WebServlet(name = "ManagerStoreInfoServlet", value = "/dashboard/storeinfo")
 public class StoreInfoServlet extends HttpServlet {

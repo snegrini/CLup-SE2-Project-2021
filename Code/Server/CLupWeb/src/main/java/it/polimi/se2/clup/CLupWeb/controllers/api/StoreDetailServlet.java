@@ -10,7 +10,6 @@ import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
 import it.polimi.se2.clup.CLupEJB.messages.Message;
-import it.polimi.se2.clup.CLupEJB.messages.StoreListMessage;
 import it.polimi.se2.clup.CLupEJB.messages.StoreMessage;
 import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import it.polimi.se2.clup.CLupEJB.services.TicketService;
@@ -28,7 +27,6 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
-import java.util.Iterator;
 
 @WebServlet(name = "StoreDetailServlet", value = "/api/store_detail")
 public class StoreDetailServlet extends HttpServlet {

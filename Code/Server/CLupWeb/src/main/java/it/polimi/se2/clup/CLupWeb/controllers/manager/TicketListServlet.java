@@ -1,9 +1,7 @@
 package it.polimi.se2.clup.CLupWeb.controllers.manager;
 
-import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
-import it.polimi.se2.clup.CLupEJB.services.StoreService;
 import it.polimi.se2.clup.CLupEJB.services.TicketService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;

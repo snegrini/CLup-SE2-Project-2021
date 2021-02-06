@@ -279,39 +279,6 @@ class OpeningHourServiceTest {
     }
 
     @Test
-    public void isInOpeningHour_TimeValid_True() throws BadOpeningHourException {
-        Time time = new Time(1612083600000L); // 10:00
-        List<OpeningHourEntity> ohList = List.of(oh1, oh2);
-
-        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
-        when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
-        when(query1.getResultList()).thenReturn(new ArrayList<>(ohList));
-
-        assertTrue(ohService.isInOpeningHour(store.getStoreId(), time));
-    }
-
-    @Test
-    public void isInOpeningHour_TimeValid_False() throws BadOpeningHourException {
-        Time time = new Time(1612094400000L); // 13:00
-        List<OpeningHourEntity> ohList = List.of(oh1, oh2);
-
-        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
-        when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
-        when(query1.getResultList()).thenReturn(new ArrayList<>(ohList));
-
-        assertFalse(ohService.isInOpeningHour(store.getStoreId(), time));
-    }
-
-    @Test
-    public void isInOpeningHour_BadStore() throws BadOpeningHourException {
-        Time time = new Time(1612094400000L); // 13:00
-
-        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(null);
-
-        assertThrows(BadOpeningHourException.class, () -> ohService.isInOpeningHour(store.getStoreId(), time));
-    }
-
-    @Test
     public void updateAllOpeningHour_UpdateSuccessful() {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
@@ -417,5 +384,38 @@ class OpeningHourServiceTest {
         when(query1.getResultList()).thenReturn(new ArrayList<>(ohListOld));
 
         assertThrows(BadOpeningHourException.class, () -> ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, manager.getUserId()));
+    }
+
+    @Test
+    public void isInOpeningHour_TimeValid_True() throws BadOpeningHourException {
+        Time time = new Time(1612083600000L); // 10:00
+        List<OpeningHourEntity> ohList = List.of(oh1, oh2);
+
+        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
+        when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
+        when(query1.getResultList()).thenReturn(new ArrayList<>(ohList));
+
+        assertTrue(ohService.isInOpeningHour(store.getStoreId(), time));
+    }
+
+    @Test
+    public void isInOpeningHour_TimeValid_False() throws BadOpeningHourException {
+        Time time = new Time(1612094400000L); // 13:00
+        List<OpeningHourEntity> ohList = List.of(oh1, oh2);
+
+        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
+        when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
+        when(query1.getResultList()).thenReturn(new ArrayList<>(ohList));
+
+        assertFalse(ohService.isInOpeningHour(store.getStoreId(), time));
+    }
+
+    @Test
+    public void isInOpeningHour_BadStore() {
+        Time time = new Time(1612094400000L); // 13:00
+
+        when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(null);
+
+        assertThrows(BadOpeningHourException.class, () -> ohService.isInOpeningHour(store.getStoreId(), time));
     }
 }

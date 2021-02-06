@@ -1,19 +1,12 @@
 package it.polimi.se2.clup.CLupWeb.controllers.manager;
 
-import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
-import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.services.OpeningHourService;
 import it.polimi.se2.clup.CLupEJB.services.StoreService;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,9 +18,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.time.format.TextStyle;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static it.polimi.se2.clup.CLupWeb.controllers.admin.StoreAddServlet.FROM_STR;
 import static it.polimi.se2.clup.CLupWeb.controllers.admin.StoreAddServlet.TO_STR;
