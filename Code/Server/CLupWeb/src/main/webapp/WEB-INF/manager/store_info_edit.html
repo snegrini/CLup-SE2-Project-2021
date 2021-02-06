@@ -1,144 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard - Opening Hours edit</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <script src="js/jquery-3.5.1.min.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <title>Dashboard - Edit store info</title>
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link href="../../css/sb-admin-2.min.css" data-th-href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+    <link href="../../css/default.css" data-th-href="@{/css/default.css}" rel="stylesheet">
 </head>
-<body>
-
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Customers Line-Up</a>
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#" data-th-href="@{/logout}">Logout</a>
+<body id="page-top">
+<div id="wrapper">
+    <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+            <div class="sidebar-brand-icon rotate-n-15">
+                <i class="fas fa-laugh-wink"></i>
+            </div>
+            <div class="sidebar-brand-text mx-3">CLup
+            </div>
+        </a>
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-th-href="@{/dashboard}">
+                <span>Dashboard</span>
+            </a>
         </li>
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">Store</div>
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfo}">
+                <span>Store Info</span>
+            </a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfoedit}">
+                <span>Edit Store Info</span>
+            </a>
+        </li>
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">Tickets</div>
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-th-href="@{/dashboard/ticketlist}">
+                <span>Tickets list</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" data-th-href="@{/dashboard/defaultpasscode}">
+                <span>Default Pass Code</span>
+            </a>
+        </li>
+        <hr class="sidebar-divider d-none d-md-block">
     </ul>
-</nav>
-
-<div class="container-fluid">
-    <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="sidebar-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#" data-th-href="@{/dashboard}">
-                            <span data-feather="home"></span>
-                            Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfo}">
-                            <span data-feather="file"></span>
-                            Store info
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-th-href="@{/dashboard/storeinfoedit}">
-                            <span data-feather="file"></span>
-                            Edit store info <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-th-href="@{/dashboard/ticketlist}">
-                            <span data-feather="file"></span>
-                            Ticket List
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" data-th-href="@{/dashboard/defaultpasscode}">
-                            <span data-feather="file"></span>
-                            Default pass code
+    <div id="content-wrapper" class="d-flex flex-column">
+        <div id="content">
+            <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item no-arrow">
+                        <a class="nav-link" href="#" data-th-href="@{/logout}" id="userDropdown" role="button"
+                           aria-haspopup="true" aria-expanded="true">
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Logout</span>
                         </a>
                     </li>
                 </ul>
-            </div>
-        </nav>
+            </nav>
+            <div class="container-fluid">
+                <h1 class="h3 mb-4 text-gray-800">Edit store info</h1>
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2">Edit store info</h1>
-            </div>
+                <h4 class="text-gray-700">Store cap:</h4>
+                <form action="storeinfoedit" method="post">
+                    <div class="form-group">
+                        <label>Store cap
+                            <input type="number" class="form-control" name="storeCap" value="123"
+                                   data-th-value="${storeCap}" required></label><br>
+                        <input type="submit" class="btn btn-primary btn-clup" value="Update"></div>
 
-            <h2>Store cap</h2>
-            <form action="storeinfoedit" method="post">
-                <fieldset>
-                    <label>Store cap
-                        <input type="number" name="storeCap" value="123" data-th-value="${storeCap}" required></label><br>
-                    <input type="submit" value="Update">
-                </fieldset>
-            </form>
+                </form>
 
-            <br>
+                <br>
 
-            <h2>Opening hours</h2>
-            <form action="ohedit" method="post">
-                <fieldset>
-                    <legend>Opening Hours</legend>
-
+                <h4 class="text-gray-700">Opening hours:</h4><br>
+                <form action="ohedit" method="post">
                     <div data-th-each="ohday : ${openingHourMap}">
                         <label>
-                            <input type="checkbox" name="day[]" data-th-value="${ohday.key}" data-th-checked="${not #lists.isEmpty(ohday.value)}">
+                            <input type="checkbox" name="day[]" data-th-value="${ohday.key}"
+                                   data-th-checked="${not #lists.isEmpty(ohday.value)}">
                             <strong data-th-text="${ohday.key}">Day of week</strong>
                         </label>
+
                         <br>
 
-                        <div data-th-if="${#lists.isEmpty(ohday.value)}" data-th-each="i : ${#numbers.sequence(1, 2)}">
-                            <label>
-                                From:
-                                <input type="time" name="from" data-th-name="${ohday.key + '-from-' + i}">
-                            </label>
-                            <label>
-                                To:
-                                <input type="time" name="to" data-th-name="${ohday.key + '-to-' + i}">
-                            </label>
+                        <div class="form-row" data-th-if="${#lists.isEmpty(ohday.value)}"
+                             data-th-each="i : ${#numbers.sequence(1, 2)}">
+                            <div class="form-group">
+                                <label>
+                                    From:
+                                    <input class="form-control" type="time" name="from"
+                                           data-th-name="${ohday.key + '-from-' + i}">
+                                </label>
+                                <label>
+                                    To:
+                                    <input class="form-control" type="time" name="to"
+                                           data-th-name="${ohday.key + '-to-' + i}">
+                                </label>
+                            </div>
                             <br>
                         </div>
 
-                        <div data-th-unless="${#lists.isEmpty(ohday.value)}" data-th-each="ohtime, iterStat : ${ohday.value}">
-                            <label>
-                                From:
-                                <input type="time" name="from" data-th-name="${ohday.key + '-from-' + iterStat.count}" data-th-value="${ohtime.fromTime}">
-                            </label>
-                            <label>
-                                To:
-                                <input type="time" name="to" data-th-name="${ohday.key + '-to-' + iterStat.count}" data-th-value="${ohtime.toTime}">
-                            </label>
+                        <div class="form-row" data-th-unless="${#lists.isEmpty(ohday.value)}"
+                             data-th-each="ohtime, iterStat : ${ohday.value}">
+                            <div class="form-group">
+                                <label>
+                                    From:
+                                    <input class="form-control" type="time" name="from"
+                                           data-th-name="${ohday.key + '-from-' + iterStat.count}"
+                                           data-th-value="${ohtime.fromTime}">
+                                </label>
+                                <label>
+                                    To:
+                                    <input class="form-control" type="time" name="to"
+                                           data-th-name="${ohday.key + '-to-' + iterStat.count}"
+                                           data-th-value="${ohtime.toTime}">
+                                </label>
+                            </div>
                             <br>
                         </div>
 
-                        <div data-th-if="${#lists.size(ohday.value) == 1}">
-                            <label>
-                                From:
-                                <input type="time" name="from" data-th-name="${ohday.key + '-from-2'}">
-                            </label>
-                            <label>
-                                To:
-                                <input type="time" name="to" data-th-name="${ohday.key + '-to-2'}">
-                            </label>
+                        <div class="form-row" data-th-if="${#lists.size(ohday.value) == 1}">
+                            <div class="form-group">
+                                <label>
+                                    From:
+                                    <input class="form-control" type="time" name="from"
+                                           data-th-name="${ohday.key + '-from-2'}">
+                                </label>
+                                <label>
+                                    To:
+                                    <input class="form-control" type="time" name="to"
+                                           data-th-name="${ohday.key + '-to-2'}">
+                                </label>
+                            </div>
                             <br>
                         </div>
+                        <br>
                     </div>
 
                     <br>
-                    <input type="submit" value="Update">
-
-                </fieldset>
-            </form>
-
-        </main>
+                    <input class="btn btn-primary btn-clup" type="submit" value="Update">
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
-
-
+<script src="../../js/jquery.min.js" data-th-src="@{/js/jquery.min.js}"></script>
+<script src="../../js/bootstrap.bundle.min.js" data-th-src="@{/js/bootstrap.bundle.min.js}"></script>
+<script src="../../js/jquery.easing.min.js" data-th-src="@{/js/jquery.easing.min.js}"></script>
+<script src="../../js/sb-admin-2.min.js" data-th-src="@{/js/sb-admin-2.min.js}"></script>
 </body>
 </html>

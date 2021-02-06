@@ -1,99 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Employee Index</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <script src="js/jquery-3.5.1.min.js"></script>
-    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <title>Dashboard - Index</title>
 
-    <script src="js/home_employee.js" charset="utf-8" defer></script>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link href="../../css/sb-admin-2.min.css" data-th-href="@{/css/sb-admin-2.min.css}" rel="stylesheet">
+    <link href="../../css/default.css" data-th-href="@{/css/default.css}" rel="stylesheet">
 </head>
+
 <body>
+<div class="container text-gray-900">
+    <h1 class="h2 mb-4 mt-4 text-gray-800" data-th-text="${store.storeName}">Pippo</h1>
 
-<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">Customers Line-Up</a>
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-            <a class="nav-link" href="#" data-th-href="@{/logout}">Logout</a>
-        </li>
-    </ul>
-</nav>
+    <p><h3 class="text-gray-800">People inside the store: </h3>
+    <span id="customersInside" data-th-text="${store.customersInside}">123</span> of
+    <span id="storeCap" data-th-text="${store.storeCap}">200</span></p>
 
-<div class="container-fluid">
-    <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="sidebar-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#" data-th-href="@{/dashboard}">
-                            <span data-feather="home"></span>
-                            Dashboard <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+    <p><h3 class="text-gray-800">People inside the store: </h3>
+    <span id="customersQueue" data-th-text="${customersQueue}">456</span></p>
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
-                <h1 class="h2">Dashboard EMPLOYEE</h1>
-            </div>
+    <h3 class="text-gray-800">Queue: </h3>
+    <div id="divPassCode" class="table-responsive">
+        <div data-th-if="${#lists.isEmpty(validTickets)}">Wow, such empty</div>
 
-            <h1 class="h3" data-th-text="${store.storeName}"></h1>
-            <img src="https://via.placeholder.com/200x100?text=Store+Logo" alt="Store logo" width="200" height="100" data-th-src="@{'/images/'+${store.imagePath}}">
-
-            <h1 class="h3">People inside the store</h1>
-            <span id="customersInside" data-th-text="${store.customersInside}">123</span> of
-            <span id="storeCap" data-th-text="${store.storeCap}">200</span>
-
-            <h1 class="h3">People in queue</h1>
-            <div id="customersQueue" data-th-text="${customersQueue}">456</div>
-
-            <h1 class="h3">Valid Ticket List</h1>
-            <div id="divPassCode" class="table-responsive">
-                <div data-th-if="${#lists.isEmpty(validTickets)}">Wow, such empty</div>
-
-                <table class="table table-striped table-sm" data-th-unless="${#lists.isEmpty(validTickets)}">
-                    <thead>
-                    <tr>
-                        <th>Pass code</th>
-                        <th>Pass status</th>
-                        <th>Queue number</th>
-                        <th>Arrival time</th>
-                    </tr>
-                    </thead>
-                    <tbody data-th-remove="all-but-first">
-                        <tr data-th-each="ticket : ${validTickets}">
-                            <td data-th-text="${ticket.passCode}">ZZZZ0001</td>
-                            <td data-th-text="${ticket.passStatus}">VALID</td>
-                            <td data-th-text="${ticket.queueNumber}">1</td>
-                            <td data-th-text="${ticket.arrivalTime}">15:28:14</td>
-                        </tr>
-                        <tr>
-                            <td>YYYY0002</td>
-                            <td>USED</td>
-                            <td>0</td>
-                            <td>08:45:41</td>
-                        </tr>
-                        <tr>
-                            <td>WWWW0005</td>
-                            <td>EXPIRED</td>
-                            <td>0</td>
-                            <td>13:18:49</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </main>
+        <table class="table table-striped table-sm" data-th-unless="${#lists.isEmpty(validTickets)}">
+            <thead>
+            <tr>
+                <th>Pass code</th>
+                <th>Pass status</th>
+                <th>Queue number</th>
+                <th>Arrival time</th>
+            </tr>
+            </thead>
+            <tbody data-th-remove="all-but-first">
+            <tr data-th-each="ticket : ${validTickets}">
+                <td data-th-text="${ticket.passCode}">ZZZZ0001</td>
+                <td data-th-text="${ticket.passStatus}">VALID</td>
+                <td data-th-text="${ticket.queueNumber}">1</td>
+                <td data-th-text="${ticket.arrivalTime}">15:28:14</td>
+            </tr>
+            <tr>
+                <td>YYYY0002</td>
+                <td>USED</td>
+                <td>0</td>
+                <td>08:45:41</td>
+            </tr>
+            <tr>
+                <td>WWWW0005</td>
+                <td>EXPIRED</td>
+                <td>0</td>
+                <td>13:18:49</td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
+<script src="../../js/jquery.min.js" data-th-src="@{/js/jquery.min.js}"></script>
+<script src="../../js/bootstrap.bundle.min.js" data-th-src="@{/js/bootstrap.bundle.min.js}"></script>
+<script src="../../js/jquery.easing.min.js" data-th-src="@{/js/jquery.easing.min.js}"></script>
+<script src="../../js/sb-admin-2.min.js" data-th-src="@{/js/sb-admin-2.min.js}"></script>
+<script src="../../js/home_employee.js" data-th-src="@{/js/home_employee.js}"></script>
 </body>
 </html>
