@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>it.polimi.se2.clup</groupId>
+        <artifactId>CLup-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>CLupEAR</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>CLupEAR</name>
+
+    <properties>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <junit.version>5.7.0</junit.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <ejbModule>
+                        <groupId>it.polimi.se2.clup</groupId>
+                        <artifactId>CLupEJB</artifactId>
+                        <bundleFilename>CLupEJB.jar</bundleFilename>
+                    </ejbModule>
+                    <webModule>
+                        <groupId>it.polimi.se2.clup</groupId>
+                        <artifactId>CLupWeb</artifactId>
+                        <contextRoot>/foo</contextRoot>
+                    </webModule>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

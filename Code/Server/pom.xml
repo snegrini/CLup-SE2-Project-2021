@@ -5,50 +5,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>it.polimi.se2.clup</groupId>
-    <artifactId>CLupEAR</artifactId>
+    <artifactId>CLup-parent</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>CLupEAR</name>
+    <name>Multi Chapter Simple Parent Project</name>
 
-    <dependencies>
-        <dependency>
-            <groupId>it.polimi.se2.clup</groupId>
-            <artifactId>CLupEJB</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>it.polimi.se2.clup</groupId>
-            <artifactId>CLupWeb</artifactId>
-            <version>1.0-SNAPSHOT</version>
-            <type>war</type>
-        </dependency>
-    </dependencies>
+    <modules>
+        <module>CLupEJB</module>
+        <module>CLupWeb</module>
+        <module>CLupEAR</module>
+    </modules>
 
     <build>
         <plugins>
-            <plugin>
-                <artifactId>maven-ear-plugin</artifactId>
-                <version>3.2.0</version>
-                <configuration>
-                    <version>1.0</version>
-                    <modules>
-                        <ejbModule>
-                            <groupId>it.polimi.se2.clup</groupId>
-                            <artifactId>CLupEJB</artifactId>
-                            <bundleFileName>CLupEJB.jar</bundleFileName>
-                        </ejbModule>
-                        <webModule>
-                            <groupId>it.polimi.se2.clup</groupId>
-                            <artifactId>CLupWeb</artifactId>
-                            <bundleFileName>CLupWeb.war</bundleFileName>
-                            <contextRoot>/myWarConext</contextRoot>
-                        </webModule>
-                    </modules>
-                    <displayName>CLup</displayName>
-                    <generateApplicationXml>true</generateApplicationXml>
-                </configuration>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
@@ -60,6 +29,5 @@
                 </configuration>
             </plugin>
         </plugins>
-        <finalName>CLup</finalName>
     </build>
 </project>
