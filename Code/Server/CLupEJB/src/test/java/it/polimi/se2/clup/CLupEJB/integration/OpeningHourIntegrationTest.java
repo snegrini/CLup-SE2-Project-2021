@@ -18,6 +18,7 @@ import javax.persistence.Persistence;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -82,13 +83,11 @@ public class OpeningHourIntegrationTest {
 
     private void createTestData() {
         StoreEntity store = new StoreEntity();
-        store.setUsers(new ArrayList<>());
 
         UserEntity manager = new UserEntity();
         manager.setPassword(USER_CODE);
         manager.setPassword(PASSWORD);
         manager.setRole(UserRole.MANAGER);
-        manager.setStore(store);
 
         store.addUser(manager);
 
@@ -205,6 +204,32 @@ public class OpeningHourIntegrationTest {
         ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, LAST_MANAGER_ID);
         List<OpeningHourEntity> ohList = store.getOpeningHours();
         em.getTransaction().commit();
+
+        em.getTransaction().begin();
+        assertDoesNotThrow(() -> ohService.deleteAllOpeningHour(ohList, LAST_MANAGER_ID));
+        em.getTransaction().commit();
+    }
+
+    @Test
+    public void updateAllOpeningHour_Successfull() throws BadOpeningHourException, UnauthorizedException {
+        Map<Integer, List<Time>> ohFromMap = Map.of(WEEK_DAY_MONDAY, List.of(FROM_TIME_1, FROM_TIME_2));
+        Map<Integer, List<Time>> ohToMap = Map.of(WEEK_DAY_MONDAY, List.of(TO_TIME_1, TO_TIME_2));
+
+        StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
+
+        em.getTransaction().begin();
+        ohService.updateAllOpeningHour(store.getStoreId(), ohFromMap, ohToMap, LAST_MANAGER_ID);
+        List<OpeningHourEntity> ohList = store.getOpeningHours();
+        em.getTransaction().commit();
+
+        assertEquals(expectedOh1.getWeekDay(), ohList.get(0).getWeekDay());
+        assertEquals(expectedOh2.getWeekDay(), ohList.get(1).getWeekDay());
+
+        assertEquals(expectedOh1.getFromTime(), ohList.get(0).getFromTime());
+        assertEquals(expectedOh2.getFromTime(), ohList.get(1).getFromTime());
+
+        assertEquals(expectedOh1.getToTime(), ohList.get(0).getToTime());
+        assertEquals(expectedOh2.getToTime(), ohList.get(1).getToTime());
 
         em.getTransaction().begin();
         assertDoesNotThrow(() -> ohService.deleteAllOpeningHour(ohList, LAST_MANAGER_ID));

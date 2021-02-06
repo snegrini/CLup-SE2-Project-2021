@@ -2,7 +2,6 @@ package it.polimi.se2.clup.CLupEJB.services;
 
 import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
 import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
-import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
@@ -24,7 +23,6 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -48,15 +46,16 @@ class OpeningHourServiceTest {
     private OpeningHourEntity oh1;
     private OpeningHourEntity oh2;
 
-    private Time from1;
-    private Time to1;
-    private Time from2;
-    private Time to2;
+    private static final Time FROM_TIME_1 = new Time(1612076400000L); // 08:00;
+    private static final Time TO_TIME_1 = new Time(1612090800000L); // 12:00;
+    private static final Time FROM_TIME_2 = new Time(1612098000000L); // 14:00;
+    private static final Time TO_TIME_2 = new Time(1612112400000L); // 18:00;
 
     private static final String USER_CODE = "TTT000";
     private static final String PASSWORD = "test_password";
 
-    private static final int WEEK_DAY_MONDAY = 1; // Monday
+    private static final int WEEK_DAY_MONDAY = 1;
+    private static final int WEEK_DAY_TUESDAY = 2;
 
     @BeforeEach
     public void setUp() {
@@ -69,39 +68,30 @@ class OpeningHourServiceTest {
         store = new StoreEntity();
 
         store.setStoreId(1);
-        store.setOpeningHours(new ArrayList<>());
-        store.setUsers(new ArrayList<>());
 
         manager = new UserEntity();
         manager.setPassword(USER_CODE);
         manager.setPassword(PASSWORD);
         manager.setRole(UserRole.MANAGER);
-        manager.setStore(store);
         store.addUser(manager);
 
         createOpeningHours();
+        store.addOpeningHour(oh1);
+        store.addOpeningHour(oh2);
     }
 
     private void createOpeningHours() {
-        from1 = new Time(1612076400000L); // 08:00
-        to1 = new Time(1612090800000L); // 12:00
-
-        from2 = new Time(1612098000000L); // 14:00
-        to2 = new Time(1612112400000L); // 18:00
-
         oh1 = new OpeningHourEntity();
         oh1.setOpeningHoursId(1);
         oh1.setWeekDay(WEEK_DAY_MONDAY);
-        oh1.setFromTime(from1);
-        oh1.setToTime(to1);
-        oh1.setStore(store);
+        oh1.setFromTime(FROM_TIME_1);
+        oh1.setToTime(TO_TIME_1);
 
         oh2 = new OpeningHourEntity();
         oh2.setOpeningHoursId(2);
         oh2.setWeekDay(WEEK_DAY_MONDAY);
-        oh2.setFromTime(from2);
-        oh2.setToTime(to2);
-        oh2.setStore(store);
+        oh2.setFromTime(FROM_TIME_2);
+        oh2.setToTime(TO_TIME_2);
     }
 
     @AfterEach
@@ -110,30 +100,50 @@ class OpeningHourServiceTest {
 
     @Test
     public void addAllOpeningHour_SuccessfulAdd_InputValid() throws BadOpeningHourException, UnauthorizedException {
-        List<Time> fromTimeList = List.of(from1, from2);
-        List<Time> toTimeList = List.of(to1, to2);
+
+        // Create two new opening hours for late comparison.
+        OpeningHourEntity oh3 = new OpeningHourEntity();
+        oh3.setOpeningHoursId(1);
+        oh3.setWeekDay(WEEK_DAY_TUESDAY);
+        oh3.setFromTime(FROM_TIME_1);
+        oh3.setToTime(TO_TIME_1);
+        oh3.setStore(store);
+
+        OpeningHourEntity oh4 = new OpeningHourEntity();
+        oh4.setOpeningHoursId(2);
+        oh4.setWeekDay(WEEK_DAY_TUESDAY);
+        oh4.setFromTime(FROM_TIME_2);
+        oh4.setToTime(TO_TIME_2);
+        oh4.setStore(store);
+
+        List<Time> fromTimeList = List.of(FROM_TIME_1, FROM_TIME_2);
+        List<Time> toTimeList = List.of(TO_TIME_1, TO_TIME_2);
 
         when(em.find(eq(UserEntity.class), any())).thenReturn(manager);
 
-        ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId());
+        ohService.addAllOpeningHour(WEEK_DAY_TUESDAY, fromTimeList, toTimeList, store, manager.getUserId());
 
-        assertEquals(List.of(oh1, oh2), store.getOpeningHours());
+        List<OpeningHourEntity> expectedOhList = List.of(oh1, oh2, oh3, oh4);
+        List<OpeningHourEntity> actualOhList= store.getOpeningHours();
+
+        assertTrue(expectedOhList.size() == actualOhList.size() &&
+                expectedOhList.containsAll(actualOhList) && actualOhList.containsAll(expectedOhList));
     }
 
     @Test
     public void addAllOpeningHour_FailAdd_TimeOverlaps() {
         Time fromOverlap = new Time(1612083600000L); // 10:00
 
-        List<Time> fromTimeList = List.of(from1, fromOverlap);
-        List<Time> toTimeList = List.of(to1, to2);
+        List<Time> fromTimeList = List.of(FROM_TIME_1, fromOverlap);
+        List<Time> toTimeList = List.of(TO_TIME_1, TO_TIME_2);
 
         assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId()));
     }
 
     @Test
     public void addAllOpeningHour_FailAdd_FromAfterTo() {
-        List<Time> fromTimeList = List.of(to1);
-        List<Time> toTimeList = List.of(from1);
+        List<Time> fromTimeList = List.of(TO_TIME_1);
+        List<Time> toTimeList = List.of(FROM_TIME_1);
 
         assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId()));
     }
@@ -142,7 +152,7 @@ class OpeningHourServiceTest {
     public void addAllOpeningHour_FailAdd_ToBorderline() {
         Time toBorderline = new Time(1612219800000L); // 23:50:00
 
-        List<Time> fromTimeList = List.of(from1);
+        List<Time> fromTimeList = List.of(FROM_TIME_1);
         List<Time> toTimeList = List.of(toBorderline);
 
         assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId()));
@@ -161,16 +171,16 @@ class OpeningHourServiceTest {
 
     @Test
     public void addAllOpeningHour_FailAdd_BadListOfTimes() {
-        List<Time> fromTimeList = List.of(from1, from2);
-        List<Time> toTimeList = List.of(to1);
+        List<Time> fromTimeList = List.of(FROM_TIME_1, FROM_TIME_2);
+        List<Time> toTimeList = List.of(TO_TIME_1);
 
         assertThrows(BadOpeningHourException.class, () -> ohService.addAllOpeningHour(WEEK_DAY_MONDAY, fromTimeList, toTimeList, store, manager.getUserId()));
     }
 
     @Test
     public void addAllOpeningHour_FailAdd_UnauthorizedDifferentStore() {
-        List<Time> fromTimeList = List.of(from1, from2);
-        List<Time> toTimeList = List.of(to1, to2);
+        List<Time> fromTimeList = List.of(FROM_TIME_1, FROM_TIME_2);
+        List<Time> toTimeList = List.of(TO_TIME_1, TO_TIME_2);
 
         StoreEntity store2 = new StoreEntity();
         store2.setStoreId(2);
@@ -178,7 +188,7 @@ class OpeningHourServiceTest {
         UserEntity u1 = new UserEntity();
         u1.setUserId(2);
         u1.setRole(UserRole.MANAGER);
-        u1.setStore(store2);
+        store2.addUser(u1);
 
         when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
 
@@ -187,8 +197,8 @@ class OpeningHourServiceTest {
 
     @Test
     public void addAllOpeningHour_FailAdd_UnauthorizedEmployee() {
-        List<Time> fromTimeList = List.of(from1, from2);
-        List<Time> toTimeList = List.of(to1, to2);
+        List<Time> fromTimeList = List.of(FROM_TIME_1, FROM_TIME_2);
+        List<Time> toTimeList = List.of(TO_TIME_1, TO_TIME_2);
 
         StoreEntity store2 = new StoreEntity();
         store2.setStoreId(2);
@@ -196,7 +206,7 @@ class OpeningHourServiceTest {
         UserEntity u1 = new UserEntity();
         u1.setUserId(2);
         u1.setRole(UserRole.EMPLOYEE);
-        u1.setStore(store);
+        store2.addUser(u1);
 
         when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
 
@@ -244,7 +254,7 @@ class OpeningHourServiceTest {
         UserEntity u1 = new UserEntity();
         u1.setUserId(2);
         u1.setRole(UserRole.MANAGER);
-        u1.setStore(store2);
+        store2.addUser(u1);
 
         when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
         when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(oh1);
@@ -260,7 +270,7 @@ class OpeningHourServiceTest {
         UserEntity u1 = new UserEntity();
         u1.setUserId(2);
         u1.setRole(UserRole.EMPLOYEE);
-        u1.setStore(store);
+        store.addUser(u1);
 
         when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
         when(em.find(OpeningHourEntity.class, oh1.getOpeningHoursId())).thenReturn(oh1);
@@ -274,7 +284,7 @@ class OpeningHourServiceTest {
         Time time = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
-        store.setOpeningHours(ohList);
+        //store.setOpeningHours(ohList);
 
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
         when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
@@ -288,7 +298,7 @@ class OpeningHourServiceTest {
         Time time = new Time(1612094400000L); // 13:00
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
-        store.setOpeningHours(ohList);
+        //store.setOpeningHours(ohList);
 
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
         when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
@@ -302,7 +312,7 @@ class OpeningHourServiceTest {
         Time time = new Time(1612094400000L); // 13:00
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
-        store.setOpeningHours(ohList);
+        //store.setOpeningHours(ohList);
 
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(null);
 
@@ -314,21 +324,8 @@ class OpeningHourServiceTest {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
 
-        store.setOpeningHours(new ArrayList<>(ohListOld));
-
-        // Create new opening hour.
-        OpeningHourEntity oh3 = new OpeningHourEntity();
-        oh3.setOpeningHoursId(3);
-        oh3.setWeekDay(WEEK_DAY_MONDAY);
-        oh3.setFromTime(fromTimeNew);
-        oh3.setToTime(to1);
-        oh3.setStore(store);
-
-        List<OpeningHourEntity> ohListNew = List.of(oh2, oh3);
-
-        assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
-        Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
-        Map<Integer, List<Time>> ohToMap = Map.of(oh2.getWeekDay(), List.of(oh2.getToTime(), oh3.getToTime()));
+        Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), fromTimeNew));
+        Map<Integer, List<Time>> ohToMap = Map.of(oh2.getWeekDay(), List.of(oh2.getToTime(), TO_TIME_1));
 
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
         when(em.find(eq(UserEntity.class), anyInt())).thenReturn(manager);
@@ -346,15 +343,16 @@ class OpeningHourServiceTest {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
 
-        store.setOpeningHours(new ArrayList<>(ohListOld));
+        // FIXME EEEEE
+        //store.setOpeningHours(new ArrayList<>(ohListOld));
 
         // Create new opening hour.
         OpeningHourEntity oh3 = new OpeningHourEntity();
         oh3.setOpeningHoursId(3);
         oh3.setWeekDay(WEEK_DAY_MONDAY);
         oh3.setFromTime(fromTimeNew);
-        oh3.setToTime(to1);
-        oh3.setStore(store);
+        oh3.setToTime(TO_TIME_1);
+        store.addOpeningHour(oh3);
 
         List<OpeningHourEntity> ohListNew = List.of(oh2, oh3);
 
@@ -383,15 +381,15 @@ class OpeningHourServiceTest {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
 
-        store.setOpeningHours(new ArrayList<>(ohListOld));
+        //store.setOpeningHours(new ArrayList<>(ohListOld));
 
         // Create new opening hour.
         OpeningHourEntity oh3 = new OpeningHourEntity();
         oh3.setOpeningHoursId(3);
         oh3.setWeekDay(WEEK_DAY_MONDAY);
         oh3.setFromTime(fromTimeNew);
-        oh3.setToTime(to1);
-        oh3.setStore(store);
+        oh3.setToTime(TO_TIME_1);
+        store.addOpeningHour(oh3);
 
         assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
         Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
@@ -413,15 +411,16 @@ class OpeningHourServiceTest {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
 
-        store.setOpeningHours(new ArrayList<>(ohListOld));
+        // FIXME
+        //store.setOpeningHours(new ArrayList<>(ohListOld));
 
         // Create new opening hour.
         OpeningHourEntity oh3 = new OpeningHourEntity();
         oh3.setOpeningHoursId(3);
         oh3.setWeekDay(WEEK_DAY_MONDAY);
         oh3.setFromTime(fromTimeNew);
-        oh3.setToTime(to1);
-        oh3.setStore(store);
+        oh3.setToTime(TO_TIME_1);
+        store.addOpeningHour(oh3);
 
         assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
         Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));

@@ -3,6 +3,7 @@ package it.polimi.se2.clup.CLupEJB.entities;
 import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -52,15 +53,15 @@ public class StoreEntity {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     @OrderBy("weekDay, fromTime")
     @JsonManagedReference
-    private List<OpeningHourEntity> openingHours;
+    private final List<OpeningHourEntity> openingHours = new ArrayList<>();
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<TicketEntity> tickets;
+    private final List<TicketEntity> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<UserEntity> users;
+    private final List<UserEntity> users = new ArrayList<>();
 
     public int getStoreId() {
         return storeId;
@@ -138,34 +139,24 @@ public class StoreEntity {
         return openingHours;
     }
 
-    public void setOpeningHours(List<OpeningHourEntity> openingHours) {
-        this.openingHours = openingHours;
-    }
-
     public List<TicketEntity> getTickets() {
         return tickets;
-    }
-
-    public void setTickets(List<TicketEntity> tickets) {
-        this.tickets = tickets;
     }
 
     public List<UserEntity> getUsers() {
         return users;
     }
 
-    public void setUsers(List<UserEntity> users) {
-        this.users = users;
-    }
-
     /**
      * Adds an opening hour to the store.
      * Each side of the relationship is updated.
+     * If opening hour is new, invoking persist() on store cascades also to opening hour.
      *
      * @param oh The opening hour to be added.
      */
     public void addOpeningHour(OpeningHourEntity oh) {
         getOpeningHours().add(oh);
+        oh.setStore(this);
     }
 
     /**
@@ -186,6 +177,7 @@ public class StoreEntity {
      */
     public void addUser(UserEntity user) {
         getUsers().add(user);
+        user.setStore(this);
     }
 
     /**
@@ -202,19 +194,20 @@ public class StoreEntity {
      * Adds a ticket to the store.
      * Each side of the relationship is updated.
      *
-     * @param t The ticket to be added.
+     * @param ticket The ticket to be added.
      */
-    public void addTicket(TicketEntity t) {
-        getTickets().add(t);
+    public void addTicket(TicketEntity ticket) {
+        getTickets().add(ticket);
+        ticket.setStore(this);
     }
 
     /**
      * Removes a ticket to the store.
      * Each side of the relationship is updated.
      *
-     * @param t The ticket to be removed.
+     * @param ticket The ticket to be removed.
      */
-    public void removeTicket(TicketEntity t) {
-        getTickets().remove(t);
+    public void removeTicket(TicketEntity ticket) {
+        getTickets().remove(ticket);
     }
 }

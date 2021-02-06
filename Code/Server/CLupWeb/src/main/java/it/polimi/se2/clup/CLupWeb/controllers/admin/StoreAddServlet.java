@@ -33,6 +33,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -141,6 +144,8 @@ public class StoreAddServlet extends HttpServlet  {
             return;
         }
 
+        DateFormat sdf = new SimpleDateFormat("HH:mm");
+
         // Prepare a map of opening hours.
         for (String day : days) {
 
@@ -153,14 +158,13 @@ public class StoreAddServlet extends HttpServlet  {
 
                 if (!fromTimeStr.isEmpty() && !toTimeStr.isEmpty()) {
                     try {
-                        tempFromOh.add(Time.valueOf(fromTimeStr));
-                        tempToOh.add(Time.valueOf(toTimeStr));
-                    } catch (IllegalArgumentException e) {
+                        tempFromOh.add(new java.sql.Time(sdf.parse(fromTimeStr).getTime()));
+                        tempToOh.add(new java.sql.Time(sdf.parse(toTimeStr).getTime()));
+                    } catch (IllegalArgumentException | ParseException e) {
                         response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad input time value.");
                         return;
                     }
                 }
-
             }
             ohFromMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempFromOh);
             ohToMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempToOh);
