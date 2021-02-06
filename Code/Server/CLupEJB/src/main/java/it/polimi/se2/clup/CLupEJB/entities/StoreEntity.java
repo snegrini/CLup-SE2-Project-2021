@@ -53,15 +53,15 @@ public class StoreEntity {
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     @OrderBy("weekDay, fromTime")
     @JsonManagedReference
-    private final List<OpeningHourEntity> openingHours = new ArrayList<>();
+    private List<OpeningHourEntity> openingHours = new ArrayList<>();
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     @JsonBackReference
-    private final List<TicketEntity> tickets = new ArrayList<>();
+    private List<TicketEntity> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     @JsonBackReference
-    private final List<UserEntity> users = new ArrayList<>();
+    private List<UserEntity> users = new ArrayList<>();
 
     public int getStoreId() {
         return storeId;
