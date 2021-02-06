@@ -1,26 +1,18 @@
 package it.polimi.se2.clup.CLupWeb.controllers.manager;
 
-import it.polimi.se2.clup.CLupEJB.entities.OpeningHourEntity;
 import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.services.TicketService;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.WebContext;
-import org.thymeleaf.templatemode.TemplateMode;
-import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 @WebServlet(name = "ManagerTicketDeleteServlet", value = "/dashboard/ticketdelete")
 public class TicketDeleteServlet extends HttpServlet {
@@ -46,7 +38,7 @@ public class TicketDeleteServlet extends HttpServlet {
 
         // Delete ticket.
         try {
-            TicketEntity ticket = ticketService.findTicketById(ticketId);
+            TicketEntity ticket = ticketService.findValidTicketById(ticketId);
 
             if (ticket == null) {
                 response.sendError(HttpServletResponse.SC_PRECONDITION_FAILED, "Ticket not found.");

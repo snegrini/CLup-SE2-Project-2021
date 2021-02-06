@@ -2,12 +2,10 @@ package it.polimi.se2.clup.CLupWeb.controllers.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
 import it.polimi.se2.clup.CLupEJB.exceptions.TokenException;
 import it.polimi.se2.clup.CLupEJB.messages.Message;
-import it.polimi.se2.clup.CLupEJB.messages.StoreMessage;
 import it.polimi.se2.clup.CLupEJB.messages.TicketMessage;
 import it.polimi.se2.clup.CLupEJB.services.TicketService;
 import it.polimi.se2.clup.CLupEJB.util.TokenManager;
@@ -66,7 +64,7 @@ public class TicketDetailServlet extends HttpServlet {
             return;
         }
 
-        TicketEntity ticketEntity = ticketService.findTicketById(ticketId);
+        TicketEntity ticketEntity = ticketService.findValidTicketById(ticketId);
         if (ticketEntity == null) {
             out.print(ow.writeValueAsString(new Message(MessageStatus.ERROR, "Invalid ticket ID")));
             return;

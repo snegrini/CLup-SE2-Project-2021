@@ -18,7 +18,6 @@ import org.mockito.quality.Strictness;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
@@ -284,8 +283,6 @@ class OpeningHourServiceTest {
         Time time = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
-        //store.setOpeningHours(ohList);
-
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
         when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(new ArrayList<>(ohList));
@@ -298,8 +295,6 @@ class OpeningHourServiceTest {
         Time time = new Time(1612094400000L); // 13:00
         List<OpeningHourEntity> ohList = List.of(oh1, oh2);
 
-        //store.setOpeningHours(ohList);
-
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(store);
         when(em.createNamedQuery(eq("OpeningHourEntity.findByStoreIdAndWeekDay"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(new ArrayList<>(ohList));
@@ -310,9 +305,6 @@ class OpeningHourServiceTest {
     @Test
     public void isInOpeningHour_BadStore() throws BadOpeningHourException {
         Time time = new Time(1612094400000L); // 13:00
-        List<OpeningHourEntity> ohList = List.of(oh1, oh2);
-
-        //store.setOpeningHours(ohList);
 
         when(em.find(eq(StoreEntity.class), anyInt())).thenReturn(null);
 
@@ -343,9 +335,6 @@ class OpeningHourServiceTest {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
 
-        // FIXME EEEEE
-        //store.setOpeningHours(new ArrayList<>(ohListOld));
-
         // Create new opening hour.
         OpeningHourEntity oh3 = new OpeningHourEntity();
         oh3.setOpeningHoursId(3);
@@ -353,8 +342,6 @@ class OpeningHourServiceTest {
         oh3.setFromTime(fromTimeNew);
         oh3.setToTime(TO_TIME_1);
         store.addOpeningHour(oh3);
-
-        List<OpeningHourEntity> ohListNew = List.of(oh2, oh3);
 
         assertEquals(oh2.getWeekDay(), oh3.getWeekDay());
         Map<Integer, List<Time>> ohFromMap = Map.of(oh2.getWeekDay(), List.of(oh2.getFromTime(), oh3.getFromTime()));
@@ -380,8 +367,6 @@ class OpeningHourServiceTest {
     public void updateAllOpeningHour_UpdateFailed_BadStore() {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
-
-        //store.setOpeningHours(new ArrayList<>(ohListOld));
 
         // Create new opening hour.
         OpeningHourEntity oh3 = new OpeningHourEntity();
@@ -410,9 +395,6 @@ class OpeningHourServiceTest {
     public void updateAllOpeningHour_UpdateFailed_BadOpeningHourFormat() {
         Time fromTimeNew = new Time(1612083600000L); // 10:00
         List<OpeningHourEntity> ohListOld = List.of(oh1, oh2);
-
-        // FIXME
-        //store.setOpeningHours(new ArrayList<>(ohListOld));
 
         // Create new opening hour.
         OpeningHourEntity oh3 = new OpeningHourEntity();
