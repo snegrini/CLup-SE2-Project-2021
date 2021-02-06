@@ -5,6 +5,70 @@ No unit tests have been performed on the apps as they are thin clients and most 
 
 \section{Unit Testing}
 
+\subsection{OpeningHourService}
+\subsubsection{Add Opening Hour}
+\begin{itemize}
+	\item Valid insertion of a new list of opening hour from an authorized manager.
+	\item Attempt to insert a new list of opening hour which has timeslots overlapping.
+	\item  Attempt to insert a new list of opening hour in which, at least one opening hour, has the timeslot starting time after the end time.
+	\item Attempt to insert a new list of opening hour which has the timeslot end time in the forbidden time (from 23:45 included to 00:00 excluded).
+	\item Attempt to insert a new list of opening hour which has the timeslot start and end time in the forbidden time (from 23:45 included to 00:00 excluded).
+	\item Attempt to insert a new list of opening hours where the timeslots are malformed.
+	\item Attempt to insert a new list of opening hours performed by an authorized manager of a different store.
+	\item Attempt to insert a new list of opening hours performed by an unauthorized user.
+\end{itemize}
+
+\subsubsection{Delete Opening Hour}
+\begin{itemize}
+	\item Valid deletion of list of opening hours performed by an authorized manager.
+	\item Attempt to delete a valid list of opening hours performed by a null user.
+	\item Attempt to delete an invalid list of opening hours performed by an authorized manager.
+	\item Attempt to delete a valid list of opening hours performed by an authorized manager of a different store.
+	\item Attempt to delete a valid list of opening hours performed by an unauthorized user.
+\end{itemize}
+
+\subsubsection{Update Opening Hour}
+\begin{itemize}
+	\item Valid update of the opening hours of a store performed by an authorized manager.
+	\item Attempt to update the opening hours of a store performed by a null user.
+	\item Attempt to update the opening hours of a null store.
+	\item Attempt to update the opening hours of a store with malformed opening hours.
+\end{itemize}
+
+\subsubsection{Is In Opening Hour}
+\begin{itemize}
+	\item Valid check when a time belongs to a today opening hour of a store.
+	\item Invalid check when a time does not belongs to a today opening hour of a store.
+	\item Attempt to check response when a time belongs to an opening hour of a null store.
+\end{itemize}
+
+\subsection{StoreService}
+\subsubsection{Add Store}
+\begin{itemize}
+	\item Valid insertion of a new store from a CLup admin.
+	\item Attempt to insert a new store with a non unique name from a CLup admin.
+	\item Attempt to insert a new store with a non unique pec address from a CLup admin.
+	\item Attempt to insert a new store with invalid opening hours from a CLup admin.
+	\item Attempt to insert a new store from an unauthorized user.
+\end{itemize}
+
+\subsubsection{Update Store Cap}
+\begin{itemize}
+	\item Valid update of the store cap of a store from a store manager.
+	\item Attempt to update the store cap of an invalid store from a store manager.
+	\item Attempt to update the store cap of a store from an invalid user.
+	\item Attempt to update the store cap of a store from an unauthorized user.
+	\item Attempt to update the store cap of a store from a manager of another store.
+\end{itemize}
+
+\subsubsection{Get Estimate Wait Time}
+\begin{itemize}
+	\item Valid fetch of the store wait time while the store is not full.
+	\item Valid fetch of the store wait time while the last ticket of the queue is called.
+	\item Valid fetch of the store wait time while the ticket queue is not empty.
+	\item Attempt to fetch the wait time of a not existing store.
+\end{itemize}
+
 \subsection{TicketService}
 \subsubsection{Add Ticket}
 \begin{itemize}
@@ -37,29 +101,34 @@ No unit tests have been performed on the apps as they are thin clients and most 
 	\item Attempt to update the status of default pass code of a not existing store.
 \end{itemize}
 
-\subsection{StoreService}
-\subsubsection{Add Store}
+\subsection{UserService}
+\subsubsection{Check Credentials}
 \begin{itemize}
-	\item Valid insertion of a new store from a CLup admin.
-	\item Attempt to insert a new store with a non unique name from a CLup admin.
-	\item Attempt to insert a new store with a non unique pec address from a CLup admin.
-	\item Attempt to insert a new store with invalid opening hours from a CLup admin.
-	\item Attempt to insert a new store from an unauthorized user.
+	\item Valid check when a user sign in to the platform with a valid usercode and a correct password.
+	\item Invalid check when a user sign in to the platform with a valid usercode and an incorrect password.
+	\item Invalid check when a user sign in to the platform with an invalid usercode.
+	\item Invalid check when a user sign in to the platform with a valid usercode and correct password and more than one user is found in the database.
 \end{itemize}
 
-\subsubsection{Update Store Cap}
+\subsubsection{Generate Credentials}
 \begin{itemize}
-	\item Valid update of the store cap of a store from a store manager.
-	\item Attempt to update the store cap of an invalid store from a store manager.
-	\item Attempt to update the store cap of a store from an invalid user.
-	\item Attempt to update the store cap of a store from an unauthorized user.
-	\item Attempt to update the store cap of a store from a manager of another store.
+	\item Valid generation of new manager and employee credentials for a store performed by a CLup Admin.
+	\item Attempt to generate new manager and employee credentials for a store performed by an unauthorized user.
+		\item Attempt to generate new manager and employee credentials for a store performed by a null user.
+	\item Attempt to generate new manager and employee credentials for an invalid store performed by a CLup Admin.
 \end{itemize}
 
-\subsubsection{Get Estimate Wait Time}
+\subsubsection{Regenerate Credentials}
 \begin{itemize}
-	\item Valid fetch of the store wait time while the store is not full.
-	\item Valid fetch of the store wait time while the last ticket of the queue is called.
-	\item Valid fetch of the store wait time while the ticket queue is not empty.
-	\item Attempt to fetch the wait time of a not existing store.
+	\item Valid regeneration of new manager and employee passwords for a store performed by a CLup Admin.
+	\item Attempt to regenerate new manager and employee passwords for a store performed by an unauthorized user.
+	\item Attempt to regenerate new manager and employee passwords for a store performed by a null user.
+	\item Attempt to regenerate new manager and employee passwords for an invalid store performed by a CLup Admin.
 \end{itemize}
+
+\section{Integration Testing}
+After the unit testing phase, we continued with the integration testing phase. In particular, we tested the interfacing of the various modules with each other and the connection with the database.
+In order not to be too verbose, we will not list each method tested. Tests can be found inside the specific folder inside the project.
+
+\section{System Testing}
+A part of the testing phase was also dedicated to the manual testing of the web servlets and web pages through the normal usage of a web browser and with the help of a tool for making HTTP POST requests with custom parameters (Postman).

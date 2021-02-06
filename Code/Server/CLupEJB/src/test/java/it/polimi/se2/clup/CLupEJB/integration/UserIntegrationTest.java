@@ -17,6 +17,9 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 public class UserIntegrationTest {
     private static final String USER_CODE = "TTT000";
@@ -129,8 +132,8 @@ public class UserIntegrationTest {
         assertFalse(genUsers.get(1).getKey().isEmpty());
         assertFalse(genUsers.get(1).getValue().isEmpty());
 
-        assertEquals(genUsers.get(0).getKey(), userService.checkCredentials(genUsers.get(0).getKey(), genUsers.get(0).getValue()).getUsercode());
-        assertEquals(genUsers.get(1).getKey(), userService.checkCredentials(genUsers.get(1).getKey(), genUsers.get(1).getValue()).getUsercode());
+        assertNotNull(userService.checkCredentials(genUsers.get(0).getKey(), genUsers.get(0).getValue()));
+        assertNotNull(userService.checkCredentials(genUsers.get(1).getKey(), genUsers.get(1).getValue()));
 
         em.getTransaction().rollback();
     }
@@ -161,6 +164,68 @@ public class UserIntegrationTest {
 
         em.getTransaction().begin();
         assertThrows(BadStoreException.class, () -> userService.generateCredentials(null, admin.getUserId()));
+        em.getTransaction().rollback();
+    }
+
+    @Test
+    public void regenerateCredentials_Authorized_Success() throws UnauthorizedException, BadStoreException, CredentialsException {
+        UserEntity admin = em.find(UserEntity.class, LAST_USER_ID);
+        StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
+
+        em.getTransaction().begin();
+        List<Map.Entry<String, String>> genUsers = userService.generateCredentials(store, admin.getUserId());
+
+        List<Map.Entry<String, String>> regenUsers = userService.regenerateCredentials(store, admin.getUserId());
+        assertNotNull(regenUsers);
+        assertFalse(regenUsers.isEmpty());
+        assertFalse(regenUsers.get(0).getKey().isEmpty());
+        assertFalse(regenUsers.get(0).getValue().isEmpty());
+        assertFalse(regenUsers.get(1).getKey().isEmpty());
+        assertFalse(regenUsers.get(1).getValue().isEmpty());
+
+        // Check usercode is the same and password is not.
+        assertEquals(genUsers.get(0).getKey(), regenUsers.get(0).getKey());
+        assertEquals(genUsers.get(1).getKey(), regenUsers.get(1).getKey());
+        assertNotEquals(genUsers.get(0).getValue(), regenUsers.get(0).getValue());
+        assertNotEquals(genUsers.get(1).getValue(), regenUsers.get(1).getValue());
+
+        // Check failed login with old password.
+        assertNull(userService.checkCredentials(genUsers.get(0).getKey(), genUsers.get(0).getValue()));
+        assertNull(userService.checkCredentials(genUsers.get(0).getKey(), genUsers.get(0).getValue()));
+
+        // Check successful login with new password.
+        assertNotNull(userService.checkCredentials(regenUsers.get(0).getKey(), regenUsers.get(0).getValue()));
+        assertNotNull(userService.checkCredentials(regenUsers.get(1).getKey(), regenUsers.get(1).getValue()));
+
+        em.getTransaction().rollback();
+    }
+
+    @Test
+    public void regenerateCredentials_Unauthorized_Failure() throws UnauthorizedException, BadStoreException, CredentialsException {
+        UserEntity admin = em.find(UserEntity.class, LAST_USER_ID);
+        StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
+
+        em.getTransaction().begin();
+        admin.setRole(UserRole.MANAGER);
+        assertThrows(UnauthorizedException.class, () -> userService.regenerateCredentials(store, admin.getUserId()));
+        em.getTransaction().rollback();
+    }
+
+    @Test
+    public void regenerateCredentials_BadUser_Failure() {
+        StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
+
+        em.getTransaction().begin();
+        assertThrows(UnauthorizedException.class, () -> userService.regenerateCredentials(store, -1));
+        em.getTransaction().rollback();
+    }
+
+    @Test
+    public void regenerateCredentials_BadStore_Failure() {
+        UserEntity admin = em.find(UserEntity.class, LAST_USER_ID);
+
+        em.getTransaction().begin();
+        assertThrows(BadStoreException.class, () -> userService.regenerateCredentials(null, admin.getUserId()));
         em.getTransaction().rollback();
     }
 

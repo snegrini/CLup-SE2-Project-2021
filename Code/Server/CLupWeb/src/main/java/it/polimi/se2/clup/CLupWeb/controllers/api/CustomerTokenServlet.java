@@ -1,11 +1,5 @@
 package it.polimi.se2.clup.CLupWeb.controllers.api;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
-import javax.servlet.annotation.*;
-import java.io.IOException;
-import java.io.PrintWriter;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import it.polimi.se2.clup.CLupEJB.enums.MessageStatus;
@@ -14,6 +8,14 @@ import it.polimi.se2.clup.CLupEJB.messages.Message;
 import it.polimi.se2.clup.CLupEJB.messages.TokenMessage;
 import it.polimi.se2.clup.CLupEJB.util.TokenManager;
 import org.apache.commons.text.StringEscapeUtils;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 @WebServlet(name = "CustomerTokenServlet", value = "/api/customer_token")
 public class CustomerTokenServlet extends HttpServlet {

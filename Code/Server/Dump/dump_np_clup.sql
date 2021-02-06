@@ -106,7 +106,7 @@ CREATE TABLE `store` (
 
 LOCK TABLES `store` WRITE;
 /*!40000 ALTER TABLE `store` DISABLE KEYS */;
-INSERT INTO `store` VALUES (1,'Essecorta',1,'essecorta@example.org','5556645211',60,0,'12345678','superal_logo.png'),(2,'Superal',2,'superal@example.org','5552256633',20,0,'12345678','essecorta_logo.png');
+INSERT INTO `store` VALUES (1,'Essecorta',1,'essecorta@example.org','5556645211',60,0,'12345678','essecorta.png'),(2,'Superal',2,'superal@example.org','5552256633',20,0,'12345678','superal.png');
 /*!40000 ALTER TABLE `store` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,4 +181,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-02-02 23:00:35
+-- Dump completed on 2021-02-06 17:33:03
