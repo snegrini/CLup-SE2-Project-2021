@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>it.polimi.se2.clup</groupId>
+    <artifactId>CLupEAR</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>CLupEAR</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>it.polimi.se2.clup</groupId>
+            <artifactId>CLupEJB</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>it.polimi.se2.clup</groupId>
+            <artifactId>CLupWeb</artifactId>
+            <version>1.0-SNAPSHOT</version>
+            <type>war</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-ear-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <version>1.0</version>
+                    <modules>
+                        <ejbModule>
+                            <groupId>it.polimi.se2.clup</groupId>
+                            <artifactId>CLupEJB</artifactId>
+                            <bundleFileName>CLupEJB.jar</bundleFileName>
+                        </ejbModule>
+                        <webModule>
+                            <groupId>it.polimi.se2.clup</groupId>
+                            <artifactId>CLupWeb</artifactId>
+                            <bundleFileName>CLupWeb.war</bundleFileName>
+                            <contextRoot>/myWarConext</contextRoot>
+                        </webModule>
+                    </modules>
+                    <displayName>CLup</displayName>
+                    <generateApplicationXml>true</generateApplicationXml>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <url>http://localhost:8080/manager/text</url>
+                    <server>TomcatServer</server>
+                    <path>/clup</path>
+                </configuration>
+            </plugin>
+        </plugins>
+        <finalName>CLup</finalName>
+    </build>
+</project>
