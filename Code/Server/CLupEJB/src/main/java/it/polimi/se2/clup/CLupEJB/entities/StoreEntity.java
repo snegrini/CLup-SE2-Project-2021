@@ -50,7 +50,7 @@ public class StoreEntity {
     private String imagePath;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
-    @OrderBy("weekDay")
+    @OrderBy("weekDay, fromTime")
     @JsonManagedReference
     private List<OpeningHourEntity> openingHours;
 

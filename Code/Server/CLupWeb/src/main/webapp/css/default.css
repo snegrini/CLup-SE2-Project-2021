@@ -1,4 +1,5 @@
-.btn-primary.btn-clup {
+.bg-gradient-primary {
     background-color: #da4026;
-    border-color: #fff;
+    background-image: linear-gradient(
+            180deg, #ea5a40 10%, #da4026 100%);
 }

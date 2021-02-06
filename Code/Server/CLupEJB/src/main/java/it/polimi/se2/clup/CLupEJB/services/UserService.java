@@ -158,4 +158,39 @@ public class UserService {
         return users;
     }
 
+    public List<Map.Entry<String, String>> regenerateCredentials(StoreEntity store, int userId) throws BadStoreException, UnauthorizedException, CredentialsException {
+        UserEntity user = em.find(UserEntity.class, userId);
+
+        // Check user permissions.
+        if (user == null || user.getRole() != UserRole.ADMIN) {
+            throw new UnauthorizedException("Unauthorized operation.");
+        }
+
+        if (store == null) {
+            throw new BadStoreException("Invalid store ID.");
+        }
+
+        List<UserEntity> storeUsers = store.getUsers();
+
+        UserEntity manager = storeUsers.stream().filter(x -> x.getRole() == UserRole.MANAGER).findAny().orElse(null);
+        UserEntity employee = storeUsers.stream().filter(x -> x.getRole() == UserRole.EMPLOYEE).findAny().orElse(null);
+
+        if (manager == null || employee == null) {
+            throw new CredentialsException("Missing users!");
+        }
+
+        String managerPassword = generatePassword();
+        String employeePassword = generatePassword();
+
+        manager.setPassword(encoder.encode(managerPassword));
+        employee.setPassword(encoder.encode(employeePassword));
+
+        em.merge(manager);
+        em.merge(employee);
+
+        List<Map.Entry<String, String>> users = new ArrayList<>();
+        users.add(new AbstractMap.SimpleEntry<>(manager.getUsercode(), managerPassword));
+        users.add(new AbstractMap.SimpleEntry<>(employee.getUsercode(), employeePassword));
+        return users;
+    }
 }
