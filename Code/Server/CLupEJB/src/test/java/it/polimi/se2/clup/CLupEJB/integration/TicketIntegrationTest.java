@@ -4,6 +4,7 @@ import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
 import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
 import it.polimi.se2.clup.CLupEJB.enums.PassStatus;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadTicketException;
+import it.polimi.se2.clup.CLupEJB.services.OpeningHourService;
 import it.polimi.se2.clup.CLupEJB.services.TicketService;
 import org.junit.jupiter.api.*;
 
@@ -12,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,6 +30,8 @@ public class TicketIntegrationTest {
     private static EntityManagerFactory emf;
     private static EntityManager em;
 
+    private TicketService ticketService;
+
     @BeforeAll
     public static void setUpBeforeClass() {
         emf = Persistence.createEntityManagerFactory("CLupEJB-testing");
@@ -43,6 +47,8 @@ public class TicketIntegrationTest {
     @BeforeEach
     void setUp() {
         em = emf.createEntityManager();
+        OpeningHourService ohService = new OpeningHourService();
+        ticketService = new TicketService(em, ohService);
         createTestData();
     }
 
@@ -59,14 +65,15 @@ public class TicketIntegrationTest {
         StoreEntity store = new StoreEntity();
         store.setStoreName(STORE_NAME);
         store.setStoreCap(STORE_CAP);
+        //store.setTickets(new ArrayList<>());
 
         // Create a new ticket.
         TicketEntity ticket = new TicketEntity();
         ticket.setPassCode(PASS_CODE);
         ticket.setDate(new Date(new java.util.Date().getTime()));
         ticket.setArrivalTime(new Time(new java.util.Date().getTime()));
-        ticket.setStore(store);
         ticket.setPassStatus(PassStatus.VALID);
+        store.addTicket(ticket);
 
         // Persist data.
         em.getTransaction().begin();
@@ -87,9 +94,6 @@ public class TicketIntegrationTest {
         TicketEntity ticket = em.find(TicketEntity.class, LAST_TICKET_ID);
         StoreEntity store = em.find(StoreEntity.class, LAST_STORE_ID);
 
-        if (ticket != null) {
-            em.remove(ticket);
-        }
         if (store != null) {
             em.remove(store);
         }
@@ -99,8 +103,6 @@ public class TicketIntegrationTest {
 
     @Test
     public void testValidGeneratedValueTicket_ValidPassCode() {
-        TicketService ticketService = new TicketService(em);
-
         TicketEntity ticket = ticketService.findTicketById(LAST_TICKET_ID);
         assertNotNull(ticket);
         assertEquals(PASS_CODE, ticket.getPassCode());
@@ -108,14 +110,12 @@ public class TicketIntegrationTest {
 
     @Test
     public void testValidGeneratedValueTicket_InvalidPassCode() {
-        TicketService ticketService = new TicketService(em);
         TicketEntity ticket = ticketService.findTicketById(555);
         assertNull(ticket);
     }
 
     @Test
     void findValidStoreTickets_TicketFound() throws BadTicketException {
-        TicketService ticketService = new TicketService(em);
         List<TicketEntity> resultTickets = ticketService.findValidStoreTickets(LAST_STORE_ID);
 
         assertNotNull(resultTickets);

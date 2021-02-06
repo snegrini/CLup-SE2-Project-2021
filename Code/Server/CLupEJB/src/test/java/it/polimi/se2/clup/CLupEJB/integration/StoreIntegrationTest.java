@@ -61,11 +61,6 @@ public class StoreIntegrationTest {
 
     private StoreService storeService;
 
-    private BCryptPasswordEncoder encoder;
-
-    private OpeningHourEntity expectedOh1;
-    private OpeningHourEntity expectedOh2;
-
     @BeforeAll
     public static void setUpBeforeClass() {
         emf = Persistence.createEntityManagerFactory("CLupEJB-testing");
@@ -82,7 +77,7 @@ public class StoreIntegrationTest {
     public void setUp() {
         em = emf.createEntityManager();
 
-        encoder = new BCryptPasswordEncoder();
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         OpeningHourService ohService = new OpeningHourService(em);
         UserService userService = new UserService(em, encoder);
@@ -113,17 +108,14 @@ public class StoreIntegrationTest {
         store.setStoreCap(DEFAULT_STORE_CAP);
         store.setCustomersInside(DEFAULT_CUSTOMERS_INSIDE);
         store.setAddress(new AddressEntity());
-        store.setUsers(new ArrayList<>());
 
         UserEntity manager = new UserEntity();
         manager.setUsercode(USER_CODE_MANAGER);
         manager.setRole(UserRole.MANAGER);
-        manager.setStore(store);
 
         UserEntity employee = new UserEntity();
         employee.setUsercode(USER_CODE_EMPLOYEE);
         employee.setRole(UserRole.EMPLOYEE);
-        employee.setStore(store);
 
         store.addUser(manager);
         store.addUser(employee);
@@ -137,17 +129,6 @@ public class StoreIntegrationTest {
         LAST_MANAGER_ID = manager.getUserId();
         LAST_EMPLOYEE_ID = employee.getUserId();
         em.getTransaction().commit();
-
-        // Initialise expected values.
-        expectedOh1 = new OpeningHourEntity();
-        expectedOh1.setWeekDay(WEEK_DAY_MONDAY);
-        expectedOh1.setFromTime(FROM_TIME_1);
-        expectedOh1.setToTime(TO_TIME_1);
-
-        expectedOh2 = new OpeningHourEntity();
-        expectedOh2.setWeekDay(WEEK_DAY_MONDAY);
-        expectedOh2.setFromTime(FROM_TIME_2);
-        expectedOh2.setToTime(TO_TIME_2);
     }
 
     private void removeTestData() {
@@ -277,7 +258,6 @@ public class StoreIntegrationTest {
         TicketEntity ticket = new TicketEntity();
         ticket.setArrivalTime(new Time(timestamp - 60000));
         ticket.setDate(new Date(timestamp));
-        ticket.setStore(store);
         store.addTicket(ticket);
 
         em.persist(store);
@@ -298,7 +278,6 @@ public class StoreIntegrationTest {
         TicketEntity ticket = new TicketEntity();
         ticket.setArrivalTime(new Time(timestamp + 900000));
         ticket.setDate(new Date(timestamp));
-        ticket.setStore(store);
         store.addTicket(ticket);
 
         em.persist(store);

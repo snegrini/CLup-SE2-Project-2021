@@ -33,18 +33,31 @@ public class TicketService {
     public TicketService() {
     }
 
-    public TicketService(EntityManager em) {
+    public TicketService(EntityManager em, OpeningHourService ohs) {
         this.em = em;
+        this.ohs = ohs;
     }
 
+    /**
+     * Finds a ticket by his id.
+     *
+     * @param ticketId the id of the ticket to be found.
+     * @return the found ticket if any, null otherwise.
+     */
     public TicketEntity findTicketById(int ticketId) {
+        TicketEntity ticketFound = em.find(TicketEntity.class, ticketId);
+
+        if (ticketFound == null) {
+            return null;
+        }
+
         List<TicketEntity> tempList = new ArrayList<>();
-        tempList.add(em.find(TicketEntity.class, ticketId));
+        tempList.add(ticketFound);
 
         // Verify and update tickets status.
         checkExpiredTickets(tempList);
 
-        return tempList.get(0);
+        return tempList.isEmpty() ? null : tempList.get(0);
     }
 
     /**

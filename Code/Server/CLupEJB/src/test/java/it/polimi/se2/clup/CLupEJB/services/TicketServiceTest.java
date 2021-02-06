@@ -91,8 +91,6 @@ class TicketServiceTest {
         t1.setQueueNumber(1);
         t1.setArrivalTime(new Time(1610000000000L)); // Jan 07 2021 06:13:20
 
-        store1.setTickets(new ArrayList<>( ));
-
         when(em.find(eq(StoreEntity.class), any())).thenReturn(store1);
 
         when(em.createNamedQuery(eq("TicketEntity.findByPassCode"), any())).thenReturn(query1);
@@ -142,8 +140,6 @@ class TicketServiceTest {
         t1.setQueueNumber(1);
         t1.setArrivalTime(new Time(1610000000000L)); // Jan 07 2021 06:13:20
 
-        store1.setTickets(new ArrayList<>( ));
-
         when(em.find(eq(StoreEntity.class), any())).thenReturn(store1);
 
         when(em.createNamedQuery(eq("TicketEntity.findByPassCode"), any())).thenReturn(query1);
@@ -168,8 +164,7 @@ class TicketServiceTest {
         TicketEntity t1 = new TicketEntity();
         t1.setCustomerId(customerId);
         t1.setTicketId(ticketId);
-        t1.setStore(store1);
-        store1.setTickets(new ArrayList<>(List.of(t1)));
+        store1.addTicket(t1);
 
         when(em.find(eq(TicketEntity.class), any())).thenReturn(t1);
 
@@ -207,14 +202,12 @@ class TicketServiceTest {
 
         TicketEntity t1 = new TicketEntity();
         t1.setTicketId(ticketId);
-        t1.setStore(store1);
-        t1.setStore(store1);
-        store1.setTickets(new ArrayList<>(List.of(t1)));
+        store1.addTicket(t1);
 
         UserEntity u1 = new UserEntity();
         u1.setUserId(userId);
         u1.setRole(UserRole.MANAGER);
-        u1.setStore(store1);
+        store1.addUser(u1);
 
         when(em.find(eq(TicketEntity.class), any())).thenReturn(t1);
         when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
@@ -229,7 +222,7 @@ class TicketServiceTest {
 
         TicketEntity t1 = new TicketEntity();
         t1.setTicketId(ticketId);
-        t1.setStore(store1);
+        store1.addTicket(t1);
 
         when(em.find(eq(TicketEntity.class), any())).thenReturn(t1);
         when(em.find(eq(UserEntity.class), any())).thenReturn(null);
@@ -245,7 +238,7 @@ class TicketServiceTest {
         UserEntity u1 = new UserEntity();
         u1.setUserId(userId);
         u1.setRole(UserRole.MANAGER);
-        u1.setStore(store1);
+        store1.addUser(u1);
 
         when(em.find(eq(TicketEntity.class), any())).thenReturn(null);
         when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
@@ -260,12 +253,12 @@ class TicketServiceTest {
 
         TicketEntity t1 = new TicketEntity();
         t1.setTicketId(ticketId);
-        t1.setStore(store1);
+        store1.addTicket(t1);
 
         UserEntity u1 = new UserEntity();
         u1.setUserId(userId);
         u1.setRole(UserRole.EMPLOYEE);
-        u1.setStore(store1);
+        store1.addUser(u1);
 
         when(em.find(eq(TicketEntity.class), any())).thenReturn(t1);
         when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
@@ -280,12 +273,12 @@ class TicketServiceTest {
 
         TicketEntity t1 = new TicketEntity();
         t1.setTicketId(ticketId);
-        t1.setStore(store1);
+        store1.addTicket(t1);
 
         UserEntity u1 = new UserEntity();
         u1.setUserId(userId);
         u1.setRole(UserRole.EMPLOYEE);
-        u1.setStore(store2);
+        store2.addUser(u1);
 
         when(em.find(eq(TicketEntity.class), any())).thenReturn(t1);
         when(em.find(eq(UserEntity.class), any())).thenReturn(u1);
@@ -302,8 +295,8 @@ class TicketServiceTest {
 
         TicketEntity t1 = new TicketEntity();
         t1.setPassCode(passCode);
-        t1.setStore(store1);
         t1.setPassStatus(PassStatus.VALID);
+        store1.addTicket(t1);
 
         when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
         when(query1.getResultStream()).thenReturn(Stream.of(t1));
@@ -322,8 +315,8 @@ class TicketServiceTest {
 
         TicketEntity t1 = new TicketEntity();
         t1.setPassCode(passCode);
-        t1.setStore(store1);
         t1.setPassStatus(PassStatus.USED);
+        store1.addTicket(t1);
 
         when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
         when(query1.getResultStream()).thenReturn(Stream.of(t1));
@@ -356,8 +349,8 @@ class TicketServiceTest {
 
         TicketEntity t1 = new TicketEntity();
         t1.setPassCode(passCode);
-        t1.setStore(store1);
         t1.setPassStatus(PassStatus.EXPIRED);
+        store1.addTicket(t1);
 
         when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
         when(query1.getResultStream()).thenReturn(Stream.of(t1));
@@ -384,8 +377,8 @@ class TicketServiceTest {
 
         TicketEntity t1 = new TicketEntity();
         t1.setPassCode(passCode);
-        t1.setStore(store1);
         t1.setPassStatus(PassStatus.VALID);
+        store1.addTicket(t1);
 
         when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
         when(query1.getResultStream()).thenReturn(Stream.of(t1));
@@ -414,8 +407,8 @@ class TicketServiceTest {
         t1.setPassCode(passCode);
         t1.setDate(new Date(new java.util.Date().getTime()));
         t1.setArrivalTime(new Time(new java.util.Date().getTime()));
-        t1.setStore(store1);
         t1.setPassStatus(PassStatus.VALID);
+        store1.addTicket(t1);
 
         when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(new ArrayList<>(List.of(t1)));
@@ -432,8 +425,8 @@ class TicketServiceTest {
         t1.setPassCode(passCode);
         t1.setDate(new Date(949097495)); // Friday, January 28, 2000 10:11:35 PM
         t1.setArrivalTime(new Time(new java.util.Date().getTime()));
-        t1.setStore(store1);
         t1.setPassStatus(PassStatus.VALID);
+        store1.addTicket(t1);
 
         when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(new ArrayList<>(List.of(t1)));
@@ -450,8 +443,8 @@ class TicketServiceTest {
         t1.setPassCode(passCode);
         t1.setDate(new Date(new java.util.Date().getTime()));
         t1.setArrivalTime(new Time(new java.util.Date().getTime() - 900000 - 1000));
-        t1.setStore(store1);
         t1.setPassStatus(PassStatus.VALID);
+        store1.addTicket(t1);
 
         when(em.createNamedQuery(anyString(), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(new ArrayList<>(List.of(t1)));

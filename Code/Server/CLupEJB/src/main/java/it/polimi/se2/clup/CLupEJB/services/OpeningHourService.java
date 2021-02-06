@@ -66,7 +66,6 @@ public class OpeningHourService {
         oh.setFromTime(fromTime);
         oh.setToTime(toTime);
         oh.setWeekDay(weekDay);
-        oh.setStore(store);
 
         store.addOpeningHour(oh);
 

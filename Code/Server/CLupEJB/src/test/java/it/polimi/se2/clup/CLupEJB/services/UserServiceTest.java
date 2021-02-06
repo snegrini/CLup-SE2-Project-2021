@@ -72,7 +72,7 @@ class UserServiceTest {
         user.setUsercode(USER_CODE);
         user.setPassword(PASSWORD);
         user.setRole(UserRole.ADMIN);
-        user.setStore(store);
+        store.addUser(user);
     }
 
     @AfterEach

@@ -177,7 +177,7 @@ public class StoreServiceTest {
 
         UserEntity userEntity = new UserEntity();
         userEntity.setRole(UserRole.MANAGER);
-        userEntity.setStore(storeEntity);
+        storeEntity.addUser(userEntity);
 
         when(em.find(eq(StoreEntity.class), any())).thenReturn(storeEntity);
         when(em.find(eq(UserEntity.class), any())).thenReturn(userEntity);
@@ -215,7 +215,7 @@ public class StoreServiceTest {
 
         UserEntity userEntity = new UserEntity();
         userEntity.setRole(UserRole.EMPLOYEE);
-        userEntity.setStore(storeEntity);
+        storeEntity.addUser(userEntity);
 
         when(em.find(eq(StoreEntity.class), any())).thenReturn(storeEntity);
         when(em.find(eq(UserEntity.class), any())).thenReturn(userEntity);
@@ -231,9 +231,10 @@ public class StoreServiceTest {
         storeEntity.setStoreId(1);
         storeEntity.setStoreCap(35);
 
+        StoreEntity differentStore = new StoreEntity();
         UserEntity userEntity = new UserEntity();
         userEntity.setRole(UserRole.MANAGER);
-        userEntity.setStore(new StoreEntity());
+        differentStore.addUser(userEntity);
 
         when(em.find(eq(StoreEntity.class), any())).thenReturn(storeEntity);
         when(em.find(eq(UserEntity.class), any())).thenReturn(userEntity);

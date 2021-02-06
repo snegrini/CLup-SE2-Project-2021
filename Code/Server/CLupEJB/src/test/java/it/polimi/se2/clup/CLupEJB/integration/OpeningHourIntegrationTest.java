@@ -83,13 +83,11 @@ public class OpeningHourIntegrationTest {
 
     private void createTestData() {
         StoreEntity store = new StoreEntity();
-        store.setUsers(new ArrayList<>());
 
         UserEntity manager = new UserEntity();
         manager.setPassword(USER_CODE);
         manager.setPassword(PASSWORD);
         manager.setRole(UserRole.MANAGER);
-        manager.setStore(store);
 
         store.addUser(manager);
 
