@@ -8,7 +8,7 @@
                    Be sure to create the folder at the specified location.
                    Please avoid the trailing slash '/'.-->
         <param-name>upload.location</param-name>
-        <param-value>/Users/snegrini/Projects/uploads</param-value>
+        <param-value>/clup/uploads</param-value>
     </context-param>
 
     <filter-mapping>

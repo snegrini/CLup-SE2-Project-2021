@@ -117,7 +117,7 @@ public class TicketService {
     }
 
     /**
-     * For all the prompted tickets checks if the tickets are expired. If so their status is updated.
+     * For all the prompted tickets checks if the tickets inside the given list are expired. If so their status is updated.
      *
      * @param ticketList list of tickets to be checked.
      */
