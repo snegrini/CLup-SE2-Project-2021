@@ -2,14 +2,42 @@
 
 \section{Server side}
 The server side is divided into two main modules: \textbf{CLupEJB} and \textbf{CLupWeb}.
+
+\subsection{CLupEJB}
+This module encapsulates the business logic of the application. An EJB web container provides a runtime environment for web related software components. Inside, it is divided into:
 \begin{itemize}
-	\item \textbf{CLupEJB}
-	
-	\item \textbf{CLupWeb}
+	\item \textbf{Entities}: these are POJOs representing data that can be persisted to the database. Each entity represents a table stored in the database;
+	\item \textbf{Enums}: custom enum types for specifying predefined constants;
+	\item \textbf{Exceptions}: custom exception types for specifying errors;
+	\item \textbf{Messages}: custom classes for sending data in a known format to the client;
+	\item \textbf{Services}: Enterprise Java Bean, the core components of this module which also interacts with the EntityManager to persist data on the database;
+	\item \textbf{Util}: other utility classes such as the TokenManager to handle the token authentication without credentials for the customers app.
 \end{itemize}
 
+\subsection{CLupWeb}
+This module contains Java servlets that respond to web HTTP requests and qualify as a server-side servlet web API. Inside it is divided into:
+\begin{itemize}
+	\item \textbf{Controllers}: contains all the web servlets which serve different pages and performs calls on the injected EJB module;
+	\item \textbf{Filters}: contains all the web filters used to check user authentication and permissions.
+\end{itemize}
+Moreover it includes all the static content like CSS, JS and HTML web pages which will be processed by the template engine Thymeleaf and served to the client web browser.
+
+
 \section{Client side}
+Both the client applications are made with flutter. In flutter, all the logic resides in the \textit{lib} folder. In the \textit{Android} and \textit{iOS} folders there are the respective platform files.
 
-\subsection{Store App}
-
+Below is presented the code structure of each app.
 \subsection{Customer App}
+In the lib folder there are:
+\begin{itemize}
+	\item \textbf{Enum}: contains the enums.
+	\item \textbf{Model}: contains the model classes (such as Ticket, Store etc.).
+	\item \textbf{Util}: contains the utility classes (such as the API Manager).
+	\item \textbf{Views}: contains all the pages of the app.
+\end{itemize}
+\subsection{Store App}
+In the lib folder there are:
+\begin{itemize}
+	\item \textbf{Util}: contains the utility classes (such as the API Manager).
+	\item \textbf{Views}: contains all the pages of the app.
+\end{itemize}
