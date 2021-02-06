@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -56,7 +57,7 @@ class UserServiceTest {
 
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         when(query1.setParameter(anyString(), any())).thenReturn(query1);
         when(query1.setMaxResults(anyInt())).thenReturn(query1);
 
@@ -71,11 +72,11 @@ class UserServiceTest {
     }
 
     @AfterEach
-    void tearDown() {
+    public void tearDown() {
     }
 
     @Test
-    void checkCredentials_ValidUser_CorrectPassword() throws CredentialsException {
+    public void checkCredentials_ValidUser_CorrectPassword() throws CredentialsException {
         when(em.createNamedQuery(eq("UserEntity.findByUserCode"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(List.of(user));
         when(encoder.matches(anyString(), anyString())).thenReturn(true);
@@ -88,7 +89,7 @@ class UserServiceTest {
     }
 
     @Test
-    void checkCredentials_ValidUser_WrongPassword() throws CredentialsException {
+    public void checkCredentials_ValidUser_WrongPassword() throws CredentialsException {
         when(em.createNamedQuery(eq("UserEntity.findByUserCode"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(List.of(user));
         when(encoder.matches(anyString(), anyString())).thenReturn(false);
@@ -99,7 +100,7 @@ class UserServiceTest {
     }
 
     @Test
-    void checkCredentials_InvalidUser() throws CredentialsException {
+    public void checkCredentials_InvalidUser() throws CredentialsException {
         when(em.createNamedQuery(eq("UserEntity.findByUserCode"), any())).thenReturn(query1);
         when(query1.getResultList()).thenReturn(List.of(user));
         when(encoder.matches(anyString(), anyString())).thenReturn(false);
@@ -110,7 +111,7 @@ class UserServiceTest {
     }
 
     @Test
-    void checkCredentials_TwoUserSameCode_FailLogin() {
+    public void checkCredentials_TwoUserSameCode_FailLogin() {
         // Create a second user with same credentials.
         UserEntity user2 = new UserEntity();
         user2.setPassword(PASSWORD);
@@ -124,7 +125,7 @@ class UserServiceTest {
     }
 
     @Test
-    void generateCredentials_Authorized_Success() throws UnauthorizedException, BadStoreException {
+    public void generateCredentials_Authorized_Success() throws UnauthorizedException, BadStoreException {
         when(em.find(any(), eq(user.getUserId()))).thenReturn(user);
 
         when(em.createNamedQuery(eq("UserEntity.findByUserCode"), any())).thenReturn(query1);
@@ -142,7 +143,7 @@ class UserServiceTest {
     }
 
     @Test
-    void generateCredentials_NotAuthorized_Failure() {
+    public void generateCredentials_NotAuthorized_Failure() {
         user.setRole(UserRole.EMPLOYEE);
         when(em.find(any(), eq(user.getUserId()))).thenReturn(user);
 
@@ -152,11 +153,79 @@ class UserServiceTest {
     }
 
     @Test
-    void generateCredentials_BadStore_Failure() {
+    public void generateCredentials_UserNull_Failure() {
+        when(em.find(any(), eq(user.getUserId()))).thenReturn(null);
+
+        when(em.createNamedQuery(eq("UserEntity.findByUserCode"), any())).thenReturn(query1);
+
+        assertThrows(UnauthorizedException.class, () -> userService.generateCredentials(store, user.getUserId()));
+    }
+
+    @Test
+    public void generateCredentials_BadStore_Failure() {
         when(em.find(any(), eq(user.getUserId()))).thenReturn(user);
 
         when(em.createNamedQuery(eq("UserEntity.findByUserCode"), any())).thenReturn(query1);
 
         assertThrows(BadStoreException.class, () -> userService.generateCredentials(null, user.getUserId()));
+    }
+
+    @Test
+    public void regenerateCredentials_Authorized_Success() throws UnauthorizedException, BadStoreException, CredentialsException {
+        when(em.find(any(), eq(user.getUserId()))).thenReturn(user);
+
+        UserEntity manager = new UserEntity();
+        manager.setRole(UserRole.MANAGER);
+        manager.setUsercode("MMM001");
+        manager.setPassword("passwordManager");
+
+        UserEntity employee = new UserEntity();
+        employee.setUsercode("EEE001");
+        employee.setPassword("passwordEmployee");
+        employee.setRole(UserRole.EMPLOYEE);
+
+        when(store.getUsers()).thenReturn(List.of(manager, employee));
+
+        List<UserEntity> users1 = List.of(manager, employee);
+
+        List<Map.Entry<String, String>> users2 = userService.regenerateCredentials(store, user.getUserId());
+
+        assertEquals(users1.size(), users2.size());
+
+        for (int i = 0; i < users2.size(); i++) {
+            UserEntity u1 = users1.get(i);
+            Map.Entry<String, String> u2 = users2.get(i);
+
+            assertNotNull(u2.getKey());
+            assertNotNull(u2.getValue());
+            assertFalse(u2.getKey().isEmpty());
+            assertFalse(u2.getValue().isEmpty());
+            assertEquals(u1.getUsercode(), u2.getKey());
+            assertNotEquals(u1.getPassword(), u2.getValue());
+        }
+    }
+
+    @Test
+    public void regenerateCredentials_NotAuthorized_Failure() {
+        user.setRole(UserRole.EMPLOYEE);
+        when(em.find(any(), eq(user.getUserId()))).thenReturn(user);
+
+        assertThrows(UnauthorizedException.class, () -> userService.regenerateCredentials(store, user.getUserId()));
+    }
+
+    @Test
+    public void regenerateCredentials_UserNull_Failure() {
+        when(em.find(any(), eq(user.getUserId()))).thenReturn(null);
+
+        assertThrows(UnauthorizedException.class, () -> userService.regenerateCredentials(store, user.getUserId()));
+    }
+
+    @Test
+    public void regenerateCredentials_BadStore_Failure() {
+        when(em.find(any(), eq(user.getUserId()))).thenReturn(user);
+
+        when(em.createNamedQuery(eq("UserEntity.findByUserCode"), any())).thenReturn(query1);
+
+        assertThrows(BadStoreException.class, () -> userService.regenerateCredentials(null, user.getUserId()));
     }
 }
