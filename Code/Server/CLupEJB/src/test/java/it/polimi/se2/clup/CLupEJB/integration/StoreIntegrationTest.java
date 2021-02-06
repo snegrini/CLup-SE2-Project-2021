@@ -1,8 +1,10 @@
 package it.polimi.se2.clup.CLupEJB.integration;
 
-import it.polimi.se2.clup.CLupEJB.entities.*;
+import it.polimi.se2.clup.CLupEJB.entities.AddressEntity;
+import it.polimi.se2.clup.CLupEJB.entities.StoreEntity;
+import it.polimi.se2.clup.CLupEJB.entities.TicketEntity;
+import it.polimi.se2.clup.CLupEJB.entities.UserEntity;
 import it.polimi.se2.clup.CLupEJB.enums.UserRole;
-import it.polimi.se2.clup.CLupEJB.exceptions.BadOpeningHourException;
 import it.polimi.se2.clup.CLupEJB.exceptions.BadStoreException;
 import it.polimi.se2.clup.CLupEJB.exceptions.UnauthorizedException;
 import it.polimi.se2.clup.CLupEJB.services.OpeningHourService;
@@ -16,15 +18,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.sql.Date;
 import java.sql.Time;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 
 public class StoreIntegrationTest {
 

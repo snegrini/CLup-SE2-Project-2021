@@ -290,6 +290,10 @@ public class OpeningHourService {
                 .setParameter("weekDay", weekDay)
                 .getResultList();
 
+        if (ohStoredList == null) {
+            return false;
+        }
+
         for (OpeningHourEntity oh : ohStoredList) {
             if (time.after(oh.getFromTime()) && time.before(oh.getToTime())) {
                 return true;
