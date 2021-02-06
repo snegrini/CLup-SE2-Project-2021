@@ -23,7 +23,8 @@ class TicketDetailPage extends StatefulWidget {
 class _TicketDetailState extends State<TicketDetailPage> {
   bool _loading = true;
   bool _disabled = false;
-  bool _error = false;
+  bool _errorDelete = false;
+  bool _errorFetch = false;
   String _errorText = "";
 
   @override
@@ -36,82 +37,86 @@ class _TicketDetailState extends State<TicketDetailPage> {
         ),
         body: _loading
             ? Center(
-            child: CircularProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation<Color>(
-                    ClupColors.grapefruit)))
-            : Container(
-            margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
-            child: ListView(
-              children: [
-                Text(
-                  widget.ticket.store.name,
-                  style:
-                  TextStyle(fontSize: 23, fontWeight: FontWeight.bold),
-                ),
-                Text(widget.ticket.store.address.toString(),
-                    style: TextStyle(color: Colors.grey, fontSize: 18)),
-                SizedBox(height: 18),
-                Center(
-                  child: Column(
-                    children: [
-                      QrImage(
-                        data: widget.ticket.passCode,
-                        version: QrVersions.auto,
-                        size: 200.0,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Date',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 5),
-                      Text(
-                          DateFormat('dd/MM/yyyy')
-                              .format(widget.ticket.date),
-                          style: TextStyle(fontSize: 15)),
-                      SizedBox(height: 10),
-                      Text('Estimated Call Time',
+                child: CircularProgressIndicator(
+                    valueColor: new AlwaysStoppedAnimation<Color>(
+                        ClupColors.grapefruit)))
+            : _errorFetch
+                ? Center(child: Text(_errorText))
+                : Container(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+                    child: ListView(
+                      children: [
+                        Text(
+                          widget.ticket.store.name,
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 5),
-                      Text(widget.ticket.arrivalTime.format(context),
-                          style: TextStyle(fontSize: 15)),
-                      SizedBox(height: 10),
-                      Text(
-                        'Queue Number',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 5),
-                      Text(widget.ticket.queueNumber.toString(),
-                          style: TextStyle(fontSize: 15)),
-                      SizedBox(height: 10),
-                      Text(
-                        'Ticket Status',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 5),
-                      Text(widget.ticket.passStatus.name,
-                          style: TextStyle(fontSize: 15)),
-                      SizedBox(height: 30),
-                      RaisedButton(
-                        onPressed: _disabled ? null : _deleteTicket,
-                        child: Text(
-                          'Delete the ticket',
-                          style: TextStyle(color: Colors.white),
+                              fontSize: 23, fontWeight: FontWeight.bold),
                         ),
-                        color: ClupColors.grapefruit,
-                        disabledColor: ClupColors.disabledGrapefruit,
-                      ),
-                      SizedBox(height: 20),
-                      if (_error) Text(_errorText)
-                    ],
-                  ),
-                )
-              ],
-            )));
+                        Text(widget.ticket.store.address.toString(),
+                            style: TextStyle(color: Colors.grey, fontSize: 18)),
+                        SizedBox(height: 18),
+                        Center(
+                          child: Column(
+                            children: [
+                              QrImage(
+                                data: widget.ticket.passCode,
+                                version: QrVersions.auto,
+                                size: 200.0,
+                              ),
+                              SizedBox(height: 10),
+                              Text(
+                                'Date',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 5),
+                              Text(
+                                  DateFormat('dd/MM/yyyy')
+                                      .format(widget.ticket.date),
+                                  style: TextStyle(fontSize: 15)),
+                              SizedBox(height: 10),
+                              Text('Estimated Call Time',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(height: 5),
+                              Text(widget.ticket.arrivalTime.format(context),
+                                  style: TextStyle(fontSize: 15)),
+                              SizedBox(height: 10),
+                              Text(
+                                'Queue Number',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 5),
+                              Text(widget.ticket.queueNumber.toString(),
+                                  style: TextStyle(fontSize: 15)),
+                              SizedBox(height: 10),
+                              Text(
+                                'Ticket Status',
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 5),
+                              Text(widget.ticket.passStatus.name,
+                                  style: TextStyle(fontSize: 15)),
+                              SizedBox(height: 30),
+                              RaisedButton(
+                                onPressed: _disabled ? null : _deleteTicket,
+                                child: Text(
+                                  'Delete the ticket',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                color: ClupColors.grapefruit,
+                                disabledColor: ClupColors.disabledGrapefruit,
+                              ),
+                              SizedBox(height: 20),
+                              if (_errorDelete) Text(_errorText)
+                            ],
+                          ),
+                        )
+                      ],
+                    )));
   }
 
   @override
@@ -137,12 +142,12 @@ class _TicketDetailState extends State<TicketDetailPage> {
       widget.ticket = Ticket.fromJson(ticketJson);
       setState(() {
         _loading = false;
-        _error = false;
+        _errorDelete = false;
       });
     } catch (e) {
       setState(() {
         _loading = false;
-        _error = true;
+        _errorFetch = true;
         _errorText = e;
       });
     }
@@ -158,14 +163,14 @@ class _TicketDetailState extends State<TicketDetailPage> {
           DataManager().token, widget.ticketId);
 
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) =>
-              HomePage()), (Route<dynamic> route) => false);
+          MaterialPageRoute(builder: (context) => HomePage()),
+          (Route<dynamic> route) => false);
     } catch (e) {
-    setState(() {
-    _error = true;
-    _disabled = false;
-    _errorText = e;
-    });
+      setState(() {
+        _errorDelete = true;
+        _disabled = false;
+        _errorText = e;
+      });
     }
   }
 }
