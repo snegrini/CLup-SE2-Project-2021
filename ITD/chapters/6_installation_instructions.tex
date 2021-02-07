@@ -9,7 +9,7 @@ Install it, along with the \textit{MySQL workbench}, following the wizard instru
 
 By default, MySQL is launched as a service at startup.\newline
 To check that MySQL is running correctly, try to connect to the server via \textit{MySQL workbench} using the credentials generated.\newline
-Once connected to the database server, load the two \textit{SQL Dump} provided in the project folder by doing \verb|File > Run SQL Script...|\newline
+Once connected to the database server, load the two \textit{SQL Dump} provided in the \verb|Server| archive by doing \verb|File > Run SQL Script...|\newline
 You should have two new schemas: \verb|np_clup| and \verb|np_clup_test|.
 
 \subsection{Java JDK}
@@ -119,7 +119,8 @@ Replace the \textit{param-value} of the parameter \textit{upload.location} with 
 	</web-app>
 \end{lstlisting}
 
-The example value of \verb|/clup/uploads| corresponds to \verb|C:\clup\uploads|. Be sure to put the provided example images in the specified location.
+The example value of \verb|/clup/uploads| corresponds to \verb|C:\clup\uploads|.\newline 
+\textbf{Be sure} to put the provided example images in the specified location. You can find them in the \verb|Logo| folder located in the \verb|Server| archive.
 
 \subsubsection{Testing database credentials} 
 In order to execute the integration testing, there is the need to declare the database user credentials for the test.\newline 
