@@ -204,7 +204,8 @@ public class StoreService {
         if (timeDiff < 0) {
             return 15;
         }
-        return Math.toIntExact(timeDiff / 60000) + 15;
+
+        return Math.toIntExact(timeDiff) / 60000 + 15;
     }
 
     private Time findLastTicketTime(StoreEntity store) {
