@@ -283,14 +283,14 @@ public class StoreServiceTest {
         storeEntity.setStoreCap(35);
 
         TicketEntity ticketEntity = new TicketEntity();
-        ticketEntity.setArrivalTime(new Time(timestamp + 900000));
+        ticketEntity.setArrivalTime(new Time(timestamp + 900500));
 
         when(em.find(eq(StoreEntity.class), any())).thenReturn(storeEntity);
 
         when(em.createNamedQuery(eq("TicketEntity.findByStoreSorted"), any())).thenReturn(query1);
         when(query1.getResultStream()).thenReturn(Stream.of(ticketEntity));
 
-        assertEquals(29, storeService.getEstimateTime(1));
+        assertEquals(30, storeService.getEstimateTime(1));
     }
 
     @Test
