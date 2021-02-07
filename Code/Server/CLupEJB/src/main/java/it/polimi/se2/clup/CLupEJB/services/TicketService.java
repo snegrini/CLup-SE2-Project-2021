@@ -263,6 +263,10 @@ public class TicketService {
             throw new BadStoreException("Cannot load store");
         }
 
+        if (store.getStoreCap() <= 0) {
+            throw new BadStoreException("This store doesn't accept customers at the moment");
+        }
+
         long timestamp = new java.util.Date().getTime();
         Date date = new Date(timestamp);
 
@@ -318,7 +322,7 @@ public class TicketService {
         TicketEntity alreadyRetrievedTicket = em.createNamedQuery("TicketEntity.findByCustomerIdOnDay", TicketEntity.class)
                 .setParameter("customerId", customerId)
                 .setParameter("date", date)
-                .setParameter("passStatus", PassStatus.VALID)
+                .setParameter("passStatus", PassStatus.EXPIRED)
                 .setMaxResults(1)
                 .getResultStream()
                 .findFirst()

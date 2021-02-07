@@ -64,19 +64,20 @@ public class OpeningEditServlet extends HttpServlet {
             List<Time> tempToOh = new ArrayList<>();
 
             for (int i = 1; i <= 2; i++) {
-                String fromTimeStr = parameterMap.get(day + FROM_STR + i)[0];
-                String toTimeStr = parameterMap.get(day + TO_STR + i)[0];
+                if (parameterMap.containsKey(day + FROM_STR + i) && parameterMap.containsKey(day + TO_STR + i)) {
+                    String fromTimeStr = parameterMap.get(day + FROM_STR + i)[0];
+                    String toTimeStr = parameterMap.get(day + TO_STR + i)[0];
 
-                if (!fromTimeStr.isEmpty() && !toTimeStr.isEmpty()) {
-                    try {
-                        tempFromOh.add(new java.sql.Time(sdf.parse(fromTimeStr).getTime()));
-                        tempToOh.add(new java.sql.Time(sdf.parse(toTimeStr).getTime()));
-                    } catch (IllegalArgumentException | ParseException e) {
-                        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad input time value.");
-                        return;
+                    if (!fromTimeStr.isEmpty() && !toTimeStr.isEmpty()) {
+                        try {
+                            tempFromOh.add(new java.sql.Time(sdf.parse(fromTimeStr).getTime()));
+                            tempToOh.add(new java.sql.Time(sdf.parse(toTimeStr).getTime()));
+                        } catch (IllegalArgumentException | ParseException e) {
+                            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad input time value.");
+                            return;
+                        }
                     }
                 }
-
             }
             ohFromMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempFromOh);
             ohToMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempToOh);
