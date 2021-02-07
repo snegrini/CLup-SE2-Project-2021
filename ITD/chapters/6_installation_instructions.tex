@@ -9,11 +9,11 @@ Install it, along with the \textit{MySQL workbench}, following the wizard instru
 
 By default, MySQL is launched as a service at startup.\newline
 To check that MySQL is running correctly, try to connect to the server via \textit{MySQL workbench} using the credentials generated.\newline
-Once connected to the database server, load the two \textit{SQL Dump} provided in the project folder doing \verb|File > Run SQL Script...|\newline
+Once connected to the database server, load the two \textit{SQL Dump} provided in the project folder by doing \verb|File > Run SQL Script...|\newline
 You should have two new schemas: \verb|np_clup| and \verb|np_clup_test|.
 
 \subsection{Java JDK}
-Now that the database is setup, download the latest \textit{Java JDK} from the \href{https://www.oracle.com/it/java/technologies/javase-jdk15-downloads.html/}{official website}.\newline
+Now that the database is setup, download the latest \textit{Java JDK} from the \href{https://www.oracle.com/it/java/technologies/javase-jdk15-downloads.html}{official website}.\newline
 Install it following the wizard instructions and set the environment variables:
 \begin{itemize}
 	\item \verb|JAVA_HOME|: set \verb|<path_JDK_installation>|
@@ -23,7 +23,7 @@ Install it following the wizard instructions and set the environment variables:
 \end{itemize}
 \clearpage
 \subsection{TomEE}
-Download the latest version of \textit{TomEE plume 8.x.x} from the \href{https://tomee.apache.org/download-ng.html/}{official website}.\newline
+Download the latest version of \textit{TomEE plume 8.x.x} from the \href{https://tomee.apache.org/download-ng.html}{official website}.\newline
 Unzip it in a handy location and open the configuration file \verb|tomee.xml| located in the \verb|conf| folder (if it does not exist, please create it).\newline
 In this file add the following lines, adjusted with your database credentials:
 
@@ -34,6 +34,7 @@ In this file add the following lines, adjusted with your database credentials:
 	showstringspaces=false,
 	tabsize=5,
 	alsoletter=-,
+	columns=fullflexible,
 }
 
 \begin{lstlisting}
@@ -63,7 +64,7 @@ Edit also the \verb|tomcat-users.xml| file located in the \verb|conf| folder and
 
 Now set the environment variable \verb|CATALINA_HOME| to the path of \textit{TomEE} folder.
 
-Finally download the Java MySQL Connector from the \href{https://dev.mysql.com/downloads/connector/j/}{MySQL website} and paste it in the \verb|lib| folder of \textit{TomEE}.
+Finally download the Platform Independent Java MySQL Connector from the \href{https://dev.mysql.com/downloads/connector/j/}{MySQL website}, unzip it and copy the \verb|.jar| in the \verb|lib| folder of \textit{TomEE}.
 
 \subsection{Maven}
 Download \textit{Maven} from the \href{https://maven.apache.org/download.cgi}{official website}.\newline
@@ -77,6 +78,7 @@ Add somewhere in the tag \textit{servers}, subtag of \textit{settings}, the \tex
 	showstringspaces=false,
 	tabsize=5,
 	alsoletter=-,
+	columns=fullflexible,
 }
 
 \begin{lstlisting}
@@ -144,7 +146,8 @@ You can use the root user or any that has all the privileges on the schema \verb
 \subsection{Deploy}
 In order to deploy the project to TomEE, start the server executing \verb|startup.bat| in the \verb|bin| folder of \textit{TomEE}.\newline
 After that, open a terminal in \verb|Server| folder of the project and run \verb|mvn clean install| and then \verb|mvn tomcat7:deploy|.\newline
-The server should now be deployed. To rerun the server only the server startup is needed.\newline
+During this procedures, \textit{Maven} will also perform the \verb|test| goal.\newline
+The server should now be deployed. To rerun the server, only the server startup is needed.\newline
 You can find the deployed server to \href{http://localhost:8080/clup}{http://localhost:8080/clup}.
 
 If you want to run the tests you can use \verb|mvn test|.
@@ -154,7 +157,7 @@ If you want to run the tests you can use \verb|mvn test|.
 \section{Client}
 \subsection{APK Installation}
 To install the apps, download the APK from the repo and install them on your device.\newline
-To achieve that, you will be required to allow app installs from unknown sources.
+To achieve that, you will be required to allow app installs from unknown sources.\newline
 \subsection{Applications configuration}
 The first time that you open the app, you will be required to set the server address.\newline
 Just write the address where the CLup server is running (e.g. \verb|http://192.168.1.2:8080/clup/|).
