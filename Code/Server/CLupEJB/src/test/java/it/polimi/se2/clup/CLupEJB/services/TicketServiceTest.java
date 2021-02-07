@@ -87,6 +87,8 @@ class TicketServiceTest {
     public void addTicket_SuccessfulAdd_InputValid() throws BadTicketException, BadStoreException, BadOpeningHourException {
         String customerId = "aaaa";
 
+        store1.setStoreCap(10);
+
         TicketEntity t1 = new TicketEntity();
         t1.setQueueNumber(1);
         t1.setArrivalTime(new Time(1610000000000L)); // Jan 07 2021 06:13:20
@@ -125,6 +127,8 @@ class TicketServiceTest {
 
         TicketEntity t1 = new TicketEntity();
 
+        store1.setStoreCap(10);
+
         when(em.find(eq(StoreEntity.class), any())).thenReturn(store1);
         when(em.createNamedQuery(eq("TicketEntity.findByCustomerIdOnDay"), any())).thenReturn(query1);
         when(query1.getResultStream()).thenReturn(Stream.of(t1));
@@ -140,6 +144,8 @@ class TicketServiceTest {
         t1.setQueueNumber(1);
         t1.setArrivalTime(new Time(1610000000000L)); // Jan 07 2021 06:13:20
 
+        store1.setStoreCap(10);
+
         when(em.find(eq(StoreEntity.class), any())).thenReturn(store1);
 
         when(em.createNamedQuery(eq("TicketEntity.findByPassCode"), any())).thenReturn(query1);
@@ -154,6 +160,13 @@ class TicketServiceTest {
         when(query4.getResultList()).thenReturn(List.of());
         when(ohs.isInOpeningHour(anyInt(), any())).thenReturn(false);
         assertThrows(BadOpeningHourException.class, () -> ticketService.addTicket(customerId, store1.getStoreId()));
+    }
+
+    @Test
+    public void addTicket_FailAdd_StoreCapNotSet() {
+        String customerId = "aaaa";
+
+        assertThrows(BadStoreException.class, () -> ticketService.addTicket(customerId, store1.getStoreId()));
     }
 
     @Test
