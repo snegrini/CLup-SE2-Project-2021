@@ -14,10 +14,25 @@
     <version>1.0-SNAPSHOT</version>
     <name>CLupEAR</name>
 	<packaging>ear</packaging>
-
-    <properties>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+	
+	<dependencies>
+		<dependency>
+			<groupId>it.polimi.se2.clup</groupId>
+			<artifactId>CLupEJB</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>ejb</type>
+		</dependency>
+		<dependency>
+			<groupId>it.polimi.se2.clup</groupId>
+			<artifactId>CLupWeb</artifactId>
+			<version>1.0-SNAPSHOT</version>
+			<type>war</type>
+		</dependency>
+	</dependencies>
 
     <build>
         <plugins>
@@ -26,16 +41,18 @@
                 <artifactId>maven-ear-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <ejbModule>
-                        <groupId>it.polimi.se2.clup</groupId>
-                        <artifactId>CLupEJB</artifactId>
-                        <bundleFilename>CLupEJB.jar</bundleFilename>
-                    </ejbModule>
-                    <webModule>
-                        <groupId>it.polimi.se2.clup</groupId>
-                        <artifactId>CLupWeb</artifactId>
-                        <contextRoot>/clup</contextRoot>
-                    </webModule>
+					<modules>
+						<ejbModule>
+							<groupId>it.polimi.se2.clup</groupId>
+							<artifactId>CLupEJB</artifactId>
+							<bundleFileName>CLupEJB.jar</bundleFileName>
+						</ejbModule>
+						<webModule>
+							<groupId>it.polimi.se2.clup</groupId>
+							<artifactId>CLupWeb</artifactId>
+							<contextRoot>/clup</contextRoot>
+						</webModule>
+					</modules>
                 </configuration>
             </plugin>
         </plugins>
