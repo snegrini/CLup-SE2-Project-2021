@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>it.polimi.se2.clup</groupId>
-        <artifactId>CLup-parent</artifactId>
+        <artifactId>CLup-Server</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -35,7 +35,7 @@
                     <webModule>
                         <groupId>it.polimi.se2.clup</groupId>
                         <artifactId>CLupWeb</artifactId>
-                        <contextRoot>/foo</contextRoot>
+                        <contextRoot>/clup</contextRoot>
                     </webModule>
                 </configuration>
             </plugin>
