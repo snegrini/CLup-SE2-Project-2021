@@ -29,12 +29,13 @@ In this file add the following lines, adjusted with your database credentials:
 
 \lstset{
 	language=XML, 
+	literate={-}{-}1,
 	morekeywords={tomee, Resource, role, user, tomcat-users},
 	basicstyle=\scriptsize,
 	showstringspaces=false,
 	tabsize=5,
 	alsoletter=-,
-	columns=fullflexible,
+	columns=fullflexible,	
 }
 
 \begin{lstlisting}
@@ -79,6 +80,7 @@ Add somewhere in the tag \textit{servers}, subtag of \textit{settings}, the \tex
 	tabsize=5,
 	alsoletter=-,
 	columns=fullflexible,
+	literate={-}{-}1,
 }
 
 \begin{lstlisting}
@@ -98,7 +100,7 @@ Add somewhere in the tag \textit{servers}, subtag of \textit{settings}, the \tex
 	</settings>
 \end{lstlisting}
 
-Now add to the environment variable \verb|PATH| the path of \textit{maven} folder.
+Now add to the environment variable \verb|PATH| the path of \verb|bin| folder inside the \textit{maven} folder.
 
 \clearpage
 
@@ -143,6 +145,7 @@ You can use the root user or any that has all the privileges on the schema \verb
 	</persistence>
 \end{lstlisting}
 
+\clearpage
 
 \subsection{Deploy}
 In order to deploy the project to TomEE, start the server executing \verb|startup.bat| in the \verb|bin| folder of \textit{TomEE}.\newline
@@ -153,7 +156,15 @@ You can find the deployed server to \href{http://localhost:8080/clup}{http://loc
 
 If you want to run the tests you can use \verb|mvn test|.
 
-\clearpage
+The database dumps contains already some default data and user credentials to allow an easier testing.\newline
+The preregistered users are:
+\begin{itemize}
+	\item \textbf{CLup Admin}: 555001 - password
+	\item \textbf{Manager Store 1}: 000001 - password
+	\item \textbf{Employee Store 1}: 222001 - password
+	\item \textbf{Manager Store 2}: 000002 - password
+	\item \textbf{Employee Store 2}: 222002 - password
+\end{itemize}
 
 \section{Client}
 \subsection{APK Installation}
