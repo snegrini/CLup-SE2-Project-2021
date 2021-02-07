@@ -46,12 +46,6 @@ public class StoreAddServlet extends HttpServlet {
     @EJB(name = "it.polimi.se2.clup.CLupEJB.services/StoreService")
     private StoreService storeService;
 
-    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/OpeningHourService")
-    private OpeningHourService ohService;
-
-    @EJB(name = "it.polimi.se2.clup.CLupEJB.services/UserService")
-    private UserService userService;
-
     public static final String FROM_STR = "-from-";
     public static final String TO_STR = "-to-";
 
@@ -89,25 +83,12 @@ public class StoreAddServlet extends HttpServlet {
         Map<String, String[]> parameterMap = request.getParameterMap();
 
 
-        // Save uploaded image
+        // Retrieve uploaded image
         Part filePart = request.getPart("image"); // Retrieves <input type="file" name="image">
 
         if (filePart == null || filePart.getSize() == 0) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing store logo.");
             return;
-        }
-
-        File uploads, file;
-        try {
-            uploads = new File(getServletContext().getInitParameter("upload.location"));
-            file = File.createTempFile("image-", ".png", uploads);
-        } catch (IOException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find the folder to upload images. Please fix the specified folder in the web.xml file.");
-            return;
-        }
-
-        try (InputStream fileContent = filePart.getInputStream()) {
-            Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
 
 
@@ -176,6 +157,16 @@ public class StoreAddServlet extends HttpServlet {
             ohToMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempToOh);
         }
 
+        // Create temp image file.
+        File uploads, file;
+        try {
+            uploads = new File(getServletContext().getInitParameter("upload.location"));
+            file = File.createTempFile("image-", ".png", uploads);
+        } catch (IOException e) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not find the folder to upload images. Please fix the specified folder in the web.xml file.");
+            return;
+        }
+
         // Add a new store with address, opening hours and credentials.
         StoreEntity store;
         List<Map.Entry<String, String>> genUsers;
@@ -188,13 +179,21 @@ public class StoreAddServlet extends HttpServlet {
 
         } catch (BadStoreException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, e.getMessage());
+            file.delete();
             return;
         } catch (UnauthorizedException e) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+            file.delete();
             return;
         } catch (EJBException e) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Bad input data.");
+            file.delete();
             return;
+        }
+
+        // Store the image file.
+        try (InputStream fileContent = filePart.getInputStream()) {
+            Files.copy(fileContent, file.toPath(), StandardCopyOption.REPLACE_EXISTING);
         }
 
         response.setContentType("text/html");
