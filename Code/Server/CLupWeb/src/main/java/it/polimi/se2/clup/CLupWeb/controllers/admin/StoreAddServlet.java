@@ -92,7 +92,7 @@ public class StoreAddServlet extends HttpServlet {
         // Save uploaded image
         Part filePart = request.getPart("image"); // Retrieves <input type="file" name="image">
 
-        if (filePart.getSize() == 0) {
+        if (filePart == null || filePart.getSize() == 0) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing store logo.");
             return;
         }
@@ -165,6 +165,13 @@ public class StoreAddServlet extends HttpServlet {
                     }
                 }
             }
+
+            // Check if after parsing, no opening hour has been specified.
+            if (tempFromOh.isEmpty() || tempToOh.isEmpty()) {
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unable to find opening hour days.");
+                return;
+            }
+
             ohFromMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempFromOh);
             ohToMap.put(DayOfWeek.valueOf(day.toUpperCase()).getValue(), tempToOh);
         }
