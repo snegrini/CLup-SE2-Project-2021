@@ -10,6 +10,13 @@
     <version>1.0-SNAPSHOT</version>
     <name>CLup Server</name>
 
+    <properties>
+        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+	
+	
     <modules>
         <module>CLupEJB</module>
         <module>CLupWeb</module>
@@ -18,6 +25,11 @@
 
     <build>
         <plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+			</plugin>
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>
                 <artifactId>tomcat7-maven-plugin</artifactId>
