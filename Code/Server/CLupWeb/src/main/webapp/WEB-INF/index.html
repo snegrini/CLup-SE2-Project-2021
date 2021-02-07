@@ -23,10 +23,10 @@
     <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 
     <label for="inputUsercode" class="sr-only">Usercode</label>
-    <input type="text" id="inputUsercode" class="form-control" placeholder="Enter Usercode" name="usercode" required
+    <input type="text" id="inputUsercode" class="form-control" placeholder="Enter Usercode" name="usercode" maxlength="6" required
            autofocus>
     <label for="inputPassword" class="sr-only">Password</label>
-    <input type="password" id="inputPassword" class="form-control" placeholder="Enter Password" name="password"
+    <input type="password" id="inputPassword" class="form-control" placeholder="Enter Password" name="password" maxlength="60"
            required>
 
     <div data-th-text="${errorMessage}"></div>
