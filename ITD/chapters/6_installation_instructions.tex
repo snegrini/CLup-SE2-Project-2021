@@ -1,1 +1,146 @@
 \chapter{Installation instructions}
+\section{Server}
+In this section is illustrated the procedure in order to deploy the server on a \textit{Windows} system.\newline
+The same steps can be applied, with the right adjustments, to deploy on other operating systems.
+
+\subsection{MySQL}
+Download \textit{MySQL Community Server} from the \href{https://dev.mysql.com/downloads/mysql/}{official website}.\newline
+Install it, along with the \textit{MySQL workbench}, following the wizard instructions and set the \textbf{root} user credentials. Be sure to store the root password in a safe place.
+
+By default, MySQL is launched as a service at startup.\newline
+To check that MySQL is running correctly, try to connect to the server via \textit{MySQL workbench} using the credentials generated.\newline
+Once connected to the database server, load the two \textit{SQL Dump} provided in the project folder doing \verb|File > Run SQL Script...|\newline
+You should have two new schemas: \verb|np_clup| and \verb|np_clup_test|.
+
+\subsection{Java JDK}
+Now that the database is setup, download the latest \textit{Java JDK} from the \href{https://www.oracle.com/it/java/technologies/javase-jdk15-downloads.html/}{official website}.\newline
+Install it following the wizard instructions and set the environment variables:
+\begin{itemize}
+	\item \verb|JAVA_HOME|: set \verb|<path_JDK_installation>|
+	\item \verb|JDK_HOME|: set \verb|<path_JDK_installation>|
+	\item \verb|CLASSPATH|: set \verb|<path_JDK_installation>\lib|
+	\item \verb|PATH|: add \verb|<path_JDK_installation>\bin|
+\end{itemize}
+\clearpage
+\subsection{TomEE}
+Download the latest version of \textit{TomEE plume 8.x.x} from the \href{https://tomee.apache.org/download-ng.html/}{official website}.\newline
+Unzip it in a handy location and open the configuration file \verb|tomee.xml| located in the \verb|conf| folder (if it does not exist, please create it).\newline
+In this file add the following lines, adjusted with your database credentials:
+
+\lstset{
+	language=XML, 
+	morekeywords={tomee, Resource, role, user, tomcat-users, settings, server, servers, id, username, password, web-app, context-param, param-name, param-value, persistence, properties, persistence-unit, property},
+	basicstyle=\scriptsize,
+	showstringspaces=false,
+	tabsize=5,
+	alsoletter=-,
+}
+
+\begin{lstlisting}
+	<?xml version="1.0" encoding="UTF-8"?>
+	<tomee>
+		<Resource id="CLupDB" type="DataSource">
+			JdbcDriver com.mysql.cj.jdbc.Driver
+			JdbcUrl jdbc:mysql://localhost:3306/np_clup
+			UserName xxx
+			Password xxx
+		</Resource>
+	</tomee>
+\end{lstlisting}
+
+Edit also the \verb|tomcat-users.xml| file located in the \verb|conf| folder and add somewhere in the tag \textit{tomcat-users} the \textbf{role} and \textbf{user} lines:
+\begin{lstlisting}
+	<?xml version="1.0" encoding="UTF-8"?>
+	<tomcat-users ...>
+		...
+		<role rolename="manager-gui"/>
+		<role rolename="manager-script"/>
+		<user username="admin" password="password" roles="manager-gui, manager-script"/>
+		...
+	</tomcat-users>
+\end{lstlisting}
+
+Now set the environment variable \verb|CATALINA_HOME| to the path of \textit{TomEE} folder.
+
+Finally download the Java MySQL Connector from the \href{https://dev.mysql.com/downloads/connector/j/}{MySQL website} and paste it in the \verb|lib| folder of \textit{TomEE}.
+
+\subsection{Maven}
+Download \textit{Maven} from the \href{https://maven.apache.org/download.cgi}{official website}.\newline
+Unzip it in a handy location and open the configuration file \verb|settings.xml| located in the \verb|conf| folder.
+Add somewhere in the tag \textit{servers}, subtag of \textit{settings}, the \textbf{server} lines:
+\begin{lstlisting}
+	<?xml version="1.0" encoding="UTF-8"?>
+	<settings ...>
+		...
+		<servers>
+			...
+			<server>
+				<id>TomcatServer</id>
+				<username>admin</username>
+				<password>password</password>
+			</server>
+			...
+		</servers>
+		...
+	</settings>
+\end{lstlisting}
+
+Now add to the environment variable \verb|PATH| the path of \textit{maven} folder.
+
+\clearpage
+
+\subsection{Server configuration}
+Before deploying you have two configure two things in the server project.
+
+\subsubsection{Store images folder}
+To set the path of the store images edit the file \verb|web.xml| in the \verb|CLupWeb\src\main\webapp\WEB-INF| folder.
+Replace the \textit{param-value} of the parameter \textit{upload.location} with the desired folder.
+\begin{lstlisting}
+	<?xml version="1.0" encoding="UTF-8"?>
+	<web-app ...>
+		<context-param>
+			<param-name>upload.location</param-name>
+			<param-value>/clup/uploads</param-value>
+		</context-param>
+	...
+	</web-app>
+\end{lstlisting}
+
+The example value of \verb|/clup/uploads| corresponds to \verb|C:\clup\uploads|. Be sure to put the provided example images in the specified location.
+
+\subsubsection{Testing database credentials} 
+In order to execute the integration testing, there is the need to declare the database user credentials for the test.\newline 
+Edit the file \verb|persistence.xml| in the \verb|CLupEJB\src\main\resources\META-INF| folder with your database credentials.\newline
+You can use the root user or any that has all the privileges on the schema \verb|np_clup_test|.
+
+\begin{lstlisting}
+	<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+	<persistence ...>
+		...
+		<persistence-unit name="CLupEJB-testing" transaction-type="RESOURCE_LOCAL">
+			...
+			<properties>
+				...
+				<property name="javax.persistence.jdbc.user" value="dev"/>
+				<property name="javax.persistence.jdbc.password" value="password"/>
+				...
+			</properties>
+		</persistence-unit>
+	</persistence>
+\end{lstlisting}
+
+
+\subsection{Deploy}
+In order to deploy the project to TomEE, start the server executing \verb|startup.bat| in the \verb|bin| folder of \textit{TomEE}.\newline
+After that, open a terminal in \verb|Server| folder of the project and run \verb|mvn clean install| and then \verb|mvn tomcat7:deploy|.\newline
+The server should now be deployed. To rerun the server only the server startup is needed.
+
+\clearpage
+
+\section{Client}
+\subsection{APK Installation}
+To install the apps download the APK provided and install them on your device. To achieve that, will be required to allowing app installs from unknown sources. To do that you can:
+\begin{itemize}
+	\item Navigate to \verb|bla bla|.
+\end{itemize}
+\subsection{Applications configuration}
