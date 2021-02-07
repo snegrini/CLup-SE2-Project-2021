@@ -165,6 +165,9 @@ public class StoreService {
         if (user.getRole() != UserRole.MANAGER || store.getStoreId() != user.getStore().getStoreId()) {
             throw new UnauthorizedException("Unauthorized operation.");
         }
+        if (storeCap < store.getStoreCap() && store.getCustomersInside() >= store.getStoreCap()) {
+            throw new BadStoreException("Cannot update the store cap, too many customers inside.");
+        }
 
         store.setStoreCap(storeCap);
         em.merge(store);

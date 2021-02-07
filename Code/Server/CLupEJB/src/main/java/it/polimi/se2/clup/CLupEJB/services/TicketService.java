@@ -318,6 +318,7 @@ public class TicketService {
         TicketEntity alreadyRetrievedTicket = em.createNamedQuery("TicketEntity.findByCustomerIdOnDay", TicketEntity.class)
                 .setParameter("customerId", customerId)
                 .setParameter("date", date)
+                .setParameter("passStatus", PassStatus.VALID)
                 .setMaxResults(1)
                 .getResultStream()
                 .findFirst()
