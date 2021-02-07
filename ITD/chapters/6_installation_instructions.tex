@@ -29,7 +29,7 @@ In this file add the following lines, adjusted with your database credentials:
 
 \lstset{
 	language=XML, 
-	morekeywords={tomee, Resource, role, user, tomcat-users, settings, server, servers, id, username, password, web-app, context-param, param-name, param-value, persistence, properties, persistence-unit, property},
+	morekeywords={tomee, Resource, role, user, tomcat-users},
 	basicstyle=\scriptsize,
 	showstringspaces=false,
 	tabsize=5,
@@ -49,6 +49,7 @@ In this file add the following lines, adjusted with your database credentials:
 \end{lstlisting}
 
 Edit also the \verb|tomcat-users.xml| file located in the \verb|conf| folder and add somewhere in the tag \textit{tomcat-users} the \textbf{role} and \textbf{user} lines:
+
 \begin{lstlisting}
 	<?xml version="1.0" encoding="UTF-8"?>
 	<tomcat-users ...>
@@ -68,6 +69,16 @@ Finally download the Java MySQL Connector from the \href{https://dev.mysql.com/d
 Download \textit{Maven} from the \href{https://maven.apache.org/download.cgi}{official website}.\newline
 Unzip it in a handy location and open the configuration file \verb|settings.xml| located in the \verb|conf| folder.
 Add somewhere in the tag \textit{servers}, subtag of \textit{settings}, the \textbf{server} lines:
+
+\lstset{
+	language=XML, 
+	morekeywords={, settings, server, servers, id, username, password, web-app, context-param, param-name, param-value, persistence, properties, persistence-unit, property},
+	basicstyle=\scriptsize,
+	showstringspaces=false,
+	tabsize=5,
+	alsoletter=-,
+}
+
 \begin{lstlisting}
 	<?xml version="1.0" encoding="UTF-8"?>
 	<settings ...>
@@ -133,14 +144,17 @@ You can use the root user or any that has all the privileges on the schema \verb
 \subsection{Deploy}
 In order to deploy the project to TomEE, start the server executing \verb|startup.bat| in the \verb|bin| folder of \textit{TomEE}.\newline
 After that, open a terminal in \verb|Server| folder of the project and run \verb|mvn clean install| and then \verb|mvn tomcat7:deploy|.\newline
-The server should now be deployed. To rerun the server only the server startup is needed.
+The server should now be deployed. To rerun the server only the server startup is needed.\newline
+You can find the deployed server to \href{http://localhost:8080/clup}{http://localhost:8080/clup}.
+
+If you want to run the tests you can use \verb|mvn test|.
 
 \clearpage
 
 \section{Client}
 \subsection{APK Installation}
-To install the apps download the APK provided and install them on your device. To achieve that, will be required to allowing app installs from unknown sources. To do that you can:
-\begin{itemize}
-	\item Navigate to \verb|bla bla|.
-\end{itemize}
+To install the apps, download the APK from the repo and install them on your device.\newline
+To achieve that, you will be required to allow app installs from unknown sources.
 \subsection{Applications configuration}
+The first time that you open the app, you will be required to set the server address.\newline
+Just write the address where the CLup server is running (e.g. \verb|http://192.168.1.2:8080/clup/|).
