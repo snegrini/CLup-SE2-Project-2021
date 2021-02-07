@@ -132,4 +132,55 @@ After the unit testing phase, we continued with the integration testing phase. I
 In order not to be too verbose, we will not list each method tested. Tests can be found inside the specific folder inside the project.
 
 \section{System Testing}
-A part of the testing phase was also dedicated to the manual testing of the web servlets and web pages through the normal usage of a web browser and with the help of a tool for making HTTP POST requests with custom parameters (Postman).
+A part of the testing phase was also dedicated to the manual testing of web servlets and web pages through the normal usage of a web browser and with the help of a tool for making HTTP POST requests with custom parameters (Postman).
+In particular, the following tests have been performed successfully:
+
+\textbf{Admin Dashboard}
+\begin{itemize}
+	\item Login to website with admin credentials;
+	\item Add a new store and its user credentials;
+	\item Regenerate the credentials for an existing store.
+	\item Display the store list and store details;
+	\item Pass bad input parameters to servlet to check their response.
+\end{itemize}
+
+\textbf{Manager Dashboard}
+\begin{itemize}
+	\item Login to website with manager credentials;
+	\item Show the store details;
+	\item Edit the store cap value;
+	\item Edit the store opening hours;
+	\item Display the store passes of the store;
+	\item Delete a store pass;
+	\item Display the default pass code in QR format;
+	\item Pass bad input parameters to servlet to check their response.
+\end{itemize}
+
+\textbf{Employee Dashboard}
+\begin{itemize}
+	\item Login to website with employee credentials;
+	\item Display the customer inside the store;
+	\item Display the customer in queue for the store;
+	\item Display the valid store passes to be validated for entry.
+\end{itemize}
+ 
+Moreover we tested the functionality of the application with the whole system and performed stress tests to check the reliability of the system:
+
+\textbf{Store App}
+\begin{itemize}
+	\item Login to the application with employee credentials;
+	\item Scan a valid store pass;
+	\item Scan a used store pass;
+	\item Scan an expired store pass;
+	\item Display the outcome of the store pass scanned.
+\end{itemize}
+
+\textbf{Customer App}
+\begin{itemize}
+	\item Display a list of the stores which registered to the system;
+	\item Search for a store by name;
+	\item Display a store details;
+	\item Enter a queue for an open store by generating a new store pass;
+	\item Display the details of a store pass;
+	\item Display the list of all the store passes of a customer;
+\end{itemize}

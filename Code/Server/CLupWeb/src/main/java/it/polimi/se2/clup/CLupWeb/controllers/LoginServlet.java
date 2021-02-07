@@ -76,8 +76,4 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect(path);
         }
     }
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-    }
 }
