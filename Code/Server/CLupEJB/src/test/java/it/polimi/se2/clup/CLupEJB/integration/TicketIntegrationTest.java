@@ -167,8 +167,8 @@ public class TicketIntegrationTest {
     public void addTicket_SuccessfulAdd_InputValid() throws BadTicketException, BadStoreException, BadOpeningHourException {
         long timestamp = new java.util.Date().getTime();
 
-        Time fromTime = Time.valueOf(new Time(timestamp - 7200000).toString()); // Two hours before now.
-        Time toTime = Time.valueOf(new Time(timestamp + 7200000).toString()); // Two hours after now.
+        Time fromTime = Time.valueOf(new Time(timestamp - 60000).toString()); // One minute before now.
+        Time toTime = Time.valueOf(new Time(timestamp + 60000).toString()); // One minute after now.
 
         DayOfWeek dayOfWeek = DayOfWeek.valueOf(new SimpleDateFormat("EEEE", Locale.US).format(new java.util.Date()).toUpperCase());
         int weekDay = dayOfWeek.getValue(); // Today.
