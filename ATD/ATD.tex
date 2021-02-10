@@ -1,0 +1,21 @@
+\documentclass[a4paper, 11pt, oneside, openright, english]{memoir}
+
+\usepackage{preamble}
+
+\begin{document}
+	\include{structure/title_page}
+
+	\pagenumbering{Roman}
+
+	\include{structure/revision_history}
+
+	\tableofcontents
+
+	\pagenumbering{arabic}
+
+	\include{chapters/1_introduction}
+	\include{chapters/2_installation_setup}
+	\include{chapters/3_acceptance_test_cases}
+	\include{chapters/4_additional_notes}
+    \include{chapters/5_effort_spent}
+\end{document}
