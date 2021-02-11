@@ -1,1 +1,201 @@
 \chapter{Acceptance Test Cases}
+
+\section{Test Cases}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & AT001\_SignUp \\
+		\midrule
+		\textbf{Description} & Register as a customer in the application. \\
+		\midrule
+		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+			\item The system shows the home page;
+			\item Go to the sign up page;
+			\item Fill the form with the following data:\newline
+			  \textit{Email: test@example.com\newline
+			  Password: Password123@\newline
+			  Confirm Password: Password123@\newline
+			  Name: Mario\newline
+			  Surname: Rossi}
+			\item Press the Sign Up button;
+			\item The system shows a page with a summary of the user data and a confirm button;
+			\item Press the confirm button;
+		\end{itemize}\\
+		\midrule
+		\textbf{Expected Output} & User correctly registered and redirected to the home page.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & AT002\_SignIn \\
+		\midrule
+		\textbf{Description} & Login as a customer in the application. \\
+		\midrule
+		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+			\item The system shows the home page;
+			\item Fill in the form with the following data:\newline
+			Email: test@example.com\newline
+			Password: Password123@
+			\item Press the Login button;
+		\end{itemize}\\
+		\midrule
+		\textbf{Expected Output} & User correctly logged in and redirected to the map page.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & AT003\_SignIn \\
+		\midrule
+		\textbf{Description} & Login as a operator in the application. \\
+		\midrule
+		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+			\item The system shows the home page;
+			\item Fill in the form with the following data:\newline
+			Email: operator1@CLup.com\newline
+			Password: operator1@CLup.com
+			\item Press the Login button;
+		\end{itemize}\\
+		\midrule
+		\textbf{Expected Output} & User correctly logged in and redirected to a page where the operator can call tickets.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & AT004\_JoinQueue \\
+		\midrule
+		\textbf{Description} & Join the queue of a store as a customer. \\
+		\midrule
+		\textbf{Preconditions} & The customer is logged in.\\
+		\midrule
+		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+			\item The system shows the map page;
+			\item Select a store from the map;
+			\item Press the "Get a Ticket" button;
+			\item The system shows the store, press the "Get a Ticket" button and then "OK" on the popup message;
+		\end{itemize}\\
+		\midrule
+		\textbf{Expected Output} & The ticket is retrieved successfully and the system shows a page which shows the retrieved ticket.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & AT005\_JoinAnotherQueue \\
+		\midrule
+		\textbf{Description} & Join the queue of a store as a customer who has already a valid ticket for another store. \\
+		\midrule
+		\textbf{Preconditions} & The customer is logged in and has already a valid ticket for another store.\\
+		\midrule
+		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+			\item The system shows the map page;
+			\item Select a store from the map;
+			\item Press the "Get a Ticket" button;
+			\item The system shows the store, press the "Get a Ticket" button and then "OK" on the popup message;
+		\end{itemize}\\
+		\midrule
+		\textbf{Expected Output} & The ticket is not retrieved and the system shows an error message.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & AT006\_DeleteTicket \\
+		\midrule
+		\textbf{Description} & Delete a ticket for a store as a customer. \\
+		\midrule
+		\textbf{Preconditions} & The customer is logged in and has a valid ticket for a store.\\
+		\midrule
+		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+			\item The system shows the ticket page;
+			\item Press the "Cancel Ticket" button;
+			\item The system ask for confirmation, press the "Delete Ticket" button;
+		\end{itemize}\\
+		\midrule
+		\textbf{Expected Output} & The ticket is deleted and the system redirects to the home page.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & AT007\_CallPerson \\
+		\midrule
+		\textbf{Description} & A store operator call the next person in queue. \\
+		\midrule
+		\textbf{Preconditions} & The store operator is logged in and a customer is inside the store queue.\\
+		\midrule
+		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+			\item Press the "Call Next Person" button;
+		\end{itemize}\\
+		\midrule
+		\textbf{Expected Output} & The person is called and on the customer app, a notification is displayed.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & AT008\_ScanTicket \\
+		\midrule
+		\textbf{Description} & A store operator scan a called customer's ticket. \\
+		\midrule
+		\textbf{Preconditions} & The store operator is logged in and a customer is called.\\
+		\midrule
+		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+			\item Press the "Scan QR Code" button;
+			\item The system open the camera and the operator scans the QR of the customer's ticket.
+		\end{itemize}\\
+		\midrule
+		\textbf{Expected Output} & The ticket is validated and the person is inside the store.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+
+\clearpage
+
+\section{User Interface Concerns}
+During the testing of the User Interface of the flutter application we encountered some UI bugs and bad behaviours:
+\begin{itemize}
+	\item 
+\end{itemize}
