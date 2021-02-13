@@ -1,4 +1,10 @@
 \chapter{Acceptance Test Cases}
+In this chapter we analysed the implemented requirements of the project and tested them.\newline 
+By comparing the list of requirements presented in RASD and the ones inside the ITD we can conclude that only a few requirements where actually implemented.\newline
+For instance, some requirements that we consider vital such as R4 and R12 are not implemented.
+
+Moreover we noticed that in the second chapter of the ITD (Requirements and Functionalities Implemented) is stated that "\textit{The	management side is kept at a bare minimum providing only the store operator functions to call customer to the entrance, scan tickets and view real time data about the store crowdedness}". This is partially true because there is not the possibility to check the store crowdedness.
+
 First thing we ran the unit and integration tests provided: all of them passes.\newline
 Then we concentrated on testing the app in a real use case scenario, just like stated in the RASD. The majority of the test performed are listed below.
 
@@ -8,36 +14,7 @@ Then we concentrated on testing the app in a real use case scenario, just like s
 	\centering
 	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
 		\toprule
-		\textbf{ID} & AT001\_SignUp \\
-		\midrule
-		\textbf{Description} & Register as a customer in the application. \\
-		\midrule
-		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
-			\item The system shows the home page;
-			\item Go to the sign up page;
-			\item Fill the form with the following data:\newline
-			  \textit{Email: test@example.com\newline
-			  Password: Password123@\newline
-			  Confirm Password: Password123@\newline
-			  Name: Mario\newline
-			  Surname: Rossi}
-			\item Press the Sign Up button;
-			\item The system shows a page with a summary of the user data and a confirm button;
-			\item Press the confirm button;
-		\end{itemize}\\
-		\midrule
-		\textbf{Expected Output} & User correctly registered and redirected to the home page.\\
-		\midrule
-		\textbf{Test Result} & Success\\
-		\bottomrule
-	\end{tabular}
-\end{table}
-
-\begin{table}[H]
-	\centering
-	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
-		\toprule
-		\textbf{ID} & AT002\_SignIn \\
+		\textbf{ID} & AT001\_SignIn \\
 		\midrule
 		\textbf{Description} & Login as a customer in the application. \\
 		\midrule
@@ -60,7 +37,7 @@ Then we concentrated on testing the app in a real use case scenario, just like s
 	\centering
 	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
 		\toprule
-		\textbf{ID} & AT003\_SignIn \\
+		\textbf{ID} & AT002\_SignIn \\
 		\midrule
 		\textbf{Description} & Login as a operator in the application. \\
 		\midrule
@@ -73,6 +50,35 @@ Then we concentrated on testing the app in a real use case scenario, just like s
 		\end{itemize}\\
 		\midrule
 		\textbf{Expected Output} & User correctly logged in and redirected to a page where the operator can call tickets.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & AT003\_SignUp \\
+		\midrule
+		\textbf{Description} & Register as a customer in the application. \\
+		\midrule
+		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+			\item The system shows the home page;
+			\item Go to the sign up page;
+			\item Fill the form with the following data:\newline
+			  \textit{Email: test@example.com\newline
+			  Password: Password123@\newline
+			  Confirm Password: Password123@\newline
+			  Name: Mario\newline
+			  Surname: Rossi}
+			\item Press the Sign Up button;
+			\item The system shows a page with a summary of the user data and a confirm button;
+			\item Press the confirm button;
+		\end{itemize}\\
+		\midrule
+		\textbf{Expected Output} & User correctly registered and redirected to the home page.\\
 		\midrule
 		\textbf{Test Result} & Success\\
 		\bottomrule
@@ -177,7 +183,7 @@ Then we concentrated on testing the app in a real use case scenario, just like s
 		\toprule
 		\textbf{ID} & AT008\_ScanTicket \\
 		\midrule
-		\textbf{Description} & A store operator scan a called customer's ticket. \\
+		\textbf{Description} & A store operator scans a called customer's ticket. \\
 		\midrule
 		\textbf{Preconditions} & The store operator is logged in and a customer is called.\\
 		\midrule
@@ -192,3 +198,36 @@ Then we concentrated on testing the app in a real use case scenario, just like s
 		\bottomrule
 	\end{tabular}
 \end{table}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{@{}p{0.25\linewidth}p{0.71\linewidth}@{}}
+		\toprule
+		\textbf{ID} & AT009\_ScanTicketOnStoreFull \\
+		\midrule
+		\textbf{Description} & A store operator scans a called customer's ticket when the store is already full. \\
+		\midrule
+		\textbf{Preconditions} & The store operator is logged in, the store is full and a customer is called.\\
+		\midrule
+		\textbf{Input} & \begin{itemize}[leftmargin=.4cm,noitemsep,topsep=0pt,before=\vspace{-3mm},after=\vspace{-4mm}]
+			\item Press the "Scan QR Code" button;
+			\item The system open the camera and the operator scans the QR of the customer's ticket.
+		\end{itemize}\\
+		\midrule
+		\textbf{Expected Output} & The customer is scanned but the system refuse the ticket because there is no more space in the store.\\
+		\midrule
+		\textbf{Test Result} & Success\\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\vskip 0.8cm
+
+We noticed that there is a design flaw about the ticket call when the store is full. An operator can always call all the tickets in the queue without any check about the store capacity.\newline This results in the following bad behaviour:
+\begin{enumerate}
+	\item The store reaches the maximum of his capacity with the scan of a ticket.
+	\item The operator calls the next ticket or more.
+	\item If the store remains full the scan of a ticket fails.
+	\item Then, if no one exits the store in 5 minutes (expiration time of a called ticket) the called tickets expire and this results in the deletion of the ticket.
+	\item The customer who owned the ticket need to get in queue again with a new one.
+\end{enumerate}
