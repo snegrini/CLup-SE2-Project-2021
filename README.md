@@ -1,6 +1,6 @@
-# Customers Line-up - Software Engineering 2 Project - A.Y. 2020-2021
-CLup is a Requirement Engineering and Design Project realized for the Software Engineering 2 course at Politecnico di Milano.
-Specification analysis, design choices, implementation and testing are widely described inside the released documents:
+# CLup - Customers Line-up - Software Engineering 2 Project - A.Y. 2020-2021
+CLup - Customers Line-up is a Requirement Engineering and Design Project realized for the Software Engineering 2 course at Politecnico di Milano.
+Requirement analysis, design choices, implementation and testing are widely described inside the released documents:
 - Requirements Analysis and Specifications Document ([RASD1.2.pdf](DeliveryFolder/RASD1.2.pdf));
 - Design Document ([DD1.2.pdf](DeliveryFolder/DD1.2.pdf));
 - Implementation and Testing Deliverable document ([ITD1.0.pdf](DeliveryFolder/ITD1.0.pdf));
