@@ -1,10 +1,10 @@
 # CLup - Customers Line-up - Software Engineering 2 Project - A.Y. 2020-2021
 CLup - Customers Line-up is a Requirement Engineering and Design Project realized for the Software Engineering 2 course at Politecnico di Milano.
 Requirement analysis, design choices, implementation and testing are widely described inside the released documents:
-- Requirements Analysis and Specifications Document ([RASD1.2.pdf](DeliveryFolder/RASD1.2.pdf));
-- Design Document ([DD1.2.pdf](DeliveryFolder/DD1.2.pdf));
-- Implementation and Testing Deliverable document ([ITD1.0.pdf](DeliveryFolder/ITD1.0.pdf));
-- Acceptance Test Deliverable document ([ATD1.0.pdf](DeliveryFolder/ATD1.0.pdf)).
+- __Requirements Analysis and Specifications Document__ ([RASD1.2.pdf](DeliveryFolder/RASD1.2.pdf));
+- __Design Document__ ([DD1.2.pdf](DeliveryFolder/DD1.2.pdf));
+- __Implementation and Testing Deliverable document__ ([ITD1.0.pdf](DeliveryFolder/ITD1.0.pdf));
+- __Acceptance Test Deliverable document__ ([ATD1.0.pdf](DeliveryFolder/ATD1.0.pdf)).
 
 Artifacts and APKs of the project can be found in the [DeliveryFolder](DeliveryFolder).\
 The source code of the implemented part of the project is available in the [Code](Code) folder.
